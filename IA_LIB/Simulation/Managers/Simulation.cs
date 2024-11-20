@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using IA_Library_ECS;
 using IA_Library_FSM;
@@ -12,7 +14,7 @@ namespace IA_Library
         Corpse,
     }
 
-    public class Simulation<TypeAgent> where TypeAgent : Agent, new()
+    public class Simulation
     {
         private Vector2 grid;
 
@@ -29,6 +31,7 @@ namespace IA_Library
         private List<AgentHerbivore> Herbivore = new List<AgentHerbivore>();
         private List<AgentCarnivore> Carnivore = new List<AgentCarnivore>();
         private List<AgentScavenger> Scavenger = new List<AgentScavenger>();
+        private List<AgentPlant> Plants = new List<AgentPlant>();
 
         private List<Brain.Brain> herbivoreMainBrain = new List<Brain.Brain>();
         private List<Brain.Brain> herbivoreMoveFoodBrain = new List<Brain.Brain>();
@@ -51,6 +54,11 @@ namespace IA_Library
             this.grid.X = grid.X;
             this.grid.Y = grid.Y;
 
+            for (int i = 0; i < totalHervivores * 2; i++)
+            {
+                Plants.Add(new AgentPlant(this));
+            }
+
             CreateEntities();
             entities = new Dictionary<uint, Brain.Brain>();
             CreateECSEntities();
@@ -60,7 +68,7 @@ namespace IA_Library
         {
             for (int i = 0; i < totalHervivores; i++)
             {
-                Herbivore.Add(new AgentHerbivore());
+                Herbivore.Add(new AgentHerbivore(this));
                 herbivoreMainBrain.Add(Herbivore[i].mainBrain);
                 herbivoreMoveFoodBrain.Add(Herbivore[i].moveToFoodBrain);
                 herbivoreMoveEscapeBrain.Add(Herbivore[i].moveToEscapeBrain);
@@ -69,7 +77,7 @@ namespace IA_Library
 
             for (int i = 0; i < totalCarnivores; i++)
             {
-                Carnivore.Add(new AgentCarnivore());
+                Carnivore.Add(new AgentCarnivore(this));
                 carnivoreMainBrain.Add(Carnivore[i].mainBrain);
                 carnivoreMoveBrain.Add(Carnivore[i].moveToFoodBrain);
                 carnivoreEatBrain.Add(Carnivore[i].eatBrain);
@@ -77,7 +85,7 @@ namespace IA_Library
 
             for (int i = 0; i < totalScavengers; i++)
             {
-                Scavenger.Add(new AgentScavenger());
+                Scavenger.Add(new AgentScavenger(this));
                 ScavengerMainBrain.Add(Scavenger[i].mainBrain);
                 ScavengerFlockingBrain.Add(Scavenger[i].flockingBrain);
             }
@@ -179,6 +187,133 @@ namespace IA_Library
             {
                 current.Update(deltaTime);
             }
+        }
+
+        public AgentPlant GetNearestPlantAgents(Vector2 position)
+        {
+            AgentPlant nearestPoint = Plants[0];
+            float minDistanceSquared = (Plants[0].position.X - position.X) * (Plants[0].position.X - position.X) +
+                                       (Plants[0].position.Y - position.Y) * (Plants[0].position.Y - position.Y);
+
+            foreach (AgentPlant point in Plants)
+            {
+                float distanceSquared = (point.position.X - position.X) * (point.position.X - position.X) +
+                                        (point.position.Y - position.Y) * (point.position.Y - position.Y);
+                if (distanceSquared < minDistanceSquared)
+                {
+                    minDistanceSquared = distanceSquared;
+                    nearestPoint = point;
+                }
+            }
+
+            return nearestPoint;
+        }
+
+        public Vector2 GetNearestPlantPosition(Vector2 position)
+        {
+            AgentPlant nearestPoint = Plants[0];
+            float minDistanceSquared = (Plants[0].position.X - position.X) * (Plants[0].position.X - position.X) +
+                                       (Plants[0].position.Y - position.Y) * (Plants[0].position.Y - position.Y);
+
+            foreach (AgentPlant point in Plants)
+            {
+                float distanceSquared = (point.position.X - position.X) * (point.position.X - position.X) +
+                                        (point.position.Y - position.Y) * (point.position.Y - position.Y);
+                if (distanceSquared < minDistanceSquared)
+                {
+                    minDistanceSquared = distanceSquared;
+                    nearestPoint = point;
+                }
+            }
+
+            return nearestPoint.position;
+        }
+
+        public List<Vector2> GetNearestCarnivoresPositions(Vector2 position, int count)
+        {
+            var sortedCarnivores = Carnivore
+                .OrderBy(h => (h.position.X - position.X) * (h.position.X - position.X) +
+                              (h.position.Y - position.Y) * (h.position.Y - position.Y))
+                .Select(h => h.position)
+                .Take(Math.Min(count, Carnivore.Count))
+                .ToList();
+
+            return sortedCarnivores;
+        }
+
+        public AgentHerbivore GetNearestHerbivoreAgent(Vector2 position)
+        {
+            AgentHerbivore nearestPoint = Herbivore[0];
+            float minDistanceSquared = (Herbivore[0].position.X - position.X) * (Herbivore[0].position.X - position.X) +
+                                       (Herbivore[0].position.Y - position.Y) * (Herbivore[0].position.Y - position.Y);
+
+            foreach (var point in Herbivore)
+            {
+                float distanceSquared = (point.position.X - position.X) * (point.position.X - position.X) +
+                                        (point.position.Y - position.Y) * (point.position.Y - position.Y);
+                if (distanceSquared < minDistanceSquared)
+                {
+                    minDistanceSquared = distanceSquared;
+                    nearestPoint = point;
+                }
+            }
+
+            return nearestPoint;
+        }
+
+        public Vector2 GetNearestHerbivorePosition(Vector2 position)
+        {
+            AgentHerbivore nearestPoint = Herbivore[0];
+            float minDistanceSquared = (Herbivore[0].position.X - position.X) * (Herbivore[0].position.X - position.X) +
+                                       (Herbivore[0].position.Y - position.Y) * (Herbivore[0].position.Y - position.Y);
+
+            foreach (var point in Herbivore)
+            {
+                float distanceSquared = (point.position.X - position.X) * (point.position.X - position.X) +
+                                        (point.position.Y - position.Y) * (point.position.Y - position.Y);
+                if (distanceSquared < minDistanceSquared)
+                {
+                    minDistanceSquared = distanceSquared;
+                    nearestPoint = point;
+                }
+            }
+
+            return nearestPoint.position;
+        }
+
+        public Vector2 GetNearestDeadHerbivorePosition(Vector2 position)
+        {
+            AgentHerbivore nearestPoint = null;
+            float minDistanceSquared = float.MaxValue;
+
+            foreach (var point in Herbivore)
+            {
+                if (!point.CanBeEaten())
+                    continue;
+
+                float distanceSquared = (point.position.X - position.X) * (point.position.X - position.X) +
+                                        (point.position.Y - position.Y) * (point.position.Y - position.Y);
+
+                if (distanceSquared < minDistanceSquared)
+                {
+                    minDistanceSquared = distanceSquared;
+                    nearestPoint = point;
+                }
+            }
+
+            return nearestPoint.position;
+        }
+
+        public List<Vector2> GetNearestScavengersPositions(Vector2 position, int count)
+        {
+            List<Vector2> sortedScavengers = Scavenger
+                .OrderBy(h => (h.position.X - position.X) * (h.position.X - position.X) +
+                              (h.position.Y - position.Y) * (h.position.Y - position.Y))
+                .Select(h => h.position)
+                .Take(Math.Min(count, Carnivore.Count))
+                .ToList();
+
+            return sortedScavengers;
         }
 
         #region GetAgents
