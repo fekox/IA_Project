@@ -18,9 +18,10 @@ namespace IA_Library.Brain
             weights = new float[weightsCount];
 
             Random rand = new Random();
+
             for (int i = 0; i < weights.Length; i++)
             {
-                weights[i] = (float)(rand.NextDouble() * 2 - 1); // RandVal (-1,1)
+                weights[i] = (float)(rand.NextDouble() * 2 - 1);
             }
 
             this.bias = bias;
