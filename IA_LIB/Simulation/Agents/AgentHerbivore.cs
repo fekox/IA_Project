@@ -8,21 +8,26 @@ namespace IA_Library_FSM
 {
     public class AgentHerbivore : Agent
     {
-        public Brain moveToFoodBrain;
-        public Brain moveToEscapeBrain;
-        public Brain eatBrain;
+        public Brain moveToFoodBrain = new Brain();
+        public Brain moveToEscapeBrain = new Brain();
+        public Brain eatBrain = new Brain();
 
         private int maxMovementPerTurn = 3;
 
         private int lives = 3;
         private int insideFood;
 
-        public AgentHerbivore()
+        public AgentHerbivore(Simulation simulation) : base(simulation)
         {
             maxFood = 5;
             
             fsmController.AddBehaviour<MoveToEatHerbivoreState>(Behaviours.MoveToFood,
-                onEnterParameters: () => { return new object[] { moveToFoodBrain }; },
+                
+                onEnterParameters: () => 
+                { 
+                    return new object[] { moveToFoodBrain }; 
+                },
+
                 onTickParameters: () =>
                 {
                     return new object[]
@@ -32,7 +37,12 @@ namespace IA_Library_FSM
                 });
 
             fsmController.AddBehaviour<EatHerbivoreState>(Behaviours.Eat,
-                onEnterParameters: () => { return new object[] { eatBrain }; },
+                
+                onEnterParameters: () => 
+                { 
+                    return new object[] { eatBrain }; 
+                },
+                
                 onTickParameters: () =>
                 {
                     return new object[]
@@ -77,10 +87,12 @@ namespace IA_Library_FSM
             if (outputs[0] > 0.0f)
             {
                 fsmController.Transition(Flags.OnTransitionMoveToEat);
+            
             }
             else if (outputs[1] > 0.0f)
             {
                 fsmController.Transition(Flags.OnTransitionMoveEscape);
+            
             }
             else if (outputs[2] > 0.0f)
             {
@@ -95,13 +107,11 @@ namespace IA_Library_FSM
 
         private AgentPlant GetNearestFood()
         {
-            //TODO: hacer que busque su comida
             throw new NotImplementedException();
         }
 
         public override Vector2 GetNearestFoodPosition()
         {
-            //TODO: hacer que busque su comida
             throw new NotImplementedException();
         }
 
@@ -116,9 +126,16 @@ namespace IA_Library_FSM
                 enemies[0].X, enemies[0].Y, enemies[1].X, enemies[1].Y, enemies[2].X,
                 enemies[2].Y
             };
-            moveToFoodBrain.inputs = new[] { position.X, position.Y, nearestFoodPosition.X, nearestFoodPosition.Y };
+            
+            moveToFoodBrain.inputs = new[] 
+            { 
+                position.X, position.Y, nearestFoodPosition.X, nearestFoodPosition.Y 
+            };
+
             eatBrain.inputs = new[]
-                { position.X, position.Y, nearestFoodPosition.X, nearestFoodPosition.Y, hasEaten ? 1 : -1 };
+            { 
+                position.X, position.Y, nearestFoodPosition.X, nearestFoodPosition.Y, hasEaten ? 1 : -1 
+            };
 
             moveToEscapeBrain.inputs = new[]
             {
@@ -129,7 +146,6 @@ namespace IA_Library_FSM
 
         private List<Vector2> GetNearestEnemiesPosition()
         {
-            //TODO: hacer que busque a los carnivoros
             throw new NotImplementedException();
         }
 
@@ -167,10 +183,12 @@ namespace IA_Library_FSM
             {
                 return HerbivoreStates.Death;
             }
+            
             else if (fsmController.currentState == (int)Behaviours.Corpse)
             {
                 return HerbivoreStates.Corpse;
             }
+            
             else
             {
                 return HerbivoreStates.Alive;
@@ -208,15 +226,18 @@ namespace IA_Library_FSM
                 if (outputs[0] > positiveHalf)
                 {
                     movementPerTurn = 3;
+                
                 }
                 else if (outputs[0] < positiveHalf && outputs[0] > 0)
                 {
                     movementPerTurn = 2;
                 }
+                
                 else if (outputs[0] < 0 && outputs[0] < negativeHalf)
                 {
                     movementPerTurn = 1;
                 }
+                
                 else if (outputs[0] < negativeHalf)
                 {
                     movementPerTurn = 0;
@@ -232,7 +253,6 @@ namespace IA_Library_FSM
                 {
                     foreach (Vector2 dir in direction)
                     {
-                        //TODO : CHEQUEAR SI ESTAS SALIENDO DEL MAPA
                         position += dir;
                     }
 
@@ -245,6 +265,7 @@ namespace IA_Library_FSM
                         brain.FitnessReward += 20;
                         brain.FitnessMultiplier += 0.05f;
                     }
+
                     else
                     {
                         brain.FitnessMultiplier -= 0.05f;
@@ -253,6 +274,7 @@ namespace IA_Library_FSM
                     previousDistance = distanceFromFood;
                 }
             });
+
             return behaviour;
         }
 
@@ -298,14 +320,17 @@ namespace IA_Library_FSM
                 {
                     movementPerTurn = 3;
                 }
+
                 else if (outputs[0] < positiveHalf && outputs[0] > 0)
                 {
                     movementPerTurn = 2;
                 }
+
                 else if (outputs[0] < 0 && outputs[0] < negativeHalf)
                 {
                     movementPerTurn = 1;
                 }
+
                 else if (outputs[0] < negativeHalf)
                 {
                     movementPerTurn = 0;
@@ -323,15 +348,16 @@ namespace IA_Library_FSM
                     {
                         onMove.Invoke(direction);
                         position += dir;
-                        //Todo: Make a way to check the limit of the grid
                     }
 
                     float distanceFromEnemies = GetDistanceFrom(nearEnemyPositions);
+
                     if (distanceFromEnemies <= previousDistance)
                     {
                         brain.FitnessReward += 20;
                         brain.FitnessMultiplier += 0.05f;
                     }
+
                     else
                     {
                         brain.FitnessMultiplier -= 0.05f;
@@ -340,6 +366,7 @@ namespace IA_Library_FSM
                     previousDistance = distanceFromEnemies;
                 }
             });
+
             return behaviour;
         }
 
@@ -354,6 +381,7 @@ namespace IA_Library_FSM
         public override BehavioursActions GetOnEnterBehaviour(params object[] parameters)
         {
             brain = parameters[0] as Brain;
+
             return default;
         }
 
@@ -394,29 +422,34 @@ namespace IA_Library_FSM
                             }
                         }
                     }
+
                     else if (maxEaten || position != nearFoodPos)
                     {
                         brain.FitnessMultiplier -= 0.05f;
                     }
                 }
+
                 else
                 {
                     if (position == nearFoodPos && !maxEaten)
                     {
                         brain.FitnessMultiplier -= 0.05f;
                     }
+
                     else if (maxEaten)
                     {
                         brain.FitnessMultiplier += 0.10f;
                     }
                 }
             });
+
             return behaviour;
         }
 
         public override BehavioursActions GetOnExitBehaviour(params object[] parameters)
         {
             brain.ApplyFitness();
+
             return default;
         }
     }
