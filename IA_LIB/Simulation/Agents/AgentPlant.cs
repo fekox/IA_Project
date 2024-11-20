@@ -1,5 +1,5 @@
-using IA_Library;
 using System.Numerics;
+using IA_Library;
 
 namespace IA_Library_FSM
 {
@@ -8,9 +8,9 @@ namespace IA_Library_FSM
         private int lives = 5;
         private bool isAlive = true;
 
-        public AgentPlant(Simulation simulation) : base(simulation) 
+        public AgentPlant(Simulation simulation, GridManager gridManager) : base(simulation, gridManager)
         {
-        
+
         }
 
         public void Eat()
@@ -30,7 +30,7 @@ namespace IA_Library_FSM
         {
             return lives > 0;
         }
-        
+
         public override void Update(float deltaTime)
         {
             throw new System.NotImplementedException();
