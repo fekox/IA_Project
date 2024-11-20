@@ -1,21 +1,31 @@
 using System.Collections.Generic;
+using System.IO.IsolatedStorage;
 using System.Numerics;
+using IA_Library;
 using IA_Library.Brain;
 
 namespace IA_Library_FSM
 {
     public class AgentScavenger : Agent
     {
-        public Brain flockingBrain;
+        public Brain flockingBrain = new Brain();
         
-        public float rotation;
         public float minEatRadius;
-        public float speed = 1f;
 
-        public AgentScavenger()
+
+        public Vector2 currentDirection;
+        public float speed = 1f;
+        public float rotation = 1f;
+
+        public AgentScavenger(Simulation simulation) : base(simulation)
         {
             fsmController.AddBehaviour<MoveToEatScavengerState>(Behaviours.MoveToFood,
-                onTickParameters: () => { return new object[] { mainBrain }; });
+            
+                onTickParameters: () => 
+                { 
+                    return new object[] { mainBrain }; 
+                }
+            );
             
             fsmController.ForcedState(Behaviours.MoveToFood);
         }
@@ -23,6 +33,10 @@ namespace IA_Library_FSM
         public override void Update(float deltaTime)
         {
             fsmController.Tick();
+
+            MoveTo(currentDirection);
+
+            Rotate();
         }
 
         public override void ChooseNextState(float[] outputs)
@@ -32,13 +46,27 @@ namespace IA_Library_FSM
 
         public override void MoveTo(Vector2 direction)
         {
-            Vector2 forwardDirection = new Vector2((float)System.Math.Cos(rotation), (float)System.Math.Sin(rotation));
-            position += forwardDirection * speed;
+            direction = Normalize(direction);
+            position += direction * speed;
         }
 
-        public override Vector2 GetNearestFoodPosition()
+        private void Rotate() 
         {
-            throw new System.NotImplementedException();
+            rotation %= 360;
+
+            float angleInRadians = rotation * (float)Math.PI / 180f;
+            currentDirection = new Vector2((float)Math.Cos(angleInRadians), (float)Math.Sin(angleInRadians));
+        }
+
+        private Vector2 Normalize(Vector2 vector)
+        {
+            float magnitude = (float)Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
+            if (magnitude > 0)
+            {
+                return new Vector2(vector.X / magnitude, vector.Y / magnitude);
+            }
+
+            return vector;
         }
 
         public override void SettingBrainUpdate(float deltaTime)
@@ -46,6 +74,12 @@ namespace IA_Library_FSM
             Vector2 nearFoodPos = GetNearestFoodPosition();
             mainBrain.inputs = new[] { position.X, position.Y, minEatRadius, nearFoodPos.X, nearFoodPos.Y};
         }
+
+        public override Vector2 GetNearestFoodPosition()
+        {
+            throw new System.NotImplementedException();
+        }
+
 
         private List<AgentScavenger> GetThreeNearestAgents()
         {
@@ -77,6 +111,7 @@ namespace IA_Library_FSM
                 if (distanceFromFood < minEatRadius)
                 {
                     brain.FitnessReward += 1;
+                
                 }
                 else if (distanceFromFood > minEatRadius)
                 {
