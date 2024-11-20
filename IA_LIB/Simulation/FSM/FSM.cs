@@ -54,6 +54,7 @@ namespace IA_Library_FSM
             Func<object[]> onEnterParameters = null, Func<object[]> onExitParameters = null) where T : State, new()
         {
             int stateIndex = Convert.ToInt32(state);
+
             if (!behaviours.ContainsKey(stateIndex))
             {
                 State newbehaviour = new T();
@@ -102,8 +103,10 @@ namespace IA_Library_FSM
 
         private void ExecuteBehaviour(BehavioursActions behavioursActions)
         {
-            if (behavioursActions.Equals(default(BehavioursActions)))
+            if (behavioursActions.Equals(default(BehavioursActions))) 
+            {
                 return;
+            }
 
             int executionOrder = 0;
 

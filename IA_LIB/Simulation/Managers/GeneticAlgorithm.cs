@@ -116,6 +116,7 @@ namespace IA_Library
                     child1.genome[i] = parent1.genome[i];
                     child2.genome[i] = parent2.genome[i];
                 }
+
                 else
                 {
                     child1.genome[i] = parent2.genome[i];
@@ -143,8 +144,11 @@ namespace IA_Library
             for (var i = 0; i < population.Count; i++)
             {
                 fitness += Math.Max(population[i].fitness, 0);
-                if (fitness >= rnd)
+               
+                if (fitness >= rnd) 
+                {
                     return population[i];
+                }
             }
 
             return null;

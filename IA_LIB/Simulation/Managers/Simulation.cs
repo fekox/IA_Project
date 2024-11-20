@@ -11,7 +11,7 @@ namespace IA_Library
     {
         Alive,
         Death,
-        Corpse,
+        Corpse
     }
 
     public class Simulation
