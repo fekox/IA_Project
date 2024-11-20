@@ -40,7 +40,8 @@ namespace IA_Library_ECS
             outputComponent ??= ECSManager.GetComponents<OutputComponent>();
             inputComponent ??= ECSManager.GetComponents<InputComponent>();
 
-            activeEntities ??= ECSManager.GetEntitiesWithComponentTypes(
+            activeEntities ??= ECSManager.GetEntitiesWithComponentTypes
+            (
                 typeof(InputLayerComponent),
                 typeof(HiddenLayerComponent),
                 typeof(OutputLayerComponent),
@@ -56,19 +57,16 @@ namespace IA_Library_ECS
             Parallel.ForEach(activeEntities, parallelOptions, entity =>
             {
                 float[] inputs = inputComponent[entity].inputs;
-
-               //hacer primera synapsis 
+               
                outputComponent[entity].output = InputLayerSynapsis(entity, inputs);
                inputComponent[entity].inputs = outputComponent[entity].output;
-
-               //hacer loop synapsis 
+ 
                for (int i = 0; i < hiddenLayerComponent[entity].hiddenLayers.Length; i++)
                {
                    outputComponent[entity].output = LayerSynapsis(entity, inputs, i);
                    inputs = outputComponent[entity].output;
                }
                
-               //hacer ultima synapsis 
                outputComponent[entity].output = OutputLayerSynapsis(entity, inputs);
             });
         }
@@ -81,21 +79,38 @@ namespace IA_Library_ECS
         private float[] InputLayerSynapsis(uint entity, float[] inputs)
         {
             Parallel.For(0, inputs.Length,
-                neuron => { outputComponent[entity].output[neuron] = InputNeuronSynapsis(entity, neuron, inputs); });
+                
+                neuron => 
+                { outputComponent[entity].output[neuron] = InputNeuronSynapsis(entity, neuron, inputs); 
+                }
+                
+            );
+
             return outputComponent[entity].output;
         }
         
         private float[] LayerSynapsis(uint entity, float[] inputs, int layer)
         {
             Parallel.For(0, inputs.Length,
-                neuron => { outputComponent[entity].output[neuron] = NeuronSynapsis(entity, neuron, inputs, layer); });
+                
+                neuron => 
+                { 
+                    outputComponent[entity].output[neuron] = NeuronSynapsis(entity, neuron, inputs, layer); 
+                }
+            );
+
             return outputComponent[entity].output;
         }
         
         private float[] OutputLayerSynapsis(uint entity, float[] inputs)
         {
             Parallel.For(0, inputs.Length,
-                neuron => { outputComponent[entity].output[neuron] = OutputNeuronSynapsis(entity, neuron, inputs); });
+                neuron => 
+                { 
+                    outputComponent[entity].output[neuron] = OutputNeuronSynapsis(entity, neuron, inputs); 
+                }   
+            );
+
             return outputComponent[entity].output;
         }
         
@@ -103,9 +118,16 @@ namespace IA_Library_ECS
         {
             ConcurrentBag<float> bag = new ConcurrentBag<float>();
             float a = 0;
-            //TODO: preguntar
+            
             Parallel.For(0, inputs.Length,
-                b => { bag.Add(outputLayerComponent[entity].layer.weights[neuron,b] * inputs[b]); });
+                
+                b => 
+                { 
+                    bag.Add(outputLayerComponent[entity].layer.weights[neuron,b] * inputs[b]); 
+                }
+            
+            );
+
             a = bag.Sum();
             a += biasComponent[entity].X;
 
@@ -116,8 +138,16 @@ namespace IA_Library_ECS
         {
             ConcurrentBag<float> bag = new ConcurrentBag<float>();
             float a = 0;
+            
             Parallel.For(0, inputLayerComponent.Count,
-                b => { bag.Add(hiddenLayerComponent[entity].hiddenLayers[layer].weights[neuron, b] * inputs[b]); });
+                
+                b => 
+                { 
+                    bag.Add(hiddenLayerComponent[entity].hiddenLayers[layer].weights[neuron, b] * inputs[b]); 
+                }
+            
+            );
+            
             a = bag.Sum();
             a += biasComponent[entity].X;
 
@@ -128,8 +158,16 @@ namespace IA_Library_ECS
         {
             ConcurrentBag<float> bag = new ConcurrentBag<float>();
             float a = 0;
+            
             Parallel.For(0, inputs.Length,
-                b => { bag.Add(inputLayerComponent[entity].layer.weights[neuron,b] * inputs[b]); });
+                
+                b => 
+                { 
+                    bag.Add(inputLayerComponent[entity].layer.weights[neuron,b] * inputs[b]); 
+                }
+            
+            );
+            
             a = bag.Sum();
             a += biasComponent[entity].X;
 

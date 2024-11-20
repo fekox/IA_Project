@@ -2,6 +2,7 @@ namespace IA_Library_ECS
 {
     public abstract class LayerComponent : ECSComponent
     {
+
     }
 
     public class Layer
