@@ -1,0 +1,1973 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &670878856862318
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1182829578643840657}
+  - component: {fileID: 3703123886648934310}
+  - component: {fileID: 5501425004443100008}
+  - component: {fileID: 6819102106505531713}
+  m_Layer: 0
+  m_Name: Point (4)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1182829578643840657
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 670878856862318}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 7.7, y: 3.32, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5578217811628422254}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &3703123886648934310
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 670878856862318}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &5501425004443100008
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 670878856862318}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!135 &6819102106505531713
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 670878856862318}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &335332011468906888
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5018696705912333701}
+  m_Layer: 0
+  m_Name: Voronoi
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5018696705912333701
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 335332011468906888}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5578217811628422254}
+  - {fileID: 5867867507978035805}
+  - {fileID: 7770416971451320535}
+  - {fileID: 7756994900072561048}
+  - {fileID: 1373243466152449079}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1310741285217842268
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7756994900072561048}
+  - component: {fileID: 8138707714279333405}
+  - component: {fileID: 8694510981783365272}
+  - component: {fileID: 5116946424948624482}
+  m_Layer: 0
+  m_Name: Limit (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7756994900072561048
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1310741285217842268}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 11, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5018696705912333701}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &8138707714279333405
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1310741285217842268}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &8694510981783365272
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1310741285217842268}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 7df0cf20f6b7eb24d9e42a81aebf4eaa, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!135 &5116946424948624482
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1310741285217842268}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1357027512165155652
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5867867507978035805}
+  - component: {fileID: 8787135041914684378}
+  - component: {fileID: 661028585218895372}
+  - component: {fileID: 1199454969348061357}
+  m_Layer: 0
+  m_Name: Limit
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5867867507978035805
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1357027512165155652}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 11, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5018696705912333701}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &8787135041914684378
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1357027512165155652}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &661028585218895372
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1357027512165155652}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 7df0cf20f6b7eb24d9e42a81aebf4eaa, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!135 &1199454969348061357
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1357027512165155652}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1801605384567237075
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1373243466152449079}
+  - component: {fileID: 256104296502603027}
+  - component: {fileID: 6086673213168256669}
+  - component: {fileID: 273355187895506887}
+  m_Layer: 0
+  m_Name: Limit (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1373243466152449079
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1801605384567237075}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5018696705912333701}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &256104296502603027
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1801605384567237075}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &6086673213168256669
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1801605384567237075}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 7df0cf20f6b7eb24d9e42a81aebf4eaa, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!135 &273355187895506887
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1801605384567237075}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &2920089512924394273
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2284164239085600061}
+  - component: {fileID: 7361193633133706180}
+  - component: {fileID: 2426760063585887606}
+  - component: {fileID: 4476371493198777147}
+  m_Layer: 0
+  m_Name: Point (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &2284164239085600061
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2920089512924394273}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.35, y: 5.96, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5578217811628422254}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &7361193633133706180
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2920089512924394273}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &2426760063585887606
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2920089512924394273}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!135 &4476371493198777147
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2920089512924394273}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &3677082737521460167
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5713468046769872811}
+  - component: {fileID: 6679127663075166546}
+  - component: {fileID: 5387534794944151214}
+  - component: {fileID: 6300449185384823937}
+  m_Layer: 0
+  m_Name: Point (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &5713468046769872811
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3677082737521460167}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.43, y: 8.7699995, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5578217811628422254}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &6679127663075166546
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3677082737521460167}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &5387534794944151214
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3677082737521460167}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!135 &6300449185384823937
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3677082737521460167}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &5520358562528137582
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8830139160470727148}
+  - component: {fileID: 7470225734536180416}
+  - component: {fileID: 3315540877654865465}
+  - component: {fileID: 2441753219397905363}
+  m_Layer: 0
+  m_Name: Point (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &8830139160470727148
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5520358562528137582}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 7.92, y: 7.89, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5578217811628422254}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &7470225734536180416
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5520358562528137582}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &3315540877654865465
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5520358562528137582}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!135 &2441753219397905363
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5520358562528137582}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &7374727198152253465
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7770416971451320535}
+  - component: {fileID: 5234058855213923305}
+  - component: {fileID: 8468651556219620527}
+  - component: {fileID: 7427179054630686919}
+  m_Layer: 0
+  m_Name: Limit (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7770416971451320535
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7374727198152253465}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 11, y: 11, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5018696705912333701}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &5234058855213923305
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7374727198152253465}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &8468651556219620527
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7374727198152253465}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 7df0cf20f6b7eb24d9e42a81aebf4eaa, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!135 &7427179054630686919
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7374727198152253465}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &7637870813514231839
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5578217811628422254}
+  - component: {fileID: 7063377485027945341}
+  m_Layer: 0
+  m_Name: VoronoiDiagram (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5578217811628422254
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7637870813514231839}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2284164239085600061}
+  - {fileID: 5713468046769872811}
+  - {fileID: 8830139160470727148}
+  - {fileID: 1182829578643840657}
+  m_Father: {fileID: 5018696705912333701}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7063377485027945341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7637870813514231839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c968b4940e924d909f369ffffb58ab87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  drawPolis: 1
+  intersections: []
+  polis:
+  - drawPoli: 0
+    weight: 5
+    relationOfMediatrix: 0.5
+    itemSector: {x: 3, y: 3}
+    intersections:
+    - {x: 1.4999999, y: 2.5}
+    - {x: 2.5, y: 2}
+    - {x: 3.5, y: 2}
+    - {x: 3.5000002, y: 2}
+    - {x: 3.5, y: 3.5}
+    - {x: 2.5, y: 3.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.89277434, g: 0.56412786, b: 0.1707263, a: 0.3}
+  - drawPoli: 0
+    weight: 3
+    relationOfMediatrix: 0.5
+    itemSector: {x: 7, y: 8}
+    intersections:
+    - {x: 6.5, y: 7.5}
+    - {x: 7.5, y: 7.5}
+    - {x: 7.5, y: 8.5}
+    - {x: 6.5, y: 8.5}
+    - {x: 6, y: 8}
+    indexIntersections: 
+    colorGizmos: {r: 0.15827179, g: 0.46669084, b: 0.95553744, a: 0.3}
+  - drawPoli: 0
+    weight: 1
+    relationOfMediatrix: 0.5
+    itemSector: {x: 3, y: 5}
+    intersections:
+    - {x: 2, y: 5}
+    - {x: 2.5, y: 4.5}
+    - {x: 3.5, y: 4.5}
+    - {x: 4, y: 5}
+    - {x: 4, y: 5.5}
+    - {x: 3.8333333, y: 5.8333335}
+    - {x: 3.166667, y: 6.166667}
+    indexIntersections: 
+    colorGizmos: {r: 0.15412164, g: 0.9678848, b: 0.71242046, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 5, y: 3}
+    intersections:
+    - {x: 4.5, y: 2.5}
+    - {x: 5.5, y: 2.5}
+    - {x: 5.5, y: 3.5}
+    - {x: 4.5, y: 3.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.07820034, g: 0.94910324, b: 0.010335922, a: 0.3}
+  - drawPoli: 0
+    weight: 1
+    relationOfMediatrix: 0.5
+    itemSector: {x: 3, y: 10}
+    intersections:
+    - {x: 2, y: 10}
+    - {x: 2.5, y: 9.5}
+    - {x: 3.5, y: 9.5}
+    - {x: 3.5, y: 11}
+    - {x: 2, y: 11}
+    indexIntersections: 
+    colorGizmos: {r: 0.44548327, g: 0.23251176, b: 0.13713026, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 3, y: 4}
+    intersections:
+    - {x: 2.5, y: 3.5}
+    - {x: 3.5, y: 3.5}
+    - {x: 3.5, y: 4.5}
+    - {x: 2.5, y: 4.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.6119074, g: 0.41413027, b: 0.584222, a: 0.3}
+  - drawPoli: 0
+    weight: 1
+    relationOfMediatrix: 0.5
+    itemSector: {x: 1, y: 10}
+    intersections:
+    - {x: -0, y: 8}
+    - {x: 0.000000075394574, y: 8}
+    - {x: 2, y: 10}
+    - {x: 2, y: 11}
+    - {x: 0, y: 11}
+    indexIntersections: 
+    colorGizmos: {r: 0.4048813, g: 0.71935546, b: 0.95655644, a: 0.3}
+  - drawPoli: 0
+    weight: 1
+    relationOfMediatrix: 0.5
+    itemSector: {x: 5, y: 7}
+    intersections:
+    - {x: 4.5, y: 6.5}
+    - {x: 5.5, y: 6.5}
+    - {x: 5.5, y: 7.5}
+    - {x: 4.5, y: 7.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.05560851, g: 0.8697468, b: 0.31002277, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 6, y: 5}
+    intersections:
+    - {x: 5.5, y: 4.5}
+    - {x: 6.5, y: 4.5}
+    - {x: 6.5, y: 5.5}
+    - {x: 5.5, y: 5.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.7908441, g: 0.5793585, b: 0.7732996, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 10, y: 9}
+    intersections:
+    - {x: 9.5, y: 8.5}
+    - {x: 11, y: 8.5}
+    - {x: 11, y: 9.5}
+    - {x: 9.5, y: 9.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.30489403, g: 0.3325917, b: 0.4483915, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 2, y: 9}
+    intersections:
+    - {x: 0, y: 8}
+    - {x: 2, y: 8}
+    - {x: 2.5, y: 8.5}
+    - {x: 2.5, y: 9.5}
+    - {x: 2, y: 10}
+    indexIntersections: 
+    colorGizmos: {r: 0.04279387, g: 0.3301373, b: 0.96509624, a: 0.3}
+  - drawPoli: 0
+    weight: 10
+    relationOfMediatrix: 0.5
+    itemSector: {x: 2, y: 4}
+    intersections:
+    - {x: 0, y: 2.5}
+    - {x: 1.5, y: 2.5}
+    - {x: 2.5, y: 3.5}
+    - {x: 2.5, y: 4.5}
+    - {x: 2, y: 5}
+    - {x: 0, y: 5}
+    indexIntersections: 
+    colorGizmos: {r: 0.07239878, g: 0.6824471, b: 0.4703446, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 1, y: 10}
+    intersections:
+    - {x: -0, y: 8}
+    - {x: 0.000000075394574, y: 8}
+    - {x: 2, y: 10}
+    - {x: 2, y: 11}
+    - {x: 0, y: 11}
+    indexIntersections: 
+    colorGizmos: {r: 0.3456561, g: 0.66209304, b: 0.9574506, a: 0.3}
+  - drawPoli: 0
+    weight: 2
+    relationOfMediatrix: 0.5
+    itemSector: {x: 9, y: 2}
+    intersections:
+    - {x: 8.5, y: 1.5}
+    - {x: 9.5, y: 1.5}
+    - {x: 9.500001, y: 3}
+    - {x: 9.166666, y: 3.1666667}
+    - {x: 8.5, y: 2.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.7162497, g: 0.14434409, b: 0.47135383, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 10, y: 1}
+    intersections:
+    - {x: 9.5, y: -0}
+    - {x: 11, y: -0}
+    - {x: 11, y: 1.5}
+    - {x: 9.5, y: 1.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.88804185, g: 0.42681557, b: 0.73775136, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 2, y: 1}
+    intersections:
+    - {x: -0, y: -0}
+    - {x: 2.5, y: -0}
+    - {x: 2.5, y: 2}
+    - {x: 1.5, y: 2.5}
+    - {x: 0, y: 2.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.09868348, g: 0.6788825, b: 0.58422166, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 10, y: 7}
+    intersections:
+    - {x: 9.5, y: 6.5}
+    - {x: 11, y: 6.5}
+    - {x: 11, y: 7.5}
+    - {x: 9.5, y: 7.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.4227453, g: 0.39357632, b: 0.86413574, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 5, y: 8}
+    intersections:
+    - {x: 4.5, y: 7.5}
+    - {x: 5.5, y: 7.5}
+    - {x: 6, y: 8}
+    - {x: 5.5, y: 8.5}
+    - {x: 4.5, y: 8.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.94216216, g: 0.95245993, b: 0.46153086, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 4, y: 8}
+    intersections:
+    - {x: 3.5, y: 7.5}
+    - {x: 4.5, y: 7.5}
+    - {x: 4.5, y: 8.5}
+    - {x: 3.5, y: 8.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.49101037, g: 0.8032553, b: 0.87602675, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 5, y: 10}
+    intersections:
+    - {x: 4.5, y: 9.5}
+    - {x: 5.5, y: 9.5}
+    - {x: 5.5, y: 11}
+    - {x: 4.5, y: 11}
+    indexIntersections: 
+    colorGizmos: {r: 0.094218135, g: 0.49429673, b: 0.39026135, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 6, y: 7}
+    intersections:
+    - {x: 5.5, y: 6.5}
+    - {x: 6.5, y: 6.5}
+    - {x: 6.5, y: 7.5}
+    - {x: 6, y: 8}
+    - {x: 5.5, y: 7.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.28915042, g: 0.057264566, b: 0.19443381, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 6, y: 10}
+    intersections:
+    - {x: 5.5, y: 9.5}
+    - {x: 6.5, y: 9.5}
+    - {x: 6.5, y: 11}
+    - {x: 5.5, y: 11}
+    indexIntersections: 
+    colorGizmos: {r: 0.16121006, g: 0.9147099, b: 0.5385944, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 8, y: 6}
+    intersections:
+    - {x: 7.5, y: 5.5}
+    - {x: 8, y: 5}
+    - {x: 8.5, y: 5.5}
+    - {x: 8.5, y: 6.5}
+    - {x: 7.5, y: 6.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.29044443, g: 0.45570773, b: 0.30631286, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 7, y: 3}
+    intersections:
+    - {x: 6.5, y: 2.5}
+    - {x: 7.5, y: 2.5}
+    - {x: 7.5, y: 3.5}
+    - {x: 6.5, y: 3.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.48327833, g: 0.5616786, b: 0.076031566, a: 0.3}
+  - drawPoli: 0
+    weight: 1
+    relationOfMediatrix: 0.5
+    itemSector: {x: 8, y: 2}
+    intersections:
+    - {x: 7.5, y: 1.5}
+    - {x: 8.5, y: 1.5}
+    - {x: 8.5, y: 2.5}
+    - {x: 7.5, y: 2.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.99281967, g: 0.66885984, b: 0.3254785, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 7, y: 10}
+    intersections:
+    - {x: 6.5, y: 9.5}
+    - {x: 7.5, y: 9.5}
+    - {x: 7.5, y: 11}
+    - {x: 6.5, y: 11}
+    indexIntersections: 
+    colorGizmos: {r: 0.5892603, g: 0.8676965, b: 0.114626884, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 8, y: 10}
+    intersections:
+    - {x: 7.5, y: 9.5}
+    - {x: 8, y: 9}
+    - {x: 8.5, y: 9.5}
+    - {x: 8.5, y: 11}
+    - {x: 7.5, y: 11}
+    indexIntersections: 
+    colorGizmos: {r: 0.51785, g: 0.809193, b: 0.69542277, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 10, y: 5}
+    intersections:
+    - {x: 9.5, y: 4.5}
+    - {x: 11, y: 4.5}
+    - {x: 11, y: 5.5}
+    - {x: 9.5, y: 5.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.39921623, g: 0.9535072, b: 0.8390137, a: 0.3}
+  - drawPoli: 0
+    weight: 2
+    relationOfMediatrix: 0.5
+    itemSector: {x: 4, y: 7}
+    intersections:
+    - {x: 3, y: 6.5}
+    - {x: 3.1666667, y: 6.1666665}
+    - {x: 3.8333333, y: 5.8333335}
+    - {x: 4.5, y: 6.5}
+    - {x: 4.5, y: 7.5}
+    - {x: 3.5, y: 7.5}
+    - {x: 3, y: 7}
+    indexIntersections: 
+    colorGizmos: {r: 0.7953713, g: 0.03996265, b: 0.0010157824, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 3, y: 8}
+    intersections:
+    - {x: 3, y: 7}
+    - {x: 3.5, y: 7.5}
+    - {x: 3.5, y: 8.5}
+    - {x: 2.5, y: 8.5}
+    - {x: 2, y: 8}
+    indexIntersections: 
+    colorGizmos: {r: 0.42570192, g: 0.78031266, b: 0.63601613, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 5, y: 6}
+    intersections:
+    - {x: 3.8333335, y: 5.8333335}
+    - {x: 4, y: 5.5}
+    - {x: 5.5, y: 5.5}
+    - {x: 5.5, y: 6.5}
+    - {x: 4.5, y: 6.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.4146238, g: 0.61786634, b: 0.81879544, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 9, y: 10}
+    intersections:
+    - {x: 8.5, y: 9.5}
+    - {x: 9.5, y: 9.5}
+    - {x: 9.5, y: 11}
+    - {x: 8.5, y: 11}
+    indexIntersections: 
+    colorGizmos: {r: 0.9448656, g: 0.17176867, b: 0.6827595, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 7, y: 6}
+    intersections:
+    - {x: 6.5, y: 5.5}
+    - {x: 7.5, y: 5.5}
+    - {x: 7.5, y: 6.5}
+    - {x: 6.5, y: 6.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.015597701, g: 0.43904203, b: 0.26246256, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 1, y: 10}
+    intersections:
+    - {x: -0, y: 8}
+    - {x: 0.000000075394574, y: 8}
+    - {x: 2, y: 10}
+    - {x: 2, y: 11}
+    - {x: 0, y: 11}
+    indexIntersections: 
+    colorGizmos: {r: 0.15076745, g: 0.64504826, b: 0.52502257, a: 0.3}
+  - drawPoli: 0
+    weight: 1
+    relationOfMediatrix: 0.5
+    itemSector: {x: 10, y: 4}
+    intersections:
+    - {x: 9, y: 3.5000002}
+    - {x: 9.166666, y: 3.1666665}
+    - {x: 9.500001, y: 3}
+    - {x: 11, y: 3}
+    - {x: 11, y: 4.5}
+    - {x: 9.5, y: 4.5}
+    - {x: 9, y: 4}
+    indexIntersections: 
+    colorGizmos: {r: 0.4429608, g: 0.06122172, b: 0.32846385, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 7, y: 4}
+    intersections:
+    - {x: 6.5, y: 3.5}
+    - {x: 7.5, y: 3.5}
+    - {x: 7.5, y: 4.5}
+    - {x: 6.5, y: 4.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.49181122, g: 0.23341477, b: 0.15206504, a: 0.3}
+  - drawPoli: 0
+    weight: 1
+    relationOfMediatrix: 0.5
+    itemSector: {x: 5, y: 5}
+    intersections:
+    - {x: 4.5, y: 4.5}
+    - {x: 5.5, y: 4.5}
+    - {x: 5.5, y: 5.5}
+    - {x: 4, y: 5.5}
+    - {x: 4, y: 5}
+    indexIntersections: 
+    colorGizmos: {r: 0.61155254, g: 0.35409218, b: 0.7536135, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 10, y: 8}
+    intersections:
+    - {x: 9.5, y: 7.5}
+    - {x: 11, y: 7.5}
+    - {x: 11, y: 8.5}
+    - {x: 9.5, y: 8.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.7214991, g: 0.93084216, b: 0.5857766, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 9, y: 7}
+    intersections:
+    - {x: 8.5, y: 6.5}
+    - {x: 9.5, y: 6.5}
+    - {x: 9.5, y: 7.5}
+    - {x: 8.5, y: 7.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.27687424, g: 0.85175145, b: 0.8928951, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 8, y: 4}
+    intersections:
+    - {x: 7.5, y: 3.5}
+    - {x: 9, y: 3.5}
+    - {x: 9, y: 4}
+    - {x: 8, y: 5}
+    - {x: 7.5, y: 4.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.5234141, g: 0.47476214, b: 0.062550426, a: 0.3}
+  - drawPoli: 0
+    weight: 3
+    relationOfMediatrix: 0.5
+    itemSector: {x: 6, y: 1}
+    intersections:
+    - {x: 5, y: -0}
+    - {x: 6.5, y: -0}
+    - {x: 6.5, y: 1.5}
+    - {x: 6, y: 2}
+    - {x: 5, y: 1}
+    indexIntersections: 
+    colorGizmos: {r: 0.9797833, g: 0.4407975, b: 0.9546969, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 7, y: 1}
+    intersections:
+    - {x: 6.5, y: -0}
+    - {x: 7.5, y: -0}
+    - {x: 7.5, y: 1.5}
+    - {x: 6.5, y: 1.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.8091917, g: 0.3836866, b: 0.689571, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 4, y: 4}
+    intersections:
+    - {x: 3.5, y: 3.5}
+    - {x: 4.5, y: 3.5}
+    - {x: 4.5, y: 4.5}
+    - {x: 4, y: 5}
+    - {x: 3.5, y: 4.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.5906747, g: 0.38136202, b: 0.43466395, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 8, y: 7}
+    intersections:
+    - {x: 7.5, y: 6.5}
+    - {x: 8.5, y: 6.5}
+    - {x: 8.5, y: 7.5}
+    - {x: 7.5, y: 7.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.7019043, g: 0.067199945, b: 0.27067715, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 1, y: 10}
+    intersections:
+    - {x: -0, y: 8}
+    - {x: 0.000000075394574, y: 8}
+    - {x: 2, y: 10}
+    - {x: 2, y: 11}
+    - {x: 0, y: 11}
+    indexIntersections: 
+    colorGizmos: {r: 0.97016597, g: 0.38251656, b: 0.09083414, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 8, y: 3}
+    intersections:
+    - {x: 7.5, y: 2.5}
+    - {x: 8.5, y: 2.5}
+    - {x: 9.166666, y: 3.1666667}
+    - {x: 9, y: 3.5000002}
+    - {x: 7.5, y: 3.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.36633247, g: 0.120826006, b: 0.87413216, a: 0.3}
+  - drawPoli: 0
+    weight: 1
+    relationOfMediatrix: 0.5
+    itemSector: {x: 2, y: 6}
+    intersections:
+    - {x: 0, y: 5}
+    - {x: 2, y: 5}
+    - {x: 3.1666667, y: 6.1666665}
+    - {x: 3, y: 6.5}
+    - {x: 0, y: 6.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.47606868, g: 0.68732476, b: 0.20311749, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 1, y: 10}
+    intersections:
+    - {x: -0, y: 8}
+    - {x: 0.000000075394574, y: 8}
+    - {x: 2, y: 10}
+    - {x: 2, y: 11}
+    - {x: 0, y: 11}
+    indexIntersections: 
+    colorGizmos: {r: 0.9071276, g: 0.8408736, b: 0.38541883, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 7, y: 7}
+    intersections:
+    - {x: 6.5, y: 6.5}
+    - {x: 7.5, y: 6.5}
+    - {x: 7.5, y: 7.5}
+    - {x: 6.5, y: 7.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.014579773, g: 0.41630203, b: 0.6677319, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 10, y: 10}
+    intersections:
+    - {x: 9.5, y: 9.5}
+    - {x: 11, y: 9.5}
+    - {x: 11, y: 11}
+    - {x: 9.5, y: 11}
+    indexIntersections: 
+    colorGizmos: {r: 0.50858635, g: 0.9037163, b: 0.64086485, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 5, y: 9}
+    intersections:
+    - {x: 4.5, y: 8.5}
+    - {x: 5.5, y: 8.5}
+    - {x: 5.5, y: 9.5}
+    - {x: 4.5, y: 9.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.23475862, g: 0.7566811, b: 0.57153827, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 1, y: 10}
+    intersections:
+    - {x: -0, y: 8}
+    - {x: 0.000000075394574, y: 8}
+    - {x: 2, y: 10}
+    - {x: 2, y: 11}
+    - {x: 0, y: 11}
+    indexIntersections: 
+    colorGizmos: {r: 0.5829697, g: 0.8081285, b: 0.038556695, a: 0.3}
+  - drawPoli: 0
+    weight: 1
+    relationOfMediatrix: 0.5
+    itemSector: {x: 9, y: 5}
+    intersections:
+    - {x: 9, y: 4}
+    - {x: 9.5, y: 4.5}
+    - {x: 9.5, y: 5.5}
+    - {x: 8.5, y: 5.5}
+    - {x: 8, y: 5}
+    indexIntersections: 
+    colorGizmos: {r: 0.3327437, g: 0.520804, b: 0.62299293, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 6, y: 9}
+    intersections:
+    - {x: 5.5, y: 8.5}
+    - {x: 6, y: 8}
+    - {x: 6.5, y: 8.5}
+    - {x: 6.5, y: 9.5}
+    - {x: 5.5, y: 9.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.15861309, g: 0.9147117, b: 0.23837101, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 7, y: 9}
+    intersections:
+    - {x: 6.5, y: 8.5}
+    - {x: 7.5, y: 8.5}
+    - {x: 8, y: 9}
+    - {x: 7.5, y: 9.5}
+    - {x: 6.5, y: 9.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.5065661, g: 0.28555077, b: 0.21424747, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 6, y: 6}
+    intersections:
+    - {x: 5.5, y: 5.5}
+    - {x: 6.5, y: 5.5}
+    - {x: 6.5, y: 6.5}
+    - {x: 5.5, y: 6.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.58158606, g: 0.9495307, b: 0.57182616, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 10, y: 2}
+    intersections:
+    - {x: 9.5, y: 1.5}
+    - {x: 11, y: 1.5}
+    - {x: 11, y: 3}
+    - {x: 9.5, y: 3}
+    indexIntersections: 
+    colorGizmos: {r: 0.731199, g: 0.25344676, b: 0.75812733, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 10, y: 6}
+    intersections:
+    - {x: 9.5, y: 5.5}
+    - {x: 11, y: 5.5}
+    - {x: 11, y: 6.5}
+    - {x: 9.5, y: 6.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.4664263, g: 0.1228286, b: 0.35482866, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 6, y: 4}
+    intersections:
+    - {x: 5.5, y: 3.5}
+    - {x: 6.5, y: 3.5}
+    - {x: 6.5, y: 4.5}
+    - {x: 5.5, y: 4.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.95210826, g: 0.88673675, b: 0.77917564, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 3, y: 1}
+    intersections:
+    - {x: 2.5, y: -0}
+    - {x: 3.5, y: -0}
+    - {x: 3.5000002, y: 2}
+    - {x: 3.5, y: 2}
+    - {x: 2.5, y: 2}
+    indexIntersections: 
+    colorGizmos: {r: 0.73474324, g: 0.6887623, b: 0.5701588, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 5, y: 4}
+    intersections:
+    - {x: 4.5, y: 3.5}
+    - {x: 5.5, y: 3.5}
+    - {x: 5.5, y: 4.5}
+    - {x: 4.5, y: 4.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.78856695, g: 0.6270168, b: 0.9025743, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 8, y: 1}
+    intersections:
+    - {x: 7.5, y: -0}
+    - {x: 8.5, y: -0}
+    - {x: 8.5, y: 1.5}
+    - {x: 7.5, y: 1.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.49102885, g: 0.44718236, b: 0.59052783, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 9, y: 6}
+    intersections:
+    - {x: 8.5, y: 5.5}
+    - {x: 9.5, y: 5.5}
+    - {x: 9.5, y: 6.5}
+    - {x: 8.5, y: 6.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.2002418, g: 0.6426126, b: 0.047605157, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 9, y: 8}
+    intersections:
+    - {x: 8.5, y: 7.5}
+    - {x: 9.5, y: 7.5}
+    - {x: 9.5, y: 8.5}
+    - {x: 8.5, y: 8.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.73612106, g: 0.805948, b: 0.833581, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 4, y: 10}
+    intersections:
+    - {x: 3.5, y: 9.5}
+    - {x: 4.5, y: 9.5}
+    - {x: 4.5, y: 11}
+    - {x: 3.5, y: 11}
+    indexIntersections: 
+    colorGizmos: {r: 0.2573089, g: 0.29603618, b: 0.9887558, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 1, y: 10}
+    intersections:
+    - {x: -0, y: 8}
+    - {x: 0.000000075394574, y: 8}
+    - {x: 2, y: 10}
+    - {x: 2, y: 11}
+    - {x: 0, y: 11}
+    indexIntersections: 
+    colorGizmos: {r: 0.616214, g: 0.94324493, b: 0.3622027, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 2, y: 7}
+    intersections:
+    - {x: 0, y: 6.5}
+    - {x: 3, y: 6.5}
+    - {x: 3, y: 7}
+    - {x: 2, y: 8}
+    - {x: 0.000000075394574, y: 8}
+    - {x: 0, y: 8}
+    indexIntersections: 
+    colorGizmos: {r: 0.67354894, g: 0.3537814, b: 0.7386242, a: 0.3}
+  - drawPoli: 0
+    weight: 1
+    relationOfMediatrix: 0.5
+    itemSector: {x: 4, y: 3}
+    intersections:
+    - {x: 3.5, y: 2}
+    - {x: 3.5000002, y: 2}
+    - {x: 4, y: 2}
+    - {x: 4.5, y: 2.5}
+    - {x: 4.5, y: 3.5}
+    - {x: 3.5, y: 3.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.24899912, g: 0.59631246, b: 0.94821894, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 5, y: 2}
+    intersections:
+    - {x: 5, y: 1}
+    - {x: 6, y: 2}
+    - {x: 5.5, y: 2.5}
+    - {x: 4.5, y: 2.5}
+    - {x: 4, y: 2}
+    indexIntersections: 
+    colorGizmos: {r: 0.6854329, g: 0.18893683, b: 0.6057202, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 4, y: 1}
+    intersections:
+    - {x: 3.5, y: -0}
+    - {x: 5, y: -0}
+    - {x: 5, y: 1}
+    - {x: 4, y: 2}
+    - {x: 3.5000002, y: 2}
+    - {x: 3.5, y: 2}
+    indexIntersections: 
+    colorGizmos: {r: 0.48999983, g: 0.2981004, b: 0.48667985, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 8, y: 8}
+    intersections:
+    - {x: 7.5, y: 7.5}
+    - {x: 8.5, y: 7.5}
+    - {x: 8.5, y: 8.5}
+    - {x: 8, y: 9}
+    - {x: 7.5, y: 8.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.7596717, g: 0.28496653, b: 0.15260649, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 1, y: 10}
+    intersections:
+    - {x: -0, y: 8}
+    - {x: 0.000000075394574, y: 8}
+    - {x: 2, y: 10}
+    - {x: 2, y: 11}
+    - {x: 0, y: 11}
+    indexIntersections: 
+    colorGizmos: {r: 0.2035222, g: 0.74946785, b: 0.7901634, a: 0.3}
+  - drawPoli: 0
+    weight: 1
+    relationOfMediatrix: 0.5
+    itemSector: {x: 9, y: 9}
+    intersections:
+    - {x: 8.5, y: 8.5}
+    - {x: 9.5, y: 8.5}
+    - {x: 9.5, y: 9.5}
+    - {x: 8.5, y: 9.5}
+    - {x: 8, y: 9}
+    indexIntersections: 
+    colorGizmos: {r: 0.10231173, g: 0.80722654, b: 0.44511992, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 3, y: 9}
+    intersections:
+    - {x: 2.5, y: 8.5}
+    - {x: 3.5, y: 8.5}
+    - {x: 3.5, y: 9.5}
+    - {x: 2.5, y: 9.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.11722064, g: 0.5795819, b: 0.89467084, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 1, y: 10}
+    intersections:
+    - {x: -0, y: 8}
+    - {x: 0.000000075394574, y: 8}
+    - {x: 2, y: 10}
+    - {x: 2, y: 11}
+    - {x: 0, y: 11}
+    indexIntersections: 
+    colorGizmos: {r: 0.5631793, g: 0.60324234, b: 0.7290287, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 1, y: 10}
+    intersections:
+    - {x: -0, y: 8}
+    - {x: 0.000000075394574, y: 8}
+    - {x: 2, y: 10}
+    - {x: 2, y: 11}
+    - {x: 0, y: 11}
+    indexIntersections: 
+    colorGizmos: {r: 0.37112492, g: 0.8318639, b: 0.08889353, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 9, y: 1}
+    intersections:
+    - {x: 8.5, y: -0}
+    - {x: 9.5, y: -0}
+    - {x: 9.5, y: 1.5}
+    - {x: 8.5, y: 1.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.75444186, g: 0.53941673, b: 0.82286334, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 6, y: 3}
+    intersections:
+    - {x: 5.5, y: 2.5}
+    - {x: 6, y: 2}
+    - {x: 6.5, y: 2.5}
+    - {x: 6.5, y: 3.5}
+    - {x: 5.5, y: 3.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.8300928, g: 0.81135535, b: 0.38364965, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 4, y: 9}
+    intersections:
+    - {x: 3.5, y: 8.5}
+    - {x: 4.5, y: 8.5}
+    - {x: 4.5, y: 9.5}
+    - {x: 3.5, y: 9.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.9650767, g: 0.46810955, b: 0.34317547, a: 0.3}
+  - drawPoli: 0
+    weight: 1
+    relationOfMediatrix: 0.5
+    itemSector: {x: 7, y: 2}
+    intersections:
+    - {x: 6.5, y: 1.5}
+    - {x: 7.5, y: 1.5}
+    - {x: 7.5, y: 2.5}
+    - {x: 6.5, y: 2.5}
+    - {x: 6, y: 2}
+    indexIntersections: 
+    colorGizmos: {r: 0.22243822, g: 0.84956765, b: 0.15014207, a: 0.3}
+  - drawPoli: 0
+    weight: 0
+    relationOfMediatrix: 0.5
+    itemSector: {x: 7, y: 5}
+    intersections:
+    - {x: 6.5, y: 4.5}
+    - {x: 7.5, y: 4.5}
+    - {x: 8, y: 5}
+    - {x: 7.5, y: 5.5}
+    - {x: 6.5, y: 5.5}
+    indexIntersections: 
+    colorGizmos: {r: 0.8233185, g: 0.83218753, b: 0.20886838, a: 0.3}
+  segmentLimit:
+  - origin: {fileID: 5867867507978035805}
+    final: {fileID: 7770416971451320535}
+    directionLimit: 2
+  - origin: {fileID: 7770416971451320535}
+    final: {fileID: 7756994900072561048}
+    directionLimit: 3
+  - origin: {fileID: 7756994900072561048}
+    final: {fileID: 1373243466152449079}
+    directionLimit: 4
+  - origin: {fileID: 1373243466152449079}
+    final: {fileID: 5867867507978035805}
+    directionLimit: 1
+  pointsToCheck:
+  - {x: 3, y: 3}
+  - {x: 7, y: 8}
+  - {x: 3, y: 5}
+  - {x: 5, y: 3}
+  - {x: 3, y: 10}
+  - {x: 3, y: 4}
+  - {x: 1, y: 10}
+  - {x: 5, y: 7}
+  - {x: 6, y: 5}
+  - {x: 10, y: 9}
+  - {x: 2, y: 9}
+  - {x: 2, y: 4}
+  - {x: 1, y: 10}
+  - {x: 9, y: 2}
+  - {x: 10, y: 1}
+  - {x: 2, y: 1}
+  - {x: 10, y: 7}
+  - {x: 5, y: 8}
+  - {x: 4, y: 8}
+  - {x: 5, y: 10}
+  - {x: 6, y: 7}
+  - {x: 6, y: 10}
+  - {x: 8, y: 6}
+  - {x: 7, y: 3}
+  - {x: 8, y: 2}
+  - {x: 7, y: 10}
+  - {x: 8, y: 10}
+  - {x: 10, y: 5}
+  - {x: 4, y: 7}
+  - {x: 3, y: 8}
+  - {x: 5, y: 6}
+  - {x: 9, y: 10}
+  - {x: 7, y: 6}
+  - {x: 1, y: 10}
+  - {x: 10, y: 4}
+  - {x: 7, y: 4}
+  - {x: 5, y: 5}
+  - {x: 10, y: 8}
+  - {x: 9, y: 7}
+  - {x: 8, y: 4}
+  - {x: 6, y: 1}
+  - {x: 7, y: 1}
+  - {x: 4, y: 4}
+  - {x: 8, y: 7}
+  - {x: 1, y: 10}
+  - {x: 8, y: 3}
+  - {x: 2, y: 6}
+  - {x: 1, y: 10}
+  - {x: 7, y: 7}
+  - {x: 10, y: 10}
+  - {x: 5, y: 9}
+  - {x: 1, y: 10}
+  - {x: 9, y: 5}
+  - {x: 6, y: 9}
+  - {x: 7, y: 9}
+  - {x: 6, y: 6}
+  - {x: 10, y: 2}
+  - {x: 10, y: 6}
+  - {x: 6, y: 4}
+  - {x: 3, y: 1}
+  - {x: 5, y: 4}
+  - {x: 8, y: 1}
+  - {x: 9, y: 6}
+  - {x: 9, y: 8}
+  - {x: 4, y: 10}
+  - {x: 1, y: 10}
+  - {x: 2, y: 7}
+  - {x: 4, y: 3}
+  - {x: 5, y: 2}
+  - {x: 4, y: 1}
+  - {x: 8, y: 8}
+  - {x: 1, y: 10}
+  - {x: 9, y: 9}
+  - {x: 3, y: 9}
+  - {x: 1, y: 10}
+  - {x: 1, y: 10}
+  - {x: 9, y: 1}
+  - {x: 6, y: 3}
+  - {x: 4, y: 9}
+  - {x: 7, y: 2}
+  - {x: 7, y: 5}
+  graph: {fileID: 0}
+  test: {fileID: 0}
