@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.IO.IsolatedStorage;
 using System.Numerics;
 using IA_Library;
 using IA_Library.Brain;
@@ -9,34 +9,42 @@ namespace IA_Library_FSM
     public class AgentScavenger : Agent
     {
         public Brain flockingBrain = new Brain();
-        
+
+        public Vector2 Direction;
+        public float speed;
+        public float rotation;
+
+        public float radius;
+
         public float minEatRadius;
 
-
-        public Vector2 currentDirection;
-        public float speed = 1f;
-        public float rotation = 1f;
-
-        public AgentScavenger(Simulation simulation) : base(simulation)
+        public AgentScavenger(Simulation simulation, GridManager gridManager) : base(simulation, gridManager)
         {
+            Action<Vector2> onMove;
+
+            speed = 5;
+            radius = 1;
+
             fsmController.AddBehaviour<MoveToEatScavengerState>(Behaviours.MoveToFood,
-            
-                onTickParameters: () => 
-                { 
-                    return new object[] { mainBrain }; 
-                }
-            );
-            
+                onEnterParameters: () => { return new object[] { mainBrain, flockingBrain }; },
+                
+                onTickParameters: () =>
+                {
+                    return new object[]
+                    {
+                        mainBrain.outputs, flockingBrain.outputs, rotation, (gridManager.cellSize * 4), position,
+                        Direction, radius, speed, GetNearestFoodPosition(), GetNearestFoodAgent(), GetNearestAgents(),
+                        onMove = MoveTo
+                    };
+                });
+
             fsmController.ForcedState(Behaviours.MoveToFood);
         }
 
         public override void Update(float deltaTime)
         {
             fsmController.Tick();
-
-            MoveTo(currentDirection);
-
-            Rotate();
+            MoveTo(Direction);
         }
 
         public override void ChooseNextState(float[] outputs)
@@ -46,76 +54,166 @@ namespace IA_Library_FSM
 
         public override void MoveTo(Vector2 direction)
         {
-            direction = Normalize(direction);
-            position += direction * speed;
-        }
-
-        private void Rotate() 
-        {
-            rotation %= 360;
-
-            float angleInRadians = rotation * (float)Math.PI / 180f;
-            currentDirection = new Vector2((float)Math.Cos(angleInRadians), (float)Math.Sin(angleInRadians));
-        }
-
-        private Vector2 Normalize(Vector2 vector)
-        {
-            float magnitude = (float)Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
-            if (magnitude > 0)
-            {
-                return new Vector2(vector.X / magnitude, vector.Y / magnitude);
-            }
-
-            return vector;
+            position = direction;
         }
 
         public override void SettingBrainUpdate(float deltaTime)
         {
             Vector2 nearFoodPos = GetNearestFoodPosition();
-            mainBrain.inputs = new[] { position.X, position.Y, minEatRadius, nearFoodPos.X, nearFoodPos.Y};
+            mainBrain.inputs = new[] { position.X, position.Y, minEatRadius, nearFoodPos.X, nearFoodPos.Y };
         }
 
         public override Vector2 GetNearestFoodPosition()
         {
-            throw new System.NotImplementedException();
+            return simulation.GetNearestDeadHerbivorePosition(position);
         }
 
-
-        private List<AgentScavenger> GetThreeNearestAgents()
+        public AgentHerbivore GetNearestFoodAgent()
         {
-            throw new System.NotImplementedException();
+            return simulation.GetNearestHerbivoreAgent(position);
+        }
+
+        private List<AgentScavenger> GetNearestAgents()
+        {
+            return simulation.GetNearestScavengers(position, 3);
         }
     }
-    
+
     public class MoveToEatScavengerState : MoveState
     {
+        public Brain flockingBrain;
+        private Vector2 direction;
+
         public override BehavioursActions GetOnEnterBehaviour(params object[] parameters)
         {
-            throw new System.NotImplementedException();
+            brain = parameters[0] as Brain;
+            flockingBrain = parameters[1] as Brain;
+
+            return default;
         }
 
         public override BehavioursActions GetTickBehaviour(params object[] parameters)
         {
             BehavioursActions behaviour = new BehavioursActions();
 
-            float[] outputs = parameters[0] as float[];
-            position = (Vector2)(parameters[1]);
-            Vector2 nearFoodPos = (Vector2)parameters[2];
+            float[] outputsMove = parameters[0] as float[];
+            float[] outputsFlocking = parameters[1] as float[];
+
+            float rotation = (float)(parameters[2]);
             float minEatRadius = (float)(parameters[3]);
-            
+
+            position = (Vector2)(parameters[4]);
+            direction = (Vector2)(parameters[5]);
+            float radius = (float)parameters[6];
+            float speed = (float)(parameters[7]);
+
+            Vector2 nearFoodPos = (Vector2)parameters[8];
+            AgentHerbivore agentDeadHerbivore = (AgentHerbivore)parameters[9];
+
+            List<AgentScavenger> nearScavengers = (List<AgentScavenger>)parameters[10];
+
+            var onMove = parameters[11] as Action<Vector2[]>;
+
             behaviour.AddMultitreadableBehaviours(0, () =>
             {
-                List<Vector2> newPositions = new List<Vector2> { nearFoodPos };
-                float distanceFromFood = GetDistanceFrom(newPositions);
+                float leftValue = outputsMove[0];
+                float rightValue = outputsMove[1];
+
+                float netRotationValue = leftValue - rightValue;
+                float turnAngle = netRotationValue * MathF.PI / 180;
+
+                var rotationMatrix = new Matrix3x2
+                (
+                    MathF.Cos(turnAngle), MathF.Sin(turnAngle),
+                    -MathF.Sin(turnAngle), MathF.Cos(turnAngle),
+                    0, 0
+                );
+
+                direction = Vector2.Transform(direction, rotationMatrix);
+                direction = Vector2.Normalize(direction);
+                rotation += netRotationValue;
+
+                rotation = (rotation + 360) % 360;
+            });
+
+            behaviour.AddMultitreadableBehaviours(1, () =>
+            {
+                Vector2 flokingInfluence = direction * (outputsFlocking[0] + outputsFlocking[1] + outputsFlocking[2]);
+
+                Vector2 finalDirection = direction + flokingInfluence;
+
+                finalDirection = Vector2.Normalize(finalDirection);
+
+                Vector2 finalPosition = position + finalDirection * speed;
+
+                Vector2[] FinalPosition = new[] { finalPosition };
+
+                onMove.Invoke(FinalPosition);
+            });
+
+            behaviour.AddMultitreadableBehaviours(2, () =>
+            {
+                float distanceFromFood = Vector2.Distance(position, nearFoodPos);
 
                 if (distanceFromFood < minEatRadius)
                 {
                     brain.FitnessReward += 1;
-                
+                    agentDeadHerbivore.EatPiece();
                 }
+                
                 else if (distanceFromFood > minEatRadius)
                 {
                     brain.FitnessMultiplier -= 0.05f;
+                }
+
+                foreach (AgentScavenger scavenger in nearScavengers)
+                {
+                    float diff = MathF.Abs(rotation - scavenger.rotation);
+
+                    if (diff > 180) 
+                    {
+                        diff = 360 - diff;
+                    }
+
+                    if (diff > 90)
+                    {
+                        flockingBrain.FitnessMultiplier -= 0.05f;
+                    }
+                    
+                    else
+                    {
+                        flockingBrain.FitnessReward += 1;
+                    }
+
+                    if (Vector2.Distance(position, scavenger.position) > radius * 6)
+                    {
+                        flockingBrain.FitnessMultiplier -= 0.05f;
+                    }
+                    
+                    else
+                    {
+                        flockingBrain.FitnessReward += 1;
+                    }
+
+                    if (Vector2.Distance(position, scavenger.position) < radius * 2)
+                    {
+                        flockingBrain.FitnessMultiplier -= 0.05f;
+                    }
+                    
+                    else
+                    {
+                        flockingBrain.FitnessReward += 1;
+                    }
+
+                    if (distanceFromFood < minEatRadius)
+                    {
+                        flockingBrain.FitnessReward += 1;
+                    }
+                    
+                    else if (distanceFromFood > minEatRadius)
+                    {
+                        flockingBrain.FitnessMultiplier -= 0.05f;
+                    }
                 }
             });
 
@@ -124,7 +222,10 @@ namespace IA_Library_FSM
 
         public override BehavioursActions GetOnExitBehaviour(params object[] parameters)
         {
-            throw new System.NotImplementedException();
+            brain.ApplyFitness();
+            flockingBrain.ApplyFitness();
+
+            return default;
         }
     }
 }
