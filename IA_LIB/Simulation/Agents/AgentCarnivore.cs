@@ -11,8 +11,10 @@ namespace IA_Library_FSM
         public Brain moveToFoodBrain = new Brain();
         public Brain eatBrain = new Brain();
 
-        public AgentCarnivore(Simulation simulation) : base(simulation)
+        public AgentCarnivore(Simulation simulation, GridManager gridManager) : base(simulation, gridManager)
         {
+            Action<Vector2> onMove;
+
             fsmController.AddBehaviour<MoveToEatCarnivoreState>(Behaviours.MoveToFood,
                 
                 onEnterParameters: () => 
@@ -24,10 +26,9 @@ namespace IA_Library_FSM
                 {
                     return new object[]
                     {
-                        moveToFoodBrain.outputs, position, GetNearestFoodPosition(), GetNearestFood()
+                        moveToFoodBrain.outputs, position, GetNearestFoodPosition(), GetNearestFood(), onMove = MoveTo
                     };
                 }
-                
             );
 
             fsmController.AddBehaviour<EatCarnivoreState>(Behaviours.Eat,
@@ -36,7 +37,7 @@ namespace IA_Library_FSM
                 { 
                     return new object[] { eatBrain }; 
                 },
-
+                
                 onTickParameters: () =>
                 {
                     return new object[]
@@ -54,7 +55,6 @@ namespace IA_Library_FSM
         public override void Update(float deltaTime)
         {
             ChooseNextState(mainBrain.outputs);
-
             fsmController.Tick();
         }
 
@@ -64,7 +64,7 @@ namespace IA_Library_FSM
             {
                 fsmController.Transition(Flags.OnTransitionMoveToEat);
             }
-
+            
             else if (outputs[1] > 0.0f)
             {
                 fsmController.Transition(Flags.OnTransitionEat);
@@ -73,12 +73,7 @@ namespace IA_Library_FSM
 
         public override void MoveTo(Vector2 direction)
         {
-            throw new NotImplementedException();
-        }
-
-        public override Vector2 GetNearestFoodPosition()
-        {
-            throw new NotImplementedException();
+            position = gridManager.GetNewPositionInGrid(position, direction);
         }
 
         public override void SettingBrainUpdate(float deltaTime)
@@ -103,7 +98,12 @@ namespace IA_Library_FSM
 
         private AgentHerbivore GetNearestFood()
         {
-            throw new NotImplementedException();
+            return simulation.GetNearestHerbivoreAgent(position);
+        }
+
+        public override Vector2 GetNearestFoodPosition()
+        {
+            return simulation.GetNearestHerbivorePosition(position);
         }
     }
 
@@ -117,7 +117,6 @@ namespace IA_Library_FSM
             brain = parameters[0] as Brain;
             positiveHalf = Neuron.Sigmoid(0.5f, brain.p);
             negativeHalf = Neuron.Sigmoid(-0.5f, brain.p);
-
             return default;
         }
 
@@ -129,6 +128,7 @@ namespace IA_Library_FSM
             position = (Vector2)parameters[1];
             Vector2 nearFoodPos = (Vector2)parameters[2];
             AgentHerbivore herbivore = parameters[3] as AgentHerbivore;
+            var onMove = parameters[4] as Action<Vector2[]>;
 
             behaviour.AddMultitreadableBehaviours(0, () =>
             {
@@ -138,16 +138,12 @@ namespace IA_Library_FSM
                 }
 
                 Vector2[] direction = new Vector2[movesPerTurn];
-
                 for (int i = 0; i < direction.Length; i++)
                 {
                     direction[i] = GetDir(outputs[i]);
                 }
 
-                foreach (Vector2 dir in direction)
-                {
-                    position += dir;
-                }
+                onMove.Invoke(direction);
 
                 List<Vector2> newPositions = new List<Vector2> { nearFoodPos };
                 float distanceFromFood = GetDistanceFrom(newPositions);
@@ -182,7 +178,6 @@ namespace IA_Library_FSM
         public override BehavioursActions GetOnEnterBehaviour(params object[] parameters)
         {
             brain = parameters[0] as Brain;
-
             return default;
         }
 
@@ -222,27 +217,27 @@ namespace IA_Library_FSM
                             }
                         }
                     }
-
+                    
                     else if (maxEaten || position != nearFoodPos)
                     {
                         brain.FitnessMultiplier -= 0.05f;
                     }
                 }
-
+                
                 else
                 {
                     if (position == nearFoodPos && !maxEaten)
                     {
                         brain.FitnessMultiplier -= 0.05f;
                     }
-
+                    
                     else if (maxEaten)
                     {
                         brain.FitnessMultiplier += 0.10f;
                     }
                 }
             });
-
+            
             return behaviour;
         }
 
