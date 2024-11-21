@@ -4,7 +4,7 @@ namespace IA_Library.Brain
     {
         public Neuron[] neurons;
         private float[] outputs;
-        private int totalWeights = 0;
+        public int totalWeights = 0;
         public int inputsCount = 0;
         private float bias = 1;
         private float p = 0.5f;
@@ -39,8 +39,8 @@ namespace IA_Library.Brain
 
             for (int i = 0; i < neurons.Length; i++)
             {
-                neurons[i] = new Neuron(inputsCount + 1, bias, p);
-                totalWeights += inputsCount + 1;
+                neurons[i] = new Neuron(inputsCount, bias, p);
+                totalWeights += inputsCount;
             }
 
             outputs = new float[neurons.Length];
@@ -73,6 +73,18 @@ namespace IA_Library.Brain
             }
 
             return weights;
+        }
+
+        public int GetWeightCount()
+        {
+            int id = 0;
+
+            foreach (var neuron in neurons)
+            {
+                id += neuron.GetWeights().Length;
+            }
+
+            return id;
         }
 
         public float[] Synapsis(float[] inputs)

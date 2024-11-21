@@ -6,9 +6,9 @@ namespace IA_Library.Brain
 {
     public class Brain
     {
-        List<NeuronLayer> layers = new List<NeuronLayer>();
-        int totalWeightsCount = 0;
-        int inputsCount = 0;
+        public List<NeuronLayer> layers = new List<NeuronLayer>();
+        private int totalWeightsCount = 0;
+        private int inputsCount = 0;
 
         public float[] outputs;
         public float[] inputs;
@@ -16,19 +16,37 @@ namespace IA_Library.Brain
         private float fitness = 1;
         public float FitnessReward;
         public float FitnessMultiplier;
-        int fitnessCount = 0;
+        private int fitnessCount = 0;
 
         public float bias = 1;
         public float p = 0.5f;
 
+        public int InputsCount => inputsCount;
 
         public Brain()
         {
         }
 
+        public Brain(Brain brain) 
+        {
+            bias = brain.bias;
+            layers = layers;
+            totalWeightsCount = brain.totalWeightsCount;
+        }
+
+        public void CopyStructureFrom(Brain brain) 
+        {
+            layers = brain.layers;
+        }
+
         public void ApplyFitness()
         {
-            fitness *= FitnessReward * FitnessMultiplier > 0 ? FitnessMultiplier : 0;
+            fitness *= (FitnessReward * FitnessMultiplier > 0f) ? (FitnessReward + FitnessMultiplier) : 0f;
+        }
+
+        public void DestroyFitness() 
+        {
+            fitness *= 0f;
         }
 
         public bool AddNeuronLayer(int neuronsCount, float bias, float p)
@@ -50,7 +68,7 @@ namespace IA_Library.Brain
 
             NeuronLayer layer = new NeuronLayer(inputsCount, neuronsCount, bias, p);
 
-            totalWeightsCount += (inputsCount + 1) * neuronsCount;
+            totalWeightsCount += inputsCount * neuronsCount;
 
             layers.Add(layer);
 
@@ -68,7 +86,55 @@ namespace IA_Library.Brain
 
             return AddNeuronLayer(inputsCount, inputsCount, bias, p);
         }
-        
+
+
+        public bool AddNeuronLayerAtPosition(int neuronsCount, int layerPosition)
+        {
+            if (layers.Count <= 0 || layerPosition >= layers.Count)
+            {
+                throw new Exception("No previous Layer or out of range");
+            }
+
+            NeuronLayer item = new NeuronLayer(layers[layerPosition].OutputsCount, neuronsCount, bias, p);
+            totalWeightsCount -= layers[layerPosition].OutputsCount * layers[layerPosition + 1].OutputsCount;
+            layers[layerPosition + 1] = new NeuronLayer(neuronsCount, layers[layerPosition + 1].NeuronsCount, bias, p);
+            totalWeightsCount += layers[layerPosition + 1].OutputsCount * neuronsCount;
+            totalWeightsCount += layers[layerPosition].OutputsCount * neuronsCount;
+            layers.Insert(layerPosition + 1, item);
+            totalWeightsCount = GetWeightsCount();
+            
+            return true;
+        }
+
+        public bool AddNeuronAtLayer(int neuronsCountToAdd, int layerPosition)
+        {
+            NeuronLayer neuronLayer = layers[layerPosition];
+            layers[layerPosition] = new NeuronLayer(neuronLayer.InputsCount, neuronLayer.NeuronsCount + neuronsCountToAdd, bias, p);
+            NeuronLayer neuronLayer2 = layers[layerPosition + 1];
+            layers[layerPosition + 1] = new NeuronLayer(layers[layerPosition].OutputsCount, neuronLayer2.NeuronsCount, bias, p);
+            totalWeightsCount += layers[layerPosition].OutputsCount * neuronsCountToAdd;
+            totalWeightsCount += layers[layerPosition + 1].OutputsCount * neuronsCountToAdd;
+            totalWeightsCount = GetWeightsCount();
+            
+            return true;
+        }
+
+        public int GetWeightsCount()
+        {
+            int num = 0;
+            foreach (NeuronLayer layer in layers)
+            {
+                num += layer.GetWeightCount();
+            }
+
+            return num;
+        }
+
+        public int GetTotalWeightsCount()
+        {
+            return totalWeightsCount;
+        }
+
         public void SetWeights(float[] newWeights)
         {
             int fromId = 0;
