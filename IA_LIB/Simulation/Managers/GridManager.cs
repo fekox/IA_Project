@@ -10,9 +10,10 @@ namespace IA_Library
 
         private Random random = new Random();
 
-        public GridManager(Vector2 size, float cellSize)
+        public GridManager(int X, int Y, float cellSize)
         {
-            this.size = size;
+            size.X = X;
+            size.Y = Y;
             this.cellSize = cellSize;
         }
 
@@ -50,19 +51,19 @@ namespace IA_Library
             { 
                 x = size.X + x; 
             }
-            
+
             if (x >= size.X) 
-            { 
+            {
                 x = x - size.X; 
             }
 
             if (y < 0) 
-            {
+            { 
                 y = size.Y + y; 
             }
-            
+
             if (y >= size.Y) 
-            { 
+            {
                 y = y - size.Y; 
             }
 
@@ -71,16 +72,16 @@ namespace IA_Library
 
         private float WrapAround(float value, float max)
         {
-            if (value < 0)
+            if (value < 0) 
             {
                 return max + value;
             }
-           
+            
             if (value >= max) 
             {
                 return value - max;
             }
-                
+            
             return value;
         }
     }

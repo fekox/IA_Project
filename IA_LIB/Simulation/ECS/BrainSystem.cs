@@ -56,7 +56,7 @@ namespace IA_Library_ECS
         {
             Parallel.ForEach(activeEntities, parallelOptions, entity =>
             {
-                float[] inputs = inputComponent[entity].inputs;
+               float[] inputs = inputComponent[entity].inputs;
                
                outputComponent[entity].output = InputLayerSynapsis(entity, inputs);
                inputComponent[entity].inputs = outputComponent[entity].output;
@@ -81,7 +81,8 @@ namespace IA_Library_ECS
             Parallel.For(0, inputs.Length,
                 
                 neuron => 
-                { outputComponent[entity].output[neuron] = InputNeuronSynapsis(entity, neuron, inputs); 
+                { 
+                    outputComponent[entity].output[neuron] = InputNeuronSynapsis(entity, neuron, inputs); 
                 }
                 
             );
@@ -105,6 +106,7 @@ namespace IA_Library_ECS
         private float[] OutputLayerSynapsis(uint entity, float[] inputs)
         {
             Parallel.For(0, inputs.Length,
+                
                 neuron => 
                 { 
                     outputComponent[entity].output[neuron] = OutputNeuronSynapsis(entity, neuron, inputs); 
