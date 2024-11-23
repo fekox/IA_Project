@@ -6,7 +6,7 @@ namespace IA_Library.Brain
     {
         private float[] weights;
         private float bias;
-        private float p; 
+        private float p;
 
         public int WeightsCount
         {
@@ -21,7 +21,7 @@ namespace IA_Library.Brain
 
             for (int i = 0; i < weights.Length; i++)
             {
-                weights[i] = (float)(rand.NextDouble() * 2 - 1);
+                weights[i] = (float)(rand.NextDouble() * 2 - 1); // RandVal (-1,1)
             }
 
             this.bias = bias;
@@ -39,7 +39,7 @@ namespace IA_Library.Brain
 
             a += bias * weights[weights.Length - 1];
 
-            return Sigmoid(a,p);
+            return Sigmoid(a, p);
         }
 
         public int SetWeights(float[] newWeights, int fromId)
@@ -56,8 +56,8 @@ namespace IA_Library.Brain
         {
             return this.weights;
         }
-	
-        public static float Sigmoid(float a,float p)
+
+        public static float Sigmoid(float a, float p)
         {
             return 1.0f / (1.0f + MathF.Exp(-a / p));
         }
