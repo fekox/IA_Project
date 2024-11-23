@@ -18,15 +18,21 @@ namespace IA_Library_FSM
 
         public float minEatRadius;
 
-        public AgentScavenger(Simulation simulation, GridManager gridManager) : base(simulation, gridManager)
+        public AgentScavenger(Simulation simulation, GridManager gridManager, Brain mainBrain, Brain flockingBrain) : base(simulation,
+            gridManager, mainBrain)
         {
             Action<Vector2> onMove;
-
             speed = 5;
             radius = 1;
 
+            this.flockingBrain = flockingBrain;
+
             fsmController.AddBehaviour<MoveToEatScavengerState>(Behaviours.MoveToFood,
-                onEnterParameters: () => { return new object[] { mainBrain, flockingBrain }; },
+                
+                onEnterParameters: () => 
+                { 
+                    return new object[] { mainBrain, flockingBrain }; 
+                },
                 
                 onTickParameters: () =>
                 {
@@ -34,9 +40,10 @@ namespace IA_Library_FSM
                     {
                         mainBrain.outputs, flockingBrain.outputs, rotation, (gridManager.cellSize * 4), position,
                         Direction, radius, speed, GetNearestFoodPosition(), GetNearestFoodAgent(), GetNearestAgents(),
-                        onMove = MoveTo
+                        onMove = MoveTo, hasEaten
                     };
-                });
+                }
+            );
 
             fsmController.ForcedState(Behaviours.MoveToFood);
         }
@@ -45,6 +52,21 @@ namespace IA_Library_FSM
         {
             fsmController.Tick();
             MoveTo(Direction);
+        }
+
+        public override void Reset()
+        {
+            mainBrain.FitnessMultiplier = 1;
+            mainBrain.FitnessReward = 0;
+
+            flockingBrain.FitnessMultiplier = 1;
+            flockingBrain.FitnessReward = 0;
+
+            currentFood = 0;
+            hasEaten = false;
+            position = gridManager.GetRandomValuePositionGrid();
+
+            fsmController.ForcedState(Behaviours.MoveToFood);
         }
 
         public override void ChooseNextState(float[] outputs)
@@ -88,7 +110,6 @@ namespace IA_Library_FSM
         {
             brain = parameters[0] as Brain;
             flockingBrain = parameters[1] as Brain;
-
             return default;
         }
 
@@ -113,7 +134,9 @@ namespace IA_Library_FSM
             List<AgentScavenger> nearScavengers = (List<AgentScavenger>)parameters[10];
 
             var onMove = parameters[11] as Action<Vector2[]>;
+            bool hasEaten = (bool)(parameters[12]);
 
+            //Rotation
             behaviour.AddMultitreadableBehaviours(0, () =>
             {
                 float leftValue = outputsMove[0];
@@ -122,8 +145,7 @@ namespace IA_Library_FSM
                 float netRotationValue = leftValue - rightValue;
                 float turnAngle = netRotationValue * MathF.PI / 180;
 
-                var rotationMatrix = new Matrix3x2
-                (
+                var rotationMatrix = new Matrix3x2(
                     MathF.Cos(turnAngle), MathF.Sin(turnAngle),
                     -MathF.Sin(turnAngle), MathF.Cos(turnAngle),
                     0, 0
@@ -136,6 +158,7 @@ namespace IA_Library_FSM
                 rotation = (rotation + 360) % 360;
             });
 
+            //Calculate Next Position
             behaviour.AddMultitreadableBehaviours(1, () =>
             {
                 Vector2 flokingInfluence = direction * (outputsFlocking[0] + outputsFlocking[1] + outputsFlocking[2]);
@@ -151,26 +174,31 @@ namespace IA_Library_FSM
                 onMove.Invoke(FinalPosition);
             });
 
+            //fitness
             behaviour.AddMultitreadableBehaviours(2, () =>
             {
+                //fitness Movement
                 float distanceFromFood = Vector2.Distance(position, nearFoodPos);
 
                 if (distanceFromFood < minEatRadius)
                 {
+                    parameters[12] = true;
                     brain.FitnessReward += 1;
                     agentDeadHerbivore.EatPiece();
                 }
-                
+
                 else if (distanceFromFood > minEatRadius)
                 {
                     brain.FitnessMultiplier -= 0.05f;
                 }
 
+                //fitness Floking
                 foreach (AgentScavenger scavenger in nearScavengers)
                 {
+                    //Alignment
                     float diff = MathF.Abs(rotation - scavenger.rotation);
 
-                    if (diff > 180) 
+                    if (diff > 180)
                     {
                         diff = 360 - diff;
                     }
@@ -179,37 +207,40 @@ namespace IA_Library_FSM
                     {
                         flockingBrain.FitnessMultiplier -= 0.05f;
                     }
-                    
+
                     else
                     {
                         flockingBrain.FitnessReward += 1;
                     }
 
+                    //Cohesion
                     if (Vector2.Distance(position, scavenger.position) > radius * 6)
                     {
                         flockingBrain.FitnessMultiplier -= 0.05f;
                     }
-                    
+
                     else
                     {
                         flockingBrain.FitnessReward += 1;
                     }
 
+                    //Separation
                     if (Vector2.Distance(position, scavenger.position) < radius * 2)
                     {
                         flockingBrain.FitnessMultiplier -= 0.05f;
                     }
-                    
+
                     else
                     {
                         flockingBrain.FitnessReward += 1;
                     }
 
+                    //Direction
                     if (distanceFromFood < minEatRadius)
                     {
                         flockingBrain.FitnessReward += 1;
                     }
-                    
+
                     else if (distanceFromFood > minEatRadius)
                     {
                         flockingBrain.FitnessMultiplier -= 0.05f;
@@ -224,7 +255,6 @@ namespace IA_Library_FSM
         {
             brain.ApplyFitness();
             flockingBrain.ApplyFitness();
-
             return default;
         }
     }

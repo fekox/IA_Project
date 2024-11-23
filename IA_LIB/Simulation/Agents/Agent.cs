@@ -26,19 +26,18 @@ namespace IA_Library_FSM
 
     public abstract class Agent
     {
-        public Brain mainBrain = new Brain();
+        public Brain mainBrain;
         protected FSM<Behaviours, Flags> fsmController;
         protected Simulation simulation;
         protected GridManager gridManager;
 
         public Vector2 position;
 
-        protected bool hasEaten = false;
+        public bool hasEaten = false;
         protected int maxFood;
         protected int currentFood = 0;
 
-
-        public Agent(Simulation simulation, GridManager gridManager)
+        public Agent(Simulation simulation, GridManager gridManager, Brain mainBrain)
         {
             fsmController = new FSM<Behaviours, Flags>();
 
@@ -46,8 +45,11 @@ namespace IA_Library_FSM
             this.gridManager = gridManager;
 
             position = gridManager.GetRandomValuePositionGrid();
+
+            this.mainBrain = mainBrain;
         }
 
+        public abstract void Reset();
         public abstract void Update(float deltaTime);
         public abstract void ChooseNextState(float[] outputs);
         public abstract void MoveTo(Vector2 direction);
@@ -70,22 +72,22 @@ namespace IA_Library_FSM
         protected Vector2 GetDir(float x)
         {
             Vector2 dir = new Vector2();
-
+            
             if (x > positiveHalf)
             {
                 dir = new Vector2(1, 0);
             }
-
+            
             else if (x < positiveHalf && x > 0)
             {
                 dir = new Vector2(-1, 0);
             }
-
+            
             else if (x < 0 && x < negativeHalf)
             {
                 dir = new Vector2(0, 1);
             }
-
+            
             else if (x < negativeHalf)
             {
                 dir = new Vector2(0, -1);

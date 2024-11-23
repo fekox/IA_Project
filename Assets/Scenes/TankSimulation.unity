@@ -886,7 +886,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1690210759}
-  - component: {fileID: 1690210760}
   m_Layer: 0
   m_Name: PopulationManager
   m_TagString: Untagged
@@ -909,24 +908,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1690210760
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1690210757}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d219dd68001a7734a9b4fd44ecfdb82a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gridMaterial: {fileID: 2100000, guid: 86e0066a86fc0a84d9a5fbbc3b240cca, type: 2}
-  plantMaterial: {fileID: 2100000, guid: 25340932a8ef5e3448b9648f4d92d4b6, type: 2}
-  herbivoreMaterial: {fileID: 2100000, guid: 0a72a8e3deb1c61419a63c76596d5f5b, type: 2}
-  carnivoreMaterial: {fileID: 2100000, guid: 4fee3579053b3dc4bb2e570947637632, type: 2}
-  scavengerMaterial: {fileID: 2100000, guid: 869412771b722364c91d1183ee9c90d4, type: 2}
-  CubeMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!4 &1731890038 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400002, guid: 126dbcddb53386c4f969fdf0c555e822, type: 3}

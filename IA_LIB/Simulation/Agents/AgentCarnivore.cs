@@ -11,9 +11,13 @@ namespace IA_Library_FSM
         public Brain moveToFoodBrain = new Brain();
         public Brain eatBrain = new Brain();
 
-        public AgentCarnivore(Simulation simulation, GridManager gridManager) : base(simulation, gridManager)
+        public AgentCarnivore(Simulation simulation, GridManager gridManager,
+            Brain mainBrain, Brain moveToFoodBrain, Brain eatBrain) : base(simulation, gridManager, mainBrain)
         {
             Action<Vector2> onMove;
+
+            this.moveToFoodBrain = moveToFoodBrain;
+            this.eatBrain = eatBrain;
 
             fsmController.AddBehaviour<MoveToEatCarnivoreState>(Behaviours.MoveToFood,
                 
@@ -21,7 +25,7 @@ namespace IA_Library_FSM
                 { 
                     return new object[] { moveToFoodBrain }; 
                 },
-                
+               
                 onTickParameters: () =>
                 {
                     return new object[]
@@ -58,13 +62,31 @@ namespace IA_Library_FSM
             fsmController.Tick();
         }
 
+        public override void Reset()
+        {
+            mainBrain.FitnessMultiplier = 1;
+            mainBrain.FitnessReward = 0;
+
+            moveToFoodBrain.FitnessMultiplier = 1;
+            moveToFoodBrain.FitnessReward = 0;
+
+            eatBrain.FitnessMultiplier = 1;
+            eatBrain.FitnessReward = 0;
+
+            currentFood = 0;
+            hasEaten = false;
+            position = gridManager.GetRandomValuePositionGrid();
+
+            fsmController.ForcedState(Behaviours.MoveToFood);
+        }
+
         public override void ChooseNextState(float[] outputs)
         {
             if (outputs[0] > 0.0f)
             {
                 fsmController.Transition(Flags.OnTransitionMoveToEat);
             }
-            
+
             else if (outputs[1] > 0.0f)
             {
                 fsmController.Transition(Flags.OnTransitionEat);
@@ -84,12 +106,12 @@ namespace IA_Library_FSM
             { 
                 position.X, position.Y, nearestFoodPosition.X, nearestFoodPosition.Y, hasEaten ? 1 : -1, 
             };
-
+            
             moveToFoodBrain.inputs = new[] 
             { 
                 position.X, position.Y, nearestFoodPosition.X, nearestFoodPosition.Y 
             };
-
+            
             eatBrain.inputs = new[]
             { 
                 position.X, position.Y, nearestFoodPosition.X, nearestFoodPosition.Y, hasEaten ? 1 : -1 
@@ -117,6 +139,7 @@ namespace IA_Library_FSM
             brain = parameters[0] as Brain;
             positiveHalf = Neuron.Sigmoid(0.5f, brain.p);
             negativeHalf = Neuron.Sigmoid(-0.5f, brain.p);
+            
             return default;
         }
 
@@ -138,6 +161,7 @@ namespace IA_Library_FSM
                 }
 
                 Vector2[] direction = new Vector2[movesPerTurn];
+                
                 for (int i = 0; i < direction.Length; i++)
                 {
                     direction[i] = GetDir(outputs[i]);
@@ -153,7 +177,7 @@ namespace IA_Library_FSM
                     brain.FitnessReward += 20;
                     brain.FitnessMultiplier += 0.05f;
                 }
-                
+
                 else
                 {
                     brain.FitnessMultiplier -= 0.05f;
@@ -161,14 +185,12 @@ namespace IA_Library_FSM
 
                 previousDistance = distanceFromFood;
             });
-            
             return behaviour;
         }
 
         public override BehavioursActions GetOnExitBehaviour(params object[] parameters)
         {
             brain.ApplyFitness();
-
             return default;
         }
     }
@@ -217,34 +239,33 @@ namespace IA_Library_FSM
                             }
                         }
                     }
-                    
+
                     else if (maxEaten || position != nearFoodPos)
                     {
                         brain.FitnessMultiplier -= 0.05f;
                     }
                 }
-                
+
                 else
                 {
                     if (position == nearFoodPos && !maxEaten)
                     {
                         brain.FitnessMultiplier -= 0.05f;
                     }
-                    
+
                     else if (maxEaten)
                     {
                         brain.FitnessMultiplier += 0.10f;
                     }
                 }
             });
-            
+
             return behaviour;
         }
 
         public override BehavioursActions GetOnExitBehaviour(params object[] parameters)
         {
             brain.ApplyFitness();
-
             return default;
         }
     }
