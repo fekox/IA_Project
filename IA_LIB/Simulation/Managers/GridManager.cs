@@ -47,41 +47,25 @@ namespace IA_Library
             float x = position.X;
             float y = position.Y;
 
-            if (x < 0) 
-            { 
-                x = size.X + x; 
-            }
+            if (x < 0) x = size.X + x;
 
-            if (x >= size.X) 
-            {
-                x = x - size.X; 
-            }
+            if (x >= size.X) x = x - size.X;
 
-            if (y < 0) 
-            { 
-                y = size.Y + y; 
-            }
+            if (y < 0) y = size.Y + y;
 
-            if (y >= size.Y) 
-            {
-                y = y - size.Y; 
-            }
+            if (y >= size.Y) y = y - size.Y;
 
             return new Vector2(x, y);
         }
 
         private float WrapAround(float value, float max)
         {
-            if (value < 0) 
-            {
+            if (value < 0)
                 return max + value;
-            }
-            
-            if (value >= max) 
-            {
+
+            if (value >= max)
                 return value - max;
-            }
-            
+
             return value;
         }
     }
