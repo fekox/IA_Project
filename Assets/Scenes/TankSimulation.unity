@@ -402,7 +402,7 @@ Transform:
   m_GameObject: {fileID: 495979667}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 34.969555, y: -37.48261, z: 2.0675707}
+  m_LocalPosition: {x: 34.969555, y: -50.6, z: 2.0675707}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -710,8 +710,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1097552735}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.23575103, y: -0.66313124, z: 0.23294094, w: -0.6711311}
-  m_LocalPosition: {x: -34.263, y: 18.0072, z: 1.2373605}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 10, y: 10, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -921,12 +921,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9c7d37a7ff1c8a429089337725172d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridMaterial: {fileID: 0}
-  plantMaterial: {fileID: 0}
-  herbivoreMaterial: {fileID: 0}
-  carnivoreMaterial: {fileID: 0}
-  scavengerMaterial: {fileID: 0}
-  CubeMesh: {fileID: 0}
+  gridMaterial: {fileID: 2100000, guid: 86e0066a86fc0a84d9a5fbbc3b240cca, type: 2}
+  plantMaterial: {fileID: 2100000, guid: 25340932a8ef5e3448b9648f4d92d4b6, type: 2}
+  herbivoreMaterial: {fileID: 2100000, guid: 0a72a8e3deb1c61419a63c76596d5f5b, type: 2}
+  carnivoreMaterial: {fileID: 2100000, guid: 4fee3579053b3dc4bb2e570947637632, type: 2}
+  scavengerMaterial: {fileID: 2100000, guid: 869412771b722364c91d1183ee9c90d4, type: 2}
+  CubeMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!4 &1731890038 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400002, guid: 126dbcddb53386c4f969fdf0c555e822, type: 3}
