@@ -111,7 +111,7 @@ namespace IA_Library
             population.AddRange(oldGenomes);
             population.Sort(HandleComparison);
 
-            GeneticData backUpData = new(data);
+            GeneticData backUpData = new GeneticData(data);
             
             foreach (Genome g in population)
             {

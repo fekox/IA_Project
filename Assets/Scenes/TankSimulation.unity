@@ -886,6 +886,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1690210759}
+  - component: {fileID: 1690210760}
   m_Layer: 0
   m_Name: PopulationManager
   m_TagString: Untagged
@@ -908,6 +909,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1690210760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1690210757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9c7d37a7ff1c8a429089337725172d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridMaterial: {fileID: 0}
+  plantMaterial: {fileID: 0}
+  herbivoreMaterial: {fileID: 0}
+  carnivoreMaterial: {fileID: 0}
+  scavengerMaterial: {fileID: 0}
+  CubeMesh: {fileID: 0}
 --- !u!4 &1731890038 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400002, guid: 126dbcddb53386c4f969fdf0c555e822, type: 3}
