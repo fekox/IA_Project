@@ -10,7 +10,6 @@ namespace IA_Library_FSM
 
         public AgentPlant(Simulation simulation, GridManager gridManager) : base(simulation, gridManager, null)
         {
-
         }
 
         public void Eat()

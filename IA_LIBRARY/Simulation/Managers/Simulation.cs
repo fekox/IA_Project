@@ -144,22 +144,22 @@ namespace IA_Library
             for (int i = 0; i < totalHerbivores; i++)
             {
                 CreateEntity(Herbivore[i].mainBrain);
-                CreateEntity(Herbivore[i].moveToFoodBrain);
-                CreateEntity(Herbivore[i].moveToEscapeBrain);
-                CreateEntity(Herbivore[i].eatBrain);
+                //CreateEntity(Herbivore[i].moveToFoodBrain);
+                //CreateEntity(Herbivore[i].moveToEscapeBrain);
+                //CreateEntity(Herbivore[i].eatBrain);
             }
 
             for (int i = 0; i < totalCarnivores; i++)
             {
-                CreateEntity(Carnivore[i].mainBrain);
-                CreateEntity(Carnivore[i].moveToFoodBrain);
-                CreateEntity(Carnivore[i].eatBrain);
+                // CreateEntity(Carnivore[i].mainBrain);
+                //(Carnivore[i].moveToFoodBrain);
+                //CreateEntity(Carnivore[i].eatBrain);
             }
 
             for (int i = 0; i < totalScavengers; i++)
             {
-                CreateEntity(Scavenger[i].mainBrain);
-                CreateEntity(Scavenger[i].flockingBrain);
+                //CreateEntity(Scavenger[i].mainBrain);
+                //CreateEntity(Scavenger[i].flockingBrain);
             }
         }
 
@@ -171,7 +171,7 @@ namespace IA_Library
             ECSManager.AddComponent<OutputLayerComponent>(entityID, new OutputLayerComponent(brain.GetOutputLayer()));
 
             ECSManager.AddComponent<OutputComponent>(entityID, new OutputComponent(brain.outputs));
-            ECSManager.AddComponent<InputComponent>(entityID, new InputComponent(brain.inputs));
+            ECSManager.AddComponent<InputComponent>(entityID, new InputComponent(brain.inputs, brain.InputsCount));
 
             ECSManager.AddComponent<BiasComponent>(entityID, new BiasComponent(brain.bias));
             ECSManager.AddComponent<SigmoidComponent>(entityID, new SigmoidComponent(brain.p));
@@ -188,74 +188,113 @@ namespace IA_Library
                 UpdateOutputs();
                 currentTurn++;
             }
-            
             else
             {
-                // Epoch();
+                Epoch();
                 CreateNewGeneration();
             }
         }
 
-        // private void Epoch()
-        // {
-        //     EpochHerbivore();
-        //     EpochCarnivore();
-        //     EpochScavenger();
-        //
-        //     foreach (KeyValuePair<uint, Brain.Brain> entity in entities)
-        //     {
-        //         HiddenLayerComponent inputComponent = ECSManager.GetComponent<HiddenLayerComponent>(entity.Key);
-        //         inputComponent.hiddenLayers = entity.Value.GetHiddenLayers();
-        //     }
-        // }
+        private void Epoch()
+        {
+            EpochHerbivore();
+            EpochCarnivore();
+            EpochScavenger();
+
+            foreach (KeyValuePair<uint, Brain.Brain> entity in entities)
+            {
+                HiddenLayerComponent inputComponent = ECSManager.GetComponent<HiddenLayerComponent>(entity.Key);
+                inputComponent.hiddenLayers = entity.Value.GetHiddenLayers();
+                OutputLayerComponent outputComponent = ECSManager.GetComponent<OutputLayerComponent>(entity.Key);
+                outputComponent.layer = entity.Value.GetOutputLayer();
+            }
+        }
 
         private void EpochHerbivore()
         {
-            List<Brain.Brain> herbivoresMainBrain = new List<Brain.Brain>();
-            List<Brain.Brain> herbivoresEscapeBrain = new List<Brain.Brain>();
-            List<Brain.Brain> herbivoresMoveFoodBrain = new List<Brain.Brain>();
-            List<Brain.Brain> herbivoresEatBrain = new List<Brain.Brain>();
+            int count = 0;
             foreach (AgentHerbivore current in Herbivore)
             {
                 if (current.lives > 0 && current.hasEaten)
                 {
-                    herbivoresMainBrain.Add(current.mainBrain);
-                    herbivoresEatBrain.Add(current.eatBrain);
-                    herbivoresMoveFoodBrain.Add(current.moveToFoodBrain);
-                    herbivoresEscapeBrain.Add(current.moveToEscapeBrain);
+                    count++;
+                }
+                else
+                {
+                    current.mainBrain.Set0Fitness();
+                    current.eatBrain.Set0Fitness();
+                    current.moveToFoodBrain.Set0Fitness();
+                    current.moveToEscapeBrain.Set0Fitness();
                 }
             }
 
-            bool isGenerationDead = herbivoresMainBrain.Count <= 1;
+            bool isGenerationDead = (count <= 1);
 
-            EpochLocal(herbivoresMainBrain, isGenerationDead);
-            EpochLocal(herbivoresMoveFoodBrain, isGenerationDead);
-            EpochLocal(herbivoresEatBrain, isGenerationDead);
-            EpochLocal(herbivoresEscapeBrain, isGenerationDead);
+            EpochLocal(herbivoreMainBrain, isGenerationDead, HeMainBrain);
+            EpochLocal(herbivoreMoveFoodBrain, isGenerationDead, HeMoveFoodBrain);
+            EpochLocal(herbivoreMoveEscapeBrain, isGenerationDead, HeMoveEscapeBrain);
+            EpochLocal(herbivoreEatBrain, isGenerationDead, HeEatBrain);
         }
 
-        private void EpochLocal(List<Brain.Brain> brains, bool force)
+        private void EpochCarnivore()
+        {
+            int count = 0;
+            foreach (AgentCarnivore current in Carnivore)
+            {
+                if (current.hasEaten)
+                {
+                    count++;
+                }
+                else
+                {
+                    current.mainBrain.Set0Fitness();
+                    current.eatBrain.Set0Fitness();
+                    current.moveToFoodBrain.Set0Fitness();
+                }
+            }
+
+            bool isGenerationDead = count <= 1;
+
+            EpochLocal(carnivoreMainBrain, isGenerationDead, CaMainBrain);
+            EpochLocal(carnivoreMoveBrain, isGenerationDead, CaMoveBrain);
+            EpochLocal(carnivoreEatBrain, isGenerationDead, CaEatBrain);
+        }
+
+        private void EpochScavenger()
+        {
+            int count = 0;
+            foreach (AgentHerbivore current in Herbivore)
+            {
+                if (current.hasEaten)
+                {
+                    count++;
+                }
+            }
+
+            bool isGenerationDead = count <= 1;
+
+            EpochLocal(ScavengerMainBrain, isGenerationDead, ScaMainBrain);
+            EpochLocal(ScavengerFlockingBrain, isGenerationDead, ScaFlockingBrain);
+        }
+
+        private void EpochLocal(List<Brain.Brain> brains, bool force, GeneticData data)
         {
             Genome[] newGenomes = GeneticAlgorithm.Epoch(GetGenomes(brains), geneticInfo[brains], force);
+            data.lastGenome = newGenomes;
 
             for (int i = 0; i < brains.Count; i++)
             {
-                Brain.Brain brain = brains[i];
-                brain.SetWeights(newGenomes[i].genome);
+                brains[i] = new Brain.Brain(data.brainStructure);
+                brains[i].SetWeights(newGenomes[i].genome);
             }
         }
 
         private static Genome[] GetGenomes(List<Brain.Brain> brains)
         {
             List<Genome> genomes = new List<Genome>();
-            
             foreach (var brain in brains)
             {
                 Genome genome = new Genome(brain.GetTotalWeightsCount());
-
-                brain.SetWeights(genome.genome);
-                brains.Add(brain);
-
                 genomes.Add(genome);
             }
 
@@ -265,7 +304,6 @@ namespace IA_Library
         private void CreateNewGeneration()
         {
             currentGeneration++;
-
             foreach (AgentHerbivore agent in Herbivore)
             {
                 agent.Reset();

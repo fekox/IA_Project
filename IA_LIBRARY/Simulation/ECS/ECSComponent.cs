@@ -4,10 +4,7 @@ namespace IA_Library_ECS
     {
         private uint entityOwnerID = 0;
 
-        public uint EntityOwnerID 
-        { 
-            get => entityOwnerID; set => entityOwnerID = value; 
-        }
+        public uint EntityOwnerID { get => entityOwnerID; set => entityOwnerID = value; }
 
         protected ECSComponent() { }
 

@@ -4,7 +4,7 @@ namespace IA_Library_ECS
     {
         public BiasComponent(float X) : base(X)
         {
-            
+
         }
     }
 }

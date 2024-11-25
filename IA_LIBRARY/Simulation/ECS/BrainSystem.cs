@@ -40,8 +40,7 @@ namespace IA_Library_ECS
             outputComponent ??= ECSManager.GetComponents<OutputComponent>();
             inputComponent ??= ECSManager.GetComponents<InputComponent>();
 
-            activeEntities ??= ECSManager.GetEntitiesWithComponentTypes
-            (
+            activeEntities ??= ECSManager.GetEntitiesWithComponentTypes(
                 typeof(InputLayerComponent),
                 typeof(HiddenLayerComponent),
                 typeof(OutputLayerComponent),
@@ -56,124 +55,94 @@ namespace IA_Library_ECS
         {
             Parallel.ForEach(activeEntities, parallelOptions, entity =>
             {
-               float[] inputs = inputComponent[entity].inputs;
-               
-               outputComponent[entity].output = InputLayerSynapsis(entity, inputs);
-               inputComponent[entity].inputs = outputComponent[entity].output;
- 
-               for (int i = 0; i < hiddenLayerComponent[entity].hiddenLayers.Length; i++)
-               {
-                   outputComponent[entity].output = LayerSynapsis(entity, inputs, i);
-                   inputs = outputComponent[entity].output;
-               }
-               
-               outputComponent[entity].output = OutputLayerSynapsis(entity, inputs);
+                outputComponent[entity].output = inputComponent[entity].inputs;
+
+                outputComponent[entity].output = FirstLayerSynapsis(entity, inputComponent[entity].inputs);
+                inputComponent[entity].size = outputComponent[entity].output.Length;
+                inputComponent[entity].inputs = outputComponent[entity].output;
+                outputComponent[entity].output = new float[hiddenLayerComponent[entity].HiggestLayerSize];
+                for (int layer = 0; layer < hiddenLayerComponent[entity].hiddenLayers.Length; layer++)
+                {
+                    LayerSynapsis(entity, inputComponent[entity].inputs, layer, ref inputComponent[entity].size);
+                    inputComponent[entity].inputs = outputComponent[entity].output;
+                }
+
+                outputComponent[entity].output = OutputLayerSynapsis(entity, inputComponent[entity].inputs,
+                    ref inputComponent[entity].size);
             });
         }
 
         protected override void PostExecute(float deltaTime)
         {
-            
         }
 
-        private float[] InputLayerSynapsis(uint entity, float[] inputs)
+        private float[] FirstLayerSynapsis(uint entity, float[] inputs)
         {
-            Parallel.For(0, inputs.Length,
-                
-                neuron => 
-                { 
-                    outputComponent[entity].output[neuron] = InputNeuronSynapsis(entity, neuron, inputs); 
-                }
-                
-            );
-
+            Parallel.For(0, inputs.Length, parallelOptions,
+                neuron => { outputComponent[entity].output[neuron] = FirstNeuronSynapsis(entity, neuron, inputs); });
             return outputComponent[entity].output;
         }
-        
-        private float[] LayerSynapsis(uint entity, float[] inputs, int layer)
-        {
-            Parallel.For(0, inputs.Length,
-                
-                neuron => 
-                { 
-                    outputComponent[entity].output[neuron] = NeuronSynapsis(entity, neuron, inputs, layer); 
-                }
-            );
 
+        private float[] LayerSynapsis(uint entity, float[] inputs, int layer, ref int size)
+        {
+            int neuronCount = hiddenLayerComponent[entity].hiddenLayers[layer].weights.GetLength(0);
+            Array.Resize(ref outputComponent[entity].output, neuronCount);
+
+            Parallel.For(0, neuronCount, parallelOptions,
+                neuron => { outputComponent[entity].output[neuron] = NeuronSynapsis(entity, neuron, inputs, layer); });
+
+            size = neuronCount;
             return outputComponent[entity].output;
         }
-        
-        private float[] OutputLayerSynapsis(uint entity, float[] inputs)
-        {
-            Parallel.For(0, inputs.Length,
-                
-                neuron => 
-                { 
-                    outputComponent[entity].output[neuron] = OutputNeuronSynapsis(entity, neuron, inputs); 
-                }   
-            );
 
+        private float[] OutputLayerSynapsis(uint entity, float[] inputs, ref int size)
+        {
+            int neuronCount = outputLayerComponent[entity].layer.weights.GetLength(0);
+            Array.Resize(ref outputComponent[entity].output, neuronCount);
+            Parallel.For(0, neuronCount, parallelOptions,
+                neuron => { outputComponent[entity].output[neuron] = LastNeuronSynapsis(entity, neuron, inputs); });
             return outputComponent[entity].output;
         }
-        
-        private float InputNeuronSynapsis(uint entity, int neuron, float[] inputs)
+
+        private float FirstNeuronSynapsis(uint entity, int neuron, float[] inputs)
         {
-            ConcurrentBag<float> bag = new ConcurrentBag<float>();
             float a = 0;
-            
-            Parallel.For(0, inputs.Length,
-                
-                b => 
-                { 
-                    bag.Add(outputLayerComponent[entity].layer.weights[neuron,b] * inputs[b]); 
-                }
-            
-            );
+            for (int i = 0; i < inputs.Length; i++)
+            {
+                a += inputLayerComponent[entity].layer.weights[neuron, i] * inputs[i];
+            }
 
-            a = bag.Sum();
             a += biasComponent[entity].X;
 
-            return 1.0f / (1.0f + (float)Math.Exp(-a / sigmoidComponent[entity].X));
+            return (float)Math.Tanh(a / sigmoidComponent[entity].X);
         }
 
         private float NeuronSynapsis(uint entity, int neuron, float[] inputs, int layer)
         {
-            ConcurrentBag<float> bag = new ConcurrentBag<float>();
             float a = 0;
-            
-            Parallel.For(0, inputLayerComponent.Count,
-                
-                b => 
-                { 
-                    bag.Add(hiddenLayerComponent[entity].hiddenLayers[layer].weights[neuron, b] * inputs[b]); 
-                }
-            
-            );
-            
-            a = bag.Sum();
+            int exclusive = hiddenLayerComponent[entity].hiddenLayers[layer].weights.GetLength(1);
+            for (int i = 0; i < exclusive; i++)
+            {
+                a += hiddenLayerComponent[entity].hiddenLayers[layer].weights[neuron, i] * inputs[i];
+            }
+
             a += biasComponent[entity].X;
 
-            return 1.0f / (1.0f + (float)Math.Exp(-a / sigmoidComponent[entity].X));
+            return (float)Math.Tanh(a / sigmoidComponent[entity].X);
         }
-        
-        private float OutputNeuronSynapsis(uint entity, int neuron, float[] inputs)
+
+        private float LastNeuronSynapsis(uint entity, int neuron, float[] inputs)
         {
-            ConcurrentBag<float> bag = new ConcurrentBag<float>();
             float a = 0;
-            
-            Parallel.For(0, inputs.Length,
-                
-                b => 
-                { 
-                    bag.Add(inputLayerComponent[entity].layer.weights[neuron,b] * inputs[b]); 
-                }
-            
-            );
-            
-            a = bag.Sum();
+            int exclusive = outputLayerComponent[entity].layer.weights.GetLength(1);
+            for (int i = 0; i < exclusive; i++)
+            {
+                a += outputLayerComponent[entity].layer.weights[neuron, i] * inputs[i];
+            }
+
             a += biasComponent[entity].X;
 
-            return 1.0f / (1.0f + (float)Math.Exp(-a / sigmoidComponent[entity].X));
+            return (float)Math.Tanh(a / sigmoidComponent[entity].X);
         }
     }
 }

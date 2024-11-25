@@ -78,7 +78,6 @@ namespace IA_Library_ECS
         public static IEnumerable<uint> GetEntitiesWithComponentTypes(params Type[] componentTypes)
         {
             ConcurrentBag<uint> matchs = new ConcurrentBag<uint>();
-            
             Parallel.ForEach(entities, parallelOptions, entity =>
             {
                 for (int i = 0; i < componentTypes.Length; i++)
@@ -89,7 +88,6 @@ namespace IA_Library_ECS
 
                 matchs.Add(entity.Key);
             });
-
             return matchs;
         }
 
@@ -101,12 +99,7 @@ namespace IA_Library_ECS
                 ConcurrentDictionary<uint, ComponentType> comps = new ConcurrentDictionary<uint, ComponentType>();
 
                 Parallel.ForEach(components[typeof(ComponentType)], parallelOptions,
-                    
-                    component => 
-                    { 
-                        comps.TryAdd(component.Key, component.Value as ComponentType); 
-                    }
-                );
+                    component => { comps.TryAdd(component.Key, component.Value as ComponentType); });
 
                 return comps;
             }

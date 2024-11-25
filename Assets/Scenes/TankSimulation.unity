@@ -921,9 +921,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9c7d37a7ff1c8a429089337725172d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridMaterial: {fileID: 2100000, guid: 86e0066a86fc0a84d9a5fbbc3b240cca, type: 2}
+  gridSize: {x: 70, y: 70}
+  cellSize: 1
+  totalHerbivores: 50
+  totalCarnivores: 5
+  totalScavengers: 5
+  generationTime: 400
   plantMaterial: {fileID: 2100000, guid: 25340932a8ef5e3448b9648f4d92d4b6, type: 2}
   herbivoreMaterial: {fileID: 2100000, guid: 0a72a8e3deb1c61419a63c76596d5f5b, type: 2}
+  deadHerbivoreMaterial: {fileID: 0}
   carnivoreMaterial: {fileID: 2100000, guid: 4fee3579053b3dc4bb2e570947637632, type: 2}
   scavengerMaterial: {fileID: 2100000, guid: 869412771b722364c91d1183ee9c90d4, type: 2}
   CubeMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}

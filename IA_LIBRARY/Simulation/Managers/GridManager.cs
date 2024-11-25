@@ -22,8 +22,8 @@ namespace IA_Library
             float x = (float)(random.NextDouble() * size.X);
             float y = (float)(random.NextDouble() * size.Y);
 
-            x = (float)Math.Floor(x / cellSize) * cellSize;
-            y = (float)Math.Floor(y / cellSize) * cellSize;
+            x = (float)Math.Floor(x / cellSize) * cellSize + cellSize / 2;
+            y = (float)Math.Floor(y / cellSize) * cellSize + cellSize / 2;
 
             return new Vector2(x, y);
         }
@@ -48,11 +48,9 @@ namespace IA_Library
             float y = position.Y;
 
             if (x < 0) x = size.X + x;
-
             if (x >= size.X) x = x - size.X;
 
             if (y < 0) y = size.Y + y;
-
             if (y >= size.Y) y = y - size.Y;
 
             return new Vector2(x, y);
@@ -62,10 +60,8 @@ namespace IA_Library
         {
             if (value < 0)
                 return max + value;
-
             if (value >= max)
                 return value - max;
-
             return value;
         }
     }

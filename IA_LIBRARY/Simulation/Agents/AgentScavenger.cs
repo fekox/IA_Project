@@ -28,12 +28,7 @@ namespace IA_Library_FSM
             this.flockingBrain = flockingBrain;
 
             fsmController.AddBehaviour<MoveToEatScavengerState>(Behaviours.MoveToFood,
-                
-                onEnterParameters: () => 
-                { 
-                    return new object[] { mainBrain, flockingBrain }; 
-                },
-                
+                onEnterParameters: () => { return new object[] { mainBrain, flockingBrain }; },
                 onTickParameters: () =>
                 {
                     return new object[]
@@ -42,8 +37,7 @@ namespace IA_Library_FSM
                         Direction, radius, speed, GetNearestFoodPosition(), GetNearestFoodAgent(), GetNearestAgents(),
                         onMove = MoveTo, hasEaten
                     };
-                }
-            );
+                });
 
             fsmController.ForcedState(Behaviours.MoveToFood);
         }
@@ -81,7 +75,7 @@ namespace IA_Library_FSM
 
         public override void SettingBrainUpdate(float deltaTime)
         {
-            Vector2 nearFoodPos = GetNearestFoodPosition();
+            Vector2 nearFoodPos = Vector2.One;
             mainBrain.inputs = new[] { position.X, position.Y, minEatRadius, nearFoodPos.X, nearFoodPos.Y };
         }
 
@@ -170,7 +164,6 @@ namespace IA_Library_FSM
                 Vector2 finalPosition = position + finalDirection * speed;
 
                 Vector2[] FinalPosition = new[] { finalPosition };
-
                 onMove.Invoke(FinalPosition);
             });
 
@@ -186,7 +179,6 @@ namespace IA_Library_FSM
                     brain.FitnessReward += 1;
                     agentDeadHerbivore.EatPiece();
                 }
-
                 else if (distanceFromFood > minEatRadius)
                 {
                     brain.FitnessMultiplier -= 0.05f;
@@ -199,15 +191,12 @@ namespace IA_Library_FSM
                     float diff = MathF.Abs(rotation - scavenger.rotation);
 
                     if (diff > 180)
-                    {
                         diff = 360 - diff;
-                    }
 
                     if (diff > 90)
                     {
                         flockingBrain.FitnessMultiplier -= 0.05f;
                     }
-
                     else
                     {
                         flockingBrain.FitnessReward += 1;
@@ -218,7 +207,6 @@ namespace IA_Library_FSM
                     {
                         flockingBrain.FitnessMultiplier -= 0.05f;
                     }
-
                     else
                     {
                         flockingBrain.FitnessReward += 1;
@@ -229,7 +217,6 @@ namespace IA_Library_FSM
                     {
                         flockingBrain.FitnessMultiplier -= 0.05f;
                     }
-
                     else
                     {
                         flockingBrain.FitnessReward += 1;
@@ -240,7 +227,6 @@ namespace IA_Library_FSM
                     {
                         flockingBrain.FitnessReward += 1;
                     }
-
                     else if (distanceFromFood > minEatRadius)
                     {
                         flockingBrain.FitnessMultiplier -= 0.05f;

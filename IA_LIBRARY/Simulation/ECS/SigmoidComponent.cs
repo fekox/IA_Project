@@ -4,7 +4,6 @@ namespace IA_Library_ECS
     {
         public SigmoidComponent(float X) : base(X)
         {
-
         }
     }
 }
