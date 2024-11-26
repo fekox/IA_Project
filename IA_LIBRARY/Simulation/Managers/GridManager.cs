@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Numerics;
 
 namespace IA_Library
@@ -19,13 +19,13 @@ namespace IA_Library
 
         public Vector2 GetRandomValuePositionGrid()
         {
-            float x = (float)(random.NextDouble() * size.X);
-            float y = (float)(random.NextDouble() * size.Y);
+            int xIndex = random.Next(0, (int)size.X);
+            int yIndex = random.Next(0, (int)size.Y);
 
-            x = (float)Math.Floor(x / cellSize) * cellSize + cellSize / 2;
-            y = (float)Math.Floor(y / cellSize) * cellSize + cellSize / 2;
+            float x = xIndex * cellSize + cellSize / 2;
+            float y = yIndex * cellSize + cellSize / 2;
 
-            return new Vector2(x, y);
+            return new Vector2((int)x, (int)y);
         }
 
         public Vector2 GetNewPositionInGrid(Vector2 currentPosition, Vector2 direction)
@@ -36,33 +36,43 @@ namespace IA_Library
             newPosition.X = (float)Math.Floor(newPosition.X / cellSize) * cellSize;
             newPosition.Y = (float)Math.Floor(newPosition.Y / cellSize) * cellSize;
 
-            newPosition.X = WrapAround(newPosition.X, size.X);
-            newPosition.Y = WrapAround(newPosition.Y, size.Y);
+            if (IsInsideGrid(newPosition))
+            {
+                return newPosition;
+            }
 
-            return newPosition;
+            return GetOpositeSide(newPosition);
         }
 
-        public Vector2 CheckInsideGrid(Vector2 position)
+        private Vector2 GetOpositeSide(Vector2 position)
         {
-            float x = position.X;
-            float y = position.Y;
 
-            if (x < 0) x = size.X + x;
-            if (x >= size.X) x = x - size.X;
+            if (position.X <= 0)
+            {
+                position.X = size.X - 1;
+            }
+            
+            else if (position.X >= size.X)
+            {
+                position.X = 0;
+            }
+            
+            if ( position.Y <= 0)
+            {
+                position.Y = size.Y - 1;
+            }
+            
+            else if (position.Y >= size.Y)
+            {
+                position.Y = 0;
+            }
 
-            if (y < 0) y = size.Y + y;
-            if (y >= size.Y) y = y - size.Y;
-
-            return new Vector2(x, y);
+            return position;
         }
 
-        private float WrapAround(float value, float max)
+        bool IsInsideGrid(Vector2 position)
         {
-            if (value < 0)
-                return max + value;
-            if (value >= max)
-                return value - max;
-            return value;
+            return position.X >= 0 && position.X < size.X && position.Y >= 0 && position.Y < size.Y;
         }
     }
 }

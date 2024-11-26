@@ -113,6 +113,7 @@ namespace IA_Library
             population.Sort(HandleComparison);
 
             GeneticData backUpData = new GeneticData(data);
+            
             foreach (Genome g in population)
             {
                 currentTotalFitness += g.fitness;
@@ -121,13 +122,15 @@ namespace IA_Library
             if (forceEvolve)
             {
                 data.stuckGenerationCounter = 0;
-                data.mutationChance *= 1.2f;
-                data.mutationRate *= 1.2f;
+                data.mutationChance *= 2.8f;
+                data.mutationRate *= 2.8f;
                 evolutionType = (EvolutionType)random.Next(1, Enum.GetValues(typeof(EvolutionType)).Length);
             }
+            
             else if (currentTotalFitness < data.totalFitness)
             {
                 data.stuckGenerationCounter++;
+
                 if (data.stuckGenerationCounter >= data.stuckGenerationTimes)
                 {
                     data.stuckGenerationCounter = 0;
@@ -135,28 +138,42 @@ namespace IA_Library
                 }
             }
 
+            data.totalFitness = currentTotalFitness;
+            CalculateNeuronsToAdd(data.brainStructure);
+
+
             SelectElite(evolutionType, data.totalElites);
+
             while (newPopulation.Count < population.Count)
             {
                 Crossover(data, evolutionType);
             }
 
+
             switch (evolutionType)
             {
                 case EvolutionType.None:
                     break;
+
                 case EvolutionType.AddNeurons:
+                    
                     data.brainStructure.AddNeuronAtLayer(newNeuronToAddQuantity, randomLayer);
+                    
                     break;
+                
                 case EvolutionType.AddLayer:
+                
                     data.brainStructure.AddNeuronLayerAtPosition(newNeuronToAddQuantity, randomLayer);
+                    
                     break;
+                
                 default:
                     throw new ArgumentOutOfRangeException(nameof(evolutionType), evolutionType, null);
             }
 
             data.mutationChance = backUpData.mutationChance;
             data.mutationRate = backUpData.mutationRate;
+            
             return newPopulation.ToArray();
         }
 
@@ -168,12 +185,19 @@ namespace IA_Library
                 {
                     case EvolutionType.None:
                         break;
+            
                     case EvolutionType.AddNeurons:
+                        
                         EvolveChildNeurons(population[i]);
+                    
                         break;
+                    
                     case EvolutionType.AddLayer:
+                    
                         EvolveChildLayer(population[i]);
+                        
                         break;
+                    
                     default:
                         throw new ArgumentOutOfRangeException(nameof(evolutionType), evolutionType, null);
                 }
@@ -182,8 +206,9 @@ namespace IA_Library
             }
         }
 
-        public static void CalculateNeuronsToAdd(Brain.Brain brain)
+        private static void CalculateNeuronsToAdd(Brain.Brain brain)
         {
+            Random random = new Random();
             newNeuronToAddQuantity = random.Next(1, 3);
             randomLayer = random.Next(1, brain.layers.Count - 1);
             neuronLayers = brain.layers;
@@ -220,12 +245,12 @@ namespace IA_Library
                 child1.genome[i] = mom.genome[i];
 
                 if (ShouldMutate(data.mutationChance))
-                    child1.genome[i] += GetRandomMutation(data.mutationRate);
+                    child1.genome[i] += RandomRangeFloat(-data.mutationRate, data.mutationRate);
 
                 child2.genome[i] = dad.genome[i];
 
                 if (ShouldMutate(data.mutationChance))
-                    child2.genome[i] += GetRandomMutation(data.mutationRate);
+                    child2.genome[i] += RandomRangeFloat(-data.mutationRate, data.mutationRate);
             }
 
 
@@ -234,33 +259,35 @@ namespace IA_Library
                 child2.genome[i] = mom.genome[i];
 
                 if (ShouldMutate(data.mutationChance))
-                    child2.genome[i] += GetRandomMutation(data.mutationRate);
+                    child2.genome[i] += RandomRangeFloat(-data.mutationRate, data.mutationRate);
 
                 child1.genome[i] = dad.genome[i];
 
                 if (ShouldMutate(data.mutationChance))
-                    child1.genome[i] += GetRandomMutation(data.mutationRate);
+                    child1.genome[i] += RandomRangeFloat(-data.mutationRate, data.mutationRate);
             }
 
             switch (evolutionType)
             {
                 case EvolutionType.None:
                     break;
+            
                 case EvolutionType.AddNeurons:
+                
                     EvolveChildNeurons(child1);
                     EvolveChildNeurons(child2);
+                    
                     break;
+                
                 case EvolutionType.AddLayer:
+                    
                     EvolveChildLayer(child1);
                     EvolveChildLayer(child2);
+                
                     break;
+                
                 default:
                     throw new ArgumentOutOfRangeException(nameof(evolutionType), evolutionType, null);
-            }
-
-            float GetRandomMutation(float mutationRate)
-            {
-                return (float)(random.NextDouble() * 2 * mutationRate - mutationRate);
             }
         }
 
@@ -273,6 +300,7 @@ namespace IA_Library
             for (int i = 0; i < population.Count; i++)
             {
                 fitness += Math.Max(population[i].fitness, 0);
+                
                 if (fitness >= rnd)
                     return population[i];
             }
@@ -282,7 +310,7 @@ namespace IA_Library
 
         static bool ShouldMutate(float mutationChance)
         {
-            return random.NextDouble() < mutationChance;
+            return RandomRangeFloat(0.0f, 1.0f) < mutationChance;
         }
 
         static int HandleComparison(Genome x, Genome y)
@@ -298,11 +326,11 @@ namespace IA_Library
             int newNeuronCount = child.genome.Length
                                  + newNeuronToAddQuantity * neuronLayers[randomLayer].InputsCount +
                                  nextLayerOutputs * newNeuronToAddQuantity;
+            
             float[] newWeight = new float[newNeuronCount];
 
             int count = 0;
             int originalWeightsCount = 0;
-
 
             for (int i = 0; i < randomLayer; i++)
             {
@@ -312,7 +340,6 @@ namespace IA_Library
                 }
             }
 
-
             for (int i = 0; i < neuronLayers[randomLayer].InputsCount; i++)
             {
                 for (int j = 0; j < previousLayerOutputs + newNeuronToAddQuantity; j++)
@@ -321,6 +348,7 @@ namespace IA_Library
                     {
                         CopyExistingWeights(ref count, ref originalWeightsCount);
                     }
+
                     else
                     {
                         CreateNewWeights(ref count);
@@ -336,6 +364,7 @@ namespace IA_Library
                     {
                         CopyExistingWeights(ref count, ref originalWeightsCount);
                     }
+
                     else
                     {
                         CreateNewWeights(ref count);
@@ -349,8 +378,8 @@ namespace IA_Library
             }
 
             child.genome = newWeight;
-            return;
 
+            return;
 
             void CopyExistingWeights(ref int count, ref int originalWeightsCount)
             {
@@ -371,7 +400,6 @@ namespace IA_Library
             int count = 0;
             int originalWeightsCount = 0;
 
-
             int previousLayerInputs = neuronLayers[randomLayer].OutputsCount;
             int nextLayerInputs = neuronLayers[randomLayer + 1].OutputsCount;
 
@@ -382,14 +410,12 @@ namespace IA_Library
 
             float[] newWeight = new float[newTotalWeight];
 
-
             int weightsBeforeInsertion = 0;
 
             for (int layerIndex = 0; layerIndex < randomLayer; layerIndex++)
             {
                 weightsBeforeInsertion += neuronLayers[layerIndex].totalWeights;
             }
-
 
             while (count < weightsBeforeInsertion)
             {
@@ -398,7 +424,6 @@ namespace IA_Library
 
             int previousLayerInputCounter = 0;
 
-
             for (int i = 0; i < previousLayerInputs; i++)
             {
                 for (int j = 0; j < newNeuronToAddQuantity; j++)
@@ -406,7 +431,6 @@ namespace IA_Library
                     CreateNewWeights(ref count);
                 }
             }
-
 
             for (int i = 0; i < newNeuronToAddQuantity; i++)
             {
@@ -421,10 +445,8 @@ namespace IA_Library
                 CopyExistingWeights(ref count, ref originalWeightsCount);
             }
 
-
             child.genome = newWeight;
             return;
-
 
             void CopyExistingWeights(ref int count, ref int originalWeightsCount)
             {
@@ -439,5 +461,11 @@ namespace IA_Library
                 count++;
             }
         }
+
+        public static float RandomRangeFloat(float min, float max)
+        {
+            return (float)(random.NextDouble() * (max - min) + min);
+        }
     }
+
 }

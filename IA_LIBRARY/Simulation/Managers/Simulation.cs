@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using IA_Library_ECS;
 using IA_Library_FSM;
 using IA_Library.Brain;
+using Vector2 = System.Numerics.Vector2;
 
 namespace IA_Library
 {
@@ -103,7 +103,7 @@ namespace IA_Library
             for (int i = 0; i < totalHerbivores; i++)
             {
                 Herbivore.Add(new AgentHerbivore(this, gridManager, herbivoreData[0].CreateBrain(),
-                    herbivoreData[1].CreateBrain(), herbivoreData[2].CreateBrain(), herbivoreData[3].CreateBrain()));
+                herbivoreData[1].CreateBrain(), herbivoreData[2].CreateBrain(), herbivoreData[3].CreateBrain()));
 
                 herbivoreMainBrain.Add(Herbivore[i].mainBrain);
                 herbivoreMoveFoodBrain.Add(Herbivore[i].moveToFoodBrain);
@@ -114,7 +114,8 @@ namespace IA_Library
             for (int i = 0; i < totalCarnivores; i++)
             {
                 Carnivore.Add(new AgentCarnivore(this, gridManager, carnivoreData[0].CreateBrain(),
-                    carnivoreData[1].CreateBrain(), carnivoreData[2].CreateBrain()));
+                carnivoreData[1].CreateBrain(), carnivoreData[2].CreateBrain()));
+                
                 carnivoreMainBrain.Add(Carnivore[i].mainBrain);
                 carnivoreMoveBrain.Add(Carnivore[i].moveToFoodBrain);
                 carnivoreEatBrain.Add(Carnivore[i].eatBrain);
@@ -123,7 +124,8 @@ namespace IA_Library
             for (int i = 0; i < totalScavengers; i++)
             {
                 Scavenger.Add(new AgentScavenger(this, gridManager, scavengerData[0].CreateBrain(),
-                    scavengerData[1].CreateBrain()));
+                scavengerData[1].CreateBrain()));
+           
                 ScavengerMainBrain.Add(Scavenger[i].mainBrain);
                 ScavengerFlockingBrain.Add(Scavenger[i].flockingBrain);
             }
@@ -144,22 +146,22 @@ namespace IA_Library
             for (int i = 0; i < totalHerbivores; i++)
             {
                 CreateEntity(Herbivore[i].mainBrain);
-                //CreateEntity(Herbivore[i].moveToFoodBrain);
-                //CreateEntity(Herbivore[i].moveToEscapeBrain);
-                //CreateEntity(Herbivore[i].eatBrain);
+                CreateEntity(Herbivore[i].moveToFoodBrain);
+                CreateEntity(Herbivore[i].moveToEscapeBrain);
+                CreateEntity(Herbivore[i].eatBrain);
             }
 
             for (int i = 0; i < totalCarnivores; i++)
             {
-                // CreateEntity(Carnivore[i].mainBrain);
-                //(Carnivore[i].moveToFoodBrain);
-                //CreateEntity(Carnivore[i].eatBrain);
+                CreateEntity(Carnivore[i].mainBrain);
+                CreateEntity(Carnivore[i].moveToFoodBrain);
+                CreateEntity(Carnivore[i].eatBrain);
             }
 
             for (int i = 0; i < totalScavengers; i++)
             {
-                //CreateEntity(Scavenger[i].mainBrain);
-                //CreateEntity(Scavenger[i].flockingBrain);
+                CreateEntity(Scavenger[i].mainBrain);
+                CreateEntity(Scavenger[i].flockingBrain);
             }
         }
 
@@ -188,6 +190,7 @@ namespace IA_Library
                 UpdateOutputs();
                 currentTurn++;
             }
+            
             else
             {
                 Epoch();
@@ -213,12 +216,14 @@ namespace IA_Library
         private void EpochHerbivore()
         {
             int count = 0;
+            
             foreach (AgentHerbivore current in Herbivore)
             {
                 if (current.lives > 0 && current.hasEaten)
                 {
                     count++;
                 }
+            
                 else
                 {
                     current.mainBrain.Set0Fitness();
@@ -239,12 +244,14 @@ namespace IA_Library
         private void EpochCarnivore()
         {
             int count = 0;
+            
             foreach (AgentCarnivore current in Carnivore)
             {
                 if (current.hasEaten)
                 {
                     count++;
                 }
+            
                 else
                 {
                     current.mainBrain.Set0Fitness();
@@ -263,6 +270,7 @@ namespace IA_Library
         private void EpochScavenger()
         {
             int count = 0;
+            
             foreach (AgentHerbivore current in Herbivore)
             {
                 if (current.hasEaten)
@@ -279,7 +287,7 @@ namespace IA_Library
 
         private void EpochLocal(List<Brain.Brain> brains, bool force, GeneticData data)
         {
-            Genome[] newGenomes = GeneticAlgorithm.Epoch(GetGenomes(brains), geneticInfo[brains], force);
+            Genome[] newGenomes = GeneticAlgorithm.Epoch(GetGenomes(brains), data, force);
             data.lastGenome = newGenomes;
 
             for (int i = 0; i < brains.Count; i++)
@@ -292,6 +300,7 @@ namespace IA_Library
         private static Genome[] GetGenomes(List<Brain.Brain> brains)
         {
             List<Genome> genomes = new List<Genome>();
+            
             foreach (var brain in brains)
             {
                 Genome genome = new Genome(brain.GetTotalWeightsCount());
@@ -304,6 +313,7 @@ namespace IA_Library
         private void CreateNewGeneration()
         {
             currentGeneration++;
+            
             foreach (AgentHerbivore agent in Herbivore)
             {
                 agent.Reset();
@@ -470,7 +480,7 @@ namespace IA_Library
             return nearestPoint.position;
         }
 
-        public Vector2 GetNearestDeadHerbivorePosition(Vector2 position)
+        public Vector2? GetNearestDeadHerbivorePosition(Vector2 position)
         {
             AgentHerbivore nearestPoint = null;
             float minDistanceSquared = float.MaxValue;
@@ -490,7 +500,7 @@ namespace IA_Library
                 }
             }
 
-            return nearestPoint.position;
+            return nearestPoint?.position;
         }
 
         public List<AgentScavenger> GetNearestScavengers(Vector2 position, int count)

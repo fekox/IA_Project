@@ -57,13 +57,22 @@ public class SimulationManager : MonoBehaviour
         scavengerFlockingBrain = new BrainData(8, new int[] { 5, 5, 5 }, 4, Bias, P);
 
         List<BrainData> herbivoreData = new List<BrainData>
-            { herbivoreMainBrain, herbivoreMoveEatBrain, herbivoreMoveEscapeBrain, herbivoreEatBrain };
+        { 
+            herbivoreMainBrain, herbivoreMoveEatBrain, herbivoreMoveEscapeBrain, herbivoreEatBrain 
+        };
+
         List<BrainData> carnivoreData = new List<BrainData>
-            { carnivoreMainBrain, carnivoreMoveEatBrain, carnivoreEatBrain };
-        List<BrainData> scavengerData = new List<BrainData> { scavengerMainBrain, scavengerFlockingBrain };
+        { 
+            carnivoreMainBrain, carnivoreMoveEatBrain, carnivoreEatBrain 
+        };
+
+        List<BrainData> scavengerData = new List<BrainData> 
+        { 
+            scavengerMainBrain, scavengerFlockingBrain 
+        };
 
         simulation = new Simulation(NewGrid, herbivoreData, carnivoreData, scavengerData, totalHerbivores,
-            totalCarnivores, totalScavengers, 5, 10, 10, generationTime);
+        totalCarnivores, totalScavengers, 5, 10, 10, generationTime);
     }
 
     private void Update()
@@ -84,6 +93,7 @@ public class SimulationManager : MonoBehaviour
             {
                 DrawSquare(new Vector3(agent.position.X, agent.position.Y, 0), deadHerbivoreMaterial, 1);
             }
+
             else
             {
                 DrawSquare(new Vector3(agent.position.X, agent.position.Y, 0), herbivoreMaterial, 1);
@@ -120,8 +130,9 @@ public class SimulationManager : MonoBehaviour
     private void DrawSquare(Vector3 position, Material color, float squareSize)
     {
         color.SetPass(0);
-        Matrix4x4 matrix =
-            Matrix4x4.TRS(position, Quaternion.identity, new Vector3(squareSize, squareSize, squareSize));
+
+        Matrix4x4 matrix = Matrix4x4.TRS(position, Quaternion.identity, new Vector3(squareSize, squareSize, squareSize));
+        
         Graphics.DrawMeshNow(CubeMesh, matrix);
     }
 

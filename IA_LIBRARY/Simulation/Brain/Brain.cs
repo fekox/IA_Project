@@ -29,7 +29,7 @@ namespace IA_Library.Brain
         public Brain()
         {
         }
-
+        
         public Brain(Brain brain)
         {
             bias = brain.bias;
@@ -84,8 +84,8 @@ namespace IA_Library.Brain
 
             return AddNeuronLayer(inputsCount, inputsCount, bias, p);
         }
-
-        public bool AddNeuronLayerAtPosition(int neuronsCount, int layerPosition)
+        
+        public bool AddNeuronLayerAtPosition( int neuronsCount, int layerPosition)
         {
             if (layers.Count <= 0 || layerPosition >= layers.Count)
             {
@@ -95,12 +95,13 @@ namespace IA_Library.Brain
             NeuronLayer layer = new NeuronLayer(layers[layerPosition].OutputsCount, neuronsCount, bias, p);
             totalWeightsCount -= layers[layerPosition].OutputsCount * layers[layerPosition + 1].OutputsCount;
             layers[layerPosition + 1] = new NeuronLayer(neuronsCount, layers[layerPosition + 1].NeuronsCount, bias, p);
-
+        
             totalWeightsCount += layers[layerPosition + 1].OutputsCount * neuronsCount;
             totalWeightsCount += layers[layerPosition].OutputsCount * neuronsCount;
             layers.Insert(layerPosition + 1, layer);
 
             totalWeightsCount = GetWeightsCount();
+
             return true;
         }
 
@@ -108,14 +109,15 @@ namespace IA_Library.Brain
         {
             NeuronLayer oldLayer = layers[layerPosition];
             layers[layerPosition] = new NeuronLayer(oldLayer.InputsCount, oldLayer.NeuronsCount + neuronsCountToAdd, bias, p);
-
+            
             NeuronLayer oldNextLayer = layers[layerPosition + 1];
             layers[layerPosition + 1] = new NeuronLayer(layers[layerPosition].OutputsCount, oldNextLayer.NeuronsCount, bias, p);
-
+            
             totalWeightsCount += layers[layerPosition].OutputsCount * neuronsCountToAdd;
             totalWeightsCount += layers[layerPosition + 1].OutputsCount * neuronsCountToAdd;
-
+            
             totalWeightsCount = GetWeightsCount();
+            
             return true;
         }
 
@@ -123,7 +125,7 @@ namespace IA_Library.Brain
         {
             return totalWeightsCount;
         }
-
+        
         public void SetWeights(float[] newWeights)
         {
             int fromId = 0;
@@ -156,36 +158,20 @@ namespace IA_Library.Brain
         public int GetWeightsCount()
         {
             int id = 0;
+
             foreach (var layer in layers)
             {
-                id += layer.GetWeightCount();
+                id+= layer.GetWeightCount();
             }
 
             return id;
-        }
-
-        public float[] GetGenome()
-        {
-            float[] weights = new float[totalWeightsCount];
-            int id = 0;
-
-            for (int i = 0; i < layers.Count; i++)
-            {
-                float[] ws = layers[i].GetWeights();
-
-                for (int j = 0; j < ws.Length; j++)
-                {
-                    weights[id++] = ws[j];
-                }
-            }
-
-            return weights;
         }
 
         public Layer GetInputLayer()
         {
             int id = layers[0].neurons.Length;
             float[,] weights = new float[layers[0].neurons.Length, layers[0].neurons[0].WeightsCount];
+            
             for (var index = 0; index < layers[0].neurons.Length; index++)
             {
                 for (var j = 0; j < layers[0].neurons[index].WeightsCount; j++)
@@ -195,6 +181,7 @@ namespace IA_Library.Brain
             }
 
             Layer layer = new Layer(id, weights);
+            
             return layer;
         }
 
@@ -202,7 +189,8 @@ namespace IA_Library.Brain
         {
             Index layerIndex = ^1;
             int id = layers[layerIndex].neurons.Length;
-            float[,] weights = new float[layers[layerIndex].neurons.Length, layers[0].neurons[0].WeightsCount];
+            float[,] weights = new float[layers[layerIndex].neurons.Length, layers[layerIndex].neurons[0].WeightsCount];
+            
             for (var index = 0; index < layers[layerIndex].neurons.Length; index++)
             {
                 for (var j = 0; j < layers[layerIndex].neurons[index].WeightsCount; j++)
@@ -212,6 +200,7 @@ namespace IA_Library.Brain
             }
 
             Layer layer = new Layer(id, weights);
+            
             return layer;
         }
 
@@ -219,6 +208,7 @@ namespace IA_Library.Brain
         {
             Layer[] layersToReturn = new Layer[layers.Count - 2 > 0 ? layers.Count - 2 : 0];
             var count = 0;
+            
             for (var k = 0; k < this.layers.Count; k++)
             {
                 if (k == 0 || k == this.layers.Count - 1)
@@ -267,7 +257,7 @@ namespace IA_Library.Brain
             }
 
             newbrain.AddNeuronLayer(outputsCount, bias, sigmoid);
-
+            
             return newbrain;
         }
     }

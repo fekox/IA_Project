@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace IA_Library.Brain
 {
@@ -7,7 +7,7 @@ namespace IA_Library.Brain
         private int inputsCount;
         private int[] hiddenLayer;
         private int outputsCount;
-
+        
         private float bias;
         private float sigmoid;
 

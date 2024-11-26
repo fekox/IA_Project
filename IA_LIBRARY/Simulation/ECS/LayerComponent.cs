@@ -25,7 +25,7 @@ namespace IA_Library_ECS
     {
         public Layer layer;
         public int inputCount;
-
+        
         public InputLayerComponent(Layer layer)
         {
             this.layer = layer;
@@ -42,7 +42,7 @@ namespace IA_Library_ECS
             this.hiddenLayers = hiddenLayers;
             SetHighestLayerSize();
         }
-
+        
         public void SetHighestLayerSize()
         {
             foreach (var layer in this.hiddenLayers)
@@ -79,7 +79,7 @@ namespace IA_Library_ECS
     {
         public float[] inputs;
         public int size;
-
+        
         public InputComponent(float[] inputs, int size)
         {
             this.inputs = inputs;
