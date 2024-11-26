@@ -1,27 +1,66 @@
 using System;
+using System.Collections.Generic;
 
 namespace IA_Library.Brain
 {
+    [Serializable]
     public class Neuron
     {
-        private float[] weights;
+        public float[] weights;
         private float bias;
         private float p;
+
+        private int offsetCalculator;
 
         public int WeightsCount
         {
             get { return weights.Length; }
         }
 
+        public Neuron(byte[] data, ref int outputOffset)
+        {
+            int length = BitConverter.ToInt32(data, outputOffset);
+            outputOffset += sizeof(int);
+            weights = new float[length];
+         
+            for (int i = 0; i < length; i++)
+            {
+                weights[i] = BitConverter.ToSingle(data, outputOffset);
+                outputOffset += sizeof(float);
+            }
+
+            bias = BitConverter.ToSingle(data, outputOffset);
+            outputOffset += sizeof(float);
+            p = BitConverter.ToSingle(data, outputOffset);
+            outputOffset += sizeof(float);
+        }
+
+        public byte[] Serialize()
+        {
+            List<byte> bytes = new List<byte>();
+
+            bytes.AddRange(BitConverter.GetBytes(weights.Length));
+
+            foreach (float weight in weights)
+            {
+                bytes.AddRange(BitConverter.GetBytes(weight));
+            }
+
+            bytes.AddRange(BitConverter.GetBytes(bias));
+
+            bytes.AddRange(BitConverter.GetBytes(p));
+
+            return bytes.ToArray();
+        }
+
         public Neuron(int weightsCount, float bias, float p)
         {
             weights = new float[weightsCount];
-
-            Random rand = new Random();
-
+            Random random = new Random();
+            
             for (int i = 0; i < weights.Length; i++)
             {
-                weights[i] = (float)(rand.NextDouble() * 2 - 1); // RandVal (-1,1)
+                weights[i] = (float)(random.NextDouble() * 2 - 1);
             }
 
             this.bias = bias;

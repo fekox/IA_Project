@@ -14,8 +14,11 @@ namespace IA_Library_FSM
         public AgentCarnivore(Simulation simulation, GridManager gridManager,
             Brain mainBrain, Brain moveToFoodBrain, Brain eatBrain) : base(simulation, gridManager, mainBrain)
         {
+            Action<bool> onHasEantenEnoughFood;
             Action<Vector2> onMove;
-            Action<bool> onEatFood;
+            Action<int> onEaten;
+
+            maxFood = 3;
 
             this.moveToFoodBrain = moveToFoodBrain;
             this.eatBrain = eatBrain;
@@ -37,17 +40,22 @@ namespace IA_Library_FSM
             );
 
             fsmController.AddBehaviour<EatCarnivoreState>(Behaviours.Eat,
+                
                 onEnterParameters: () => 
                 { 
                     return new object[] { eatBrain }; 
                 },
-                
+               
                 onTickParameters: () =>
                 {
                     return new object[]
                     {
-                        eatBrain.outputs, position, GetNearestFoodPosition(), GetNearestFood(), hasEaten, currentFood,
-                        maxFood, onEatFood = SetEatState
+                        eatBrain.outputs, position, GetNearestFoodPosition(),
+                        hasEaten, currentFood, maxFood,
+                        onHasEantenEnoughFood = b =>
+                        hasEaten = b,
+                        onEaten = i => currentFood = i,
+                        GetNearestFood()
                     };
                 }
             );
@@ -88,7 +96,7 @@ namespace IA_Library_FSM
             {
                 fsmController.Transition(Flags.OnTransitionMoveToEat);
             }
-
+            
             else if (outputs[1] > 0.0f)
             {
                 fsmController.Transition(Flags.OnTransitionEat);
@@ -113,7 +121,7 @@ namespace IA_Library_FSM
             { 
                 position.X, position.Y, nearestFoodPosition.X, nearestFoodPosition.Y 
             };
-
+            
             eatBrain.inputs = new[]
             { 
                 position.X, position.Y, nearestFoodPosition.X, nearestFoodPosition.Y, hasEaten ? 1 : -1 
@@ -129,10 +137,18 @@ namespace IA_Library_FSM
         {
             return simulation.GetNearestHerbivorePosition(position);
         }
-        
+
         public override void SetEatState(bool state)
         {
             hasEaten = state;
+        }
+
+        public override void AddFitnessToMain()
+        {
+            mainBrain.FitnessMultiplier = 1.0f;
+            mainBrain.FitnessReward = 0f;
+            mainBrain.FitnessReward = eatBrain.FitnessReward + moveToFoodBrain.FitnessReward;
+            mainBrain.FitnessMultiplier += eatBrain.FitnessMultiplier + moveToFoodBrain.FitnessMultiplier;
         }
     }
 
@@ -146,7 +162,7 @@ namespace IA_Library_FSM
             brain = parameters[0] as Brain;
             positiveHalf = Neuron.Sigmoid(0.5f, brain.p);
             negativeHalf = Neuron.Sigmoid(-0.5f, brain.p);
-
+            
             return default;
         }
 
@@ -168,7 +184,7 @@ namespace IA_Library_FSM
                 }
 
                 Vector2[] direction = new Vector2[movesPerTurn];
-
+                
                 for (int i = 0; i < direction.Length; i++)
                 {
                     direction[i] = GetDir(outputs[i]);
@@ -187,7 +203,7 @@ namespace IA_Library_FSM
                     brain.FitnessReward += 20;
                     brain.FitnessMultiplier += 0.05f;
                 }
-                
+            
                 else
                 {
                     brain.FitnessMultiplier -= 0.05f;
@@ -223,39 +239,32 @@ namespace IA_Library_FSM
             float[] outputs = parameters[0] as float[];
             position = (Vector2)parameters[1];
             Vector2 nearFoodPos = (Vector2)parameters[2];
-            AgentHerbivore herbivore = parameters[3] as AgentHerbivore;
-            bool maxEaten = (bool)parameters[4];
-            int currentFood = (int)parameters[5];
-            int maxEating = (int)parameters[6];
-            var hasEaten = parameters[7] as Action<bool>;
+            bool hasEatenEnoughFood = (bool)parameters[3];
+            int counterEating = (int)parameters[4];
+            int maxEating = (int)parameters[5];
+            var onHasEatenEnoughFood = parameters[6] as Action<bool>;
+            var onEaten = parameters[7] as Action<int>;
+            AgentHerbivore herbivore = parameters[8] as AgentHerbivore;
 
             behaviour.AddMultitreadableBehaviours(0, () =>
             {
-                if (herbivore == null)
-                {
-                    return;
-                }
-
                 if (outputs[0] >= 0f)
                 {
-                    if (position == nearFoodPos && !maxEaten)
+                    if (position == nearFoodPos && !hasEatenEnoughFood)
                     {
                         if (herbivore.CanBeEaten())
                         {
-                            herbivore.EatPiece();
-                            currentFood++;
-
+                            onEaten(++counterEating);
                             brain.FitnessReward += 20;
-
-                            if (currentFood == maxEating)
+                            if (counterEating == maxEating)
                             {
                                 brain.FitnessReward += 30;
-                                hasEaten.Invoke(true);
+                                onHasEatenEnoughFood.Invoke(true);
                             }
                         }
                     }
-                
-                    else if (maxEaten || position != nearFoodPos)
+                    
+                    else if (hasEatenEnoughFood || position != nearFoodPos)
                     {
                         brain.FitnessMultiplier -= 0.05f;
                     }
@@ -263,12 +272,12 @@ namespace IA_Library_FSM
             
                 else
                 {
-                    if (position == nearFoodPos && !maxEaten)
+                    if (position == nearFoodPos && !hasEatenEnoughFood)
                     {
                         brain.FitnessMultiplier -= 0.05f;
                     }
-                    
-                    else if (maxEaten)
+                
+                    else if (hasEatenEnoughFood)
                     {
                         brain.FitnessMultiplier += 0.10f;
                     }

@@ -4,73 +4,121 @@ using IA_Library.Brain;
 
 namespace IA_Library
 {
-    public class Genome
-    {
-        public float[] genome;
-        public float fitness = 0;
-
-        public Genome(float[] genes)
-        {
-            this.genome = genes;
-            fitness = 0;
-        }
-
-        public Genome(int genesCount)
-        {
-            genome = new float[genesCount];
-
-            Random rand = new Random();
-
-            for (int j = 0; j < genesCount; j++)
-                genome[j] = (float)(rand.NextDouble() * 2 - 1);
-
-            fitness = 0;
-        }
-
-        public Genome()
-        {
-            fitness = 0;
-        }
-    }
-
+    [Serializable]
     public class GeneticData
     {
         public float totalFitness = 0;
+        public int eliteCount = 0;
         public float mutationChance = 0.0f;
         public float mutationRate = 0.0f;
-        public int totalElites = 0;
+        public readonly int maxStalledGenerationsUntilEvolve = 5;
         public Brain.Brain brainStructure;
-        public readonly int stuckGenerationTimes = 6;
-        public int stuckGenerationCounter = 0;
-        public Genome[] lastGenome;
+        public Genome[] lastGenome = Array.Empty<Genome>();
+        public int generationStalled = 0;
+        public int generationCount = 0;
 
         public GeneticData()
         {
-            totalElites = 5;
-            mutationChance = 0.4f;
+            eliteCount = 5;
+            mutationChance = 0.2f;
             mutationRate = 0.4f;
         }
 
-        public GeneticData(int totalElites, float mutationChance, float mutationRate, Brain.Brain brain,
-            int stuckGenerationTimes = 6)
+        public GeneticData(byte[] data, ref int offset)
         {
-            this.totalElites = totalElites;
+            eliteCount = BitConverter.ToInt32(data, offset);
+            offset += sizeof(int);
+
+            mutationChance = BitConverter.ToSingle(data, offset);
+            offset += sizeof(float);
+
+            mutationRate = BitConverter.ToSingle(data, offset);
+            offset += sizeof(float);
+
+            brainStructure = new Brain.Brain(data, ref offset);
+
+            lastGenome = CreateGenomeArray(data, ref offset);
+
+            generationStalled = BitConverter.ToInt32(data, offset);
+            offset += sizeof(int);
+
+            generationCount = BitConverter.ToInt32(data, offset);
+            offset += sizeof(int);
+        }
+
+        public byte[] Serialize()
+        {
+            List<byte> bytes = new List<byte>();
+
+            bytes.AddRange(BitConverter.GetBytes(eliteCount));
+            bytes.AddRange(BitConverter.GetBytes(mutationChance));
+            bytes.AddRange(BitConverter.GetBytes(mutationRate));
+            bytes.AddRange(brainStructure.Serialize());
+            bytes.AddRange(SerializeGenomeArray(lastGenome));
+            bytes.AddRange(BitConverter.GetBytes(generationStalled));
+            bytes.AddRange(BitConverter.GetBytes(generationCount));
+
+            return bytes.ToArray();
+        }
+
+        private Genome[] CreateGenomeArray(byte[] data, ref int currentOffset)
+        {
+            int arrayLength = BitConverter.ToInt32(data, currentOffset);
+            currentOffset += sizeof(int);
+
+            Genome[] genomes = new Genome[arrayLength];
+
+            for (int i = 0; i < arrayLength; i++)
+            {
+                genomes[i] = new Genome(data, ref currentOffset);
+            }
+
+            return genomes;
+        }
+
+        private byte[] SerializeGenomeArray(Genome[] genomes)
+        {
+            List<byte> bytes = new List<byte>();
+
+            // Serialize the array length (4 bytes for an integer)
+            bytes.AddRange(BitConverter.GetBytes(genomes.Length));
+
+            // Serialize each Genome
+            foreach (var genome in genomes)
+            {
+                bytes.AddRange(genome.Serialize());
+            }
+
+            return bytes.ToArray();
+        }
+
+        public GeneticData(int eliteCount, float mutationChance, float mutationRate, Brain.Brain brain,
+            int maxStalledGenerationsUntilEvolve = 5)
+        {
+            this.eliteCount = eliteCount;
             this.mutationChance = mutationChance;
             this.mutationRate = mutationRate;
             this.brainStructure = brain;
-            this.stuckGenerationTimes = stuckGenerationTimes;
+            this.maxStalledGenerationsUntilEvolve = maxStalledGenerationsUntilEvolve;
         }
 
         public GeneticData(GeneticData data)
         {
-            totalElites = data.totalElites;
-            mutationChance = data.mutationChance;
-            mutationRate = data.mutationRate;
-            brainStructure = data.brainStructure;
-            stuckGenerationTimes = data.stuckGenerationTimes;
+            this.eliteCount = data.eliteCount;
+            this.mutationChance = data.mutationChance;
+            this.mutationRate = data.mutationRate;
+            this.brainStructure = data.brainStructure;
+            this.maxStalledGenerationsUntilEvolve = data.maxStalledGenerationsUntilEvolve;
+        }
+        public void Save()
+        {
+        }
+        public void Load()
+        {
         }
     }
 
+    [Serializable]
     public class GeneticAlgorithm
     {
         enum EvolutionType
@@ -101,6 +149,11 @@ namespace IA_Library
             return genomes;
         }
 
+        public static float RandomRangeFloat(float min, float max)
+        {
+            return (float)(random.NextDouble() * (max - min) + min);
+        }
+
         public static Genome[] Epoch(Genome[] oldGenomes, GeneticData data, bool forceEvolve = false)
         {
             float currentTotalFitness = 0;
@@ -121,7 +174,7 @@ namespace IA_Library
 
             if (forceEvolve)
             {
-                data.stuckGenerationCounter = 0;
+                data.generationStalled = 0;
                 data.mutationChance *= 2.8f;
                 data.mutationRate *= 2.8f;
                 evolutionType = (EvolutionType)random.Next(1, Enum.GetValues(typeof(EvolutionType)).Length);
@@ -129,11 +182,11 @@ namespace IA_Library
             
             else if (currentTotalFitness < data.totalFitness)
             {
-                data.stuckGenerationCounter++;
-
-                if (data.stuckGenerationCounter >= data.stuckGenerationTimes)
+                data.generationStalled++;
+                
+                if (data.generationStalled >= data.maxStalledGenerationsUntilEvolve)
                 {
-                    data.stuckGenerationCounter = 0;
+                    data.generationStalled = 0;
                     evolutionType = (EvolutionType)random.Next(1, Enum.GetValues(typeof(EvolutionType)).Length);
                 }
             }
@@ -142,13 +195,12 @@ namespace IA_Library
             CalculateNeuronsToAdd(data.brainStructure);
 
 
-            SelectElite(evolutionType, data.totalElites);
-
+            SelectElite(evolutionType, data.eliteCount);
+            
             while (newPopulation.Count < population.Count)
             {
                 Crossover(data, evolutionType);
             }
-
 
             switch (evolutionType)
             {
@@ -156,26 +208,36 @@ namespace IA_Library
                     break;
 
                 case EvolutionType.AddNeurons:
-                    
+
                     data.brainStructure.AddNeuronAtLayer(newNeuronToAddQuantity, randomLayer);
-                    
+
                     break;
-                
+
                 case EvolutionType.AddLayer:
-                
+
                     data.brainStructure.AddNeuronLayerAtPosition(newNeuronToAddQuantity, randomLayer);
-                    
+
                     break;
-                
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(evolutionType), evolutionType, null);
             }
 
             data.mutationChance = backUpData.mutationChance;
             data.mutationRate = backUpData.mutationRate;
-            
-            return newPopulation.ToArray();
+            data.lastGenome = newPopulation.ToArray();
+
+            return data.lastGenome;
         }
+
+        private static void CalculateNeuronsToAdd(Brain.Brain brain)
+        {
+            Random random = new Random();
+            newNeuronToAddQuantity = random.Next(1, 3);
+            randomLayer = random.Next(1, brain.layers.Count - 1);
+            neuronLayers = brain.layers;
+        }
+
 
         static void SelectElite(EvolutionType evolutionType, int eliteCount)
         {
@@ -185,33 +247,25 @@ namespace IA_Library
                 {
                     case EvolutionType.None:
                         break;
-            
+
                     case EvolutionType.AddNeurons:
-                        
+
                         EvolveChildNeurons(population[i]);
-                    
+
                         break;
-                    
+
                     case EvolutionType.AddLayer:
-                    
+
                         EvolveChildLayer(population[i]);
-                        
+
                         break;
-                    
+
                     default:
                         throw new ArgumentOutOfRangeException(nameof(evolutionType), evolutionType, null);
                 }
 
                 newPopulation.Add(population[i]);
             }
-        }
-
-        private static void CalculateNeuronsToAdd(Brain.Brain brain)
-        {
-            Random random = new Random();
-            newNeuronToAddQuantity = random.Next(1, 3);
-            randomLayer = random.Next(1, brain.layers.Count - 1);
-            neuronLayers = brain.layers;
         }
 
         static void Crossover(GeneticData data, EvolutionType evolutionType)
@@ -271,41 +325,26 @@ namespace IA_Library
             {
                 case EvolutionType.None:
                     break;
-            
+
                 case EvolutionType.AddNeurons:
-                
+
                     EvolveChildNeurons(child1);
+
                     EvolveChildNeurons(child2);
-                    
+
                     break;
-                
+
                 case EvolutionType.AddLayer:
-                    
+
                     EvolveChildLayer(child1);
+
                     EvolveChildLayer(child2);
-                
+
                     break;
-                
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(evolutionType), evolutionType, null);
             }
-        }
-
-        public static Genome RouletteSelection(float totalFitness)
-        {
-            float rnd = (float)(random.NextDouble() * Math.Max(totalFitness, 0));
-
-            float fitness = 0;
-
-            for (int i = 0; i < population.Count; i++)
-            {
-                fitness += Math.Max(population[i].fitness, 0);
-                
-                if (fitness >= rnd)
-                    return population[i];
-            }
-
-            return null;
         }
 
         static bool ShouldMutate(float mutationChance)
@@ -322,13 +361,15 @@ namespace IA_Library
         {
             int previousLayerOutputs = neuronLayers[randomLayer].OutputsCount;
             int nextLayerOutputs = neuronLayers[randomLayer + 1].OutputsCount;
+            // int newNeuronCount = child.genome.Length + newNeuronToAddQuantity * previousLayerOutputs +
+            //                      nextLayerOutputs * newNeuronToAddQuantity;
 
             int newNeuronCount = child.genome.Length
                                  + newNeuronToAddQuantity * neuronLayers[randomLayer].InputsCount +
                                  nextLayerOutputs * newNeuronToAddQuantity;
-            
             float[] newWeight = new float[newNeuronCount];
 
+            //Neurona
             int count = 0;
             int originalWeightsCount = 0;
 
@@ -348,7 +389,6 @@ namespace IA_Library
                     {
                         CopyExistingWeights(ref count, ref originalWeightsCount);
                     }
-
                     else
                     {
                         CreateNewWeights(ref count);
@@ -364,7 +404,6 @@ namespace IA_Library
                     {
                         CopyExistingWeights(ref count, ref originalWeightsCount);
                     }
-
                     else
                     {
                         CreateNewWeights(ref count);
@@ -378,7 +417,7 @@ namespace IA_Library
             }
 
             child.genome = newWeight;
-
+            
             return;
 
             void CopyExistingWeights(ref int count, ref int originalWeightsCount)
@@ -390,15 +429,18 @@ namespace IA_Library
 
             void CreateNewWeights(ref int count)
             {
-                newWeight[count] = (float)(random.NextDouble() * 2 - 1);
+                newWeight[count] = RandomRangeFloat(-1.0f, 1.0f);
                 count++;
             }
         }
 
         static void EvolveChildLayer(Genome child)
         {
+            //Neurona
+
             int count = 0;
             int originalWeightsCount = 0;
+
 
             int previousLayerInputs = neuronLayers[randomLayer].OutputsCount;
             int nextLayerInputs = neuronLayers[randomLayer + 1].OutputsCount;
@@ -457,15 +499,26 @@ namespace IA_Library
 
             void CreateNewWeights(ref int count)
             {
-                newWeight[count] = (float)(random.NextDouble() * 2 - 1);
+                newWeight[count] = RandomRangeFloat(-1.0f, 1.0f);
                 count++;
             }
         }
 
-        public static float RandomRangeFloat(float min, float max)
+        public static Genome RouletteSelection(float totalFitness)
         {
-            return (float)(random.NextDouble() * (max - min) + min);
+            float rnd = RandomRangeFloat(0, MathF.Max(totalFitness, 0));
+
+            float fitness = 0;
+
+            for (int i = 0; i < population.Count; i++)
+            {
+                fitness += MathF.Max(population[i].fitness, 0);
+
+                if (fitness >= rnd)
+                    return population[i];
+            }
+
+            return null;
         }
     }
-
 }

@@ -1,9 +1,13 @@
+using System;
+using System.Collections.Generic;
+
 namespace IA_Library.Brain
 {
+    [Serializable]
     public class NeuronLayer
     {
-        public Neuron[] neurons;
-        private float[] outputs;
+        public Neuron[] neurons = Array.Empty<Neuron>();
+        private float[] outputs = Array.Empty<float>();
         public int totalWeights = 0;
         public int inputsCount = 0;
         private float bias = 1;
@@ -24,6 +28,24 @@ namespace IA_Library.Brain
             get { return outputs.Length; }
         }
 
+        public byte[] Serialize()
+        {
+            List<byte> bytes = new List<byte>();
+
+            bytes.AddRange(BitConverter.GetBytes(neurons.Length));
+
+            foreach (var neuron in neurons)
+            {
+                bytes.AddRange(neuron.Serialize());
+            }
+
+            bytes.AddRange(BitConverter.GetBytes(bias));
+            bytes.AddRange(BitConverter.GetBytes(p));
+
+
+            return bytes.ToArray();
+        }
+
         public NeuronLayer(int inputsCount, int neuronsCount, float bias, float p)
         {
             this.inputsCount = inputsCount;
@@ -31,6 +53,23 @@ namespace IA_Library.Brain
             this.p = p;
 
             SetNeuronsCount(neuronsCount);
+        }
+
+        public NeuronLayer(byte[] data, ref int output)
+        {
+            int length = BitConverter.ToInt32(data, output);
+            output += sizeof(int);
+            neurons = new Neuron[length];
+            
+            for (int i = 0; i < length; i++)
+            {
+                neurons[i] = new Neuron(data, ref output);
+            }
+
+            bias = BitConverter.ToSingle(data, output);
+            output += sizeof(float);
+            p = BitConverter.ToSingle(data, output);
+            output += sizeof(float);
         }
 
         void SetNeuronsCount(int neuronsCount)
@@ -77,17 +116,16 @@ namespace IA_Library.Brain
 
         public int GetWeightCount()
         {
-
             int id = 0;
 
             foreach (var neuron in neurons)
             {
-                id  += neuron.GetWeights().Length;
+                id += neuron.GetWeights().Length;
             }
 
             return id;
         }
-        
+
         public float[] Synapsis(float[] inputs)
         {
             for (int j = 0; j < neurons.Length; j++)

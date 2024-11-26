@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 
 namespace IA_Library.Brain
 {
+    [Serializable]
     public class BrainData
     {
         private int inputsCount;

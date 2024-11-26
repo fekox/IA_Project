@@ -44,7 +44,7 @@ namespace IA_Library
             return GetOpositeSide(newPosition);
         }
 
-        private Vector2 GetOpositeSide(Vector2 position)
+        public Vector2 GetOpositeSide(Vector2 position)
         {
 
             if (position.X <= 0)

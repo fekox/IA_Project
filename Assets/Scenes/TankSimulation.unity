@@ -921,11 +921,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9c7d37a7ff1c8a429089337725172d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridSize: {x: 70, y: 70}
+  fileToLoad: 
+  filePath: /Saves/
+  fileExtension: generation
+  gridSize: {x: 50, y: 50}
   cellSize: 1
   totalHerbivores: 50
-  totalCarnivores: 5
-  totalScavengers: 5
+  totalCarnivores: 25
+  totalScavengers: 25
+  mutationChance: 20
+  mutationRate: 20
+  totalElites: 5
   generationTime: 420
   plantMaterial: {fileID: 2100000, guid: 25340932a8ef5e3448b9648f4d92d4b6, type: 2}
   herbivoreMaterial: {fileID: 2100000, guid: 0a72a8e3deb1c61419a63c76596d5f5b, type: 2}

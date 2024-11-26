@@ -24,6 +24,7 @@ namespace IA_Library_FSM
         OnTransitionCorpse
     }
 
+    [System.Serializable]
     public abstract class Agent
     {
         public Brain mainBrain;
@@ -34,8 +35,8 @@ namespace IA_Library_FSM
         public Vector2 position;
 
         public bool hasEaten = false;
-        protected int maxFood;
-        protected int currentFood = 0;
+        public int maxFood;
+        public int currentFood = 0;
 
         public Agent(Simulation simulation, GridManager gridManager, Brain mainBrain)
         {
@@ -56,6 +57,7 @@ namespace IA_Library_FSM
         public abstract Vector2 GetNearestFoodPosition();
         public abstract void SettingBrainUpdate(float deltaTime);
         public abstract void SetEatState(bool state);
+        public abstract void AddFitnessToMain();
         public float[] GetMainBrainGenome()
         {
             return mainBrain.outputs;
@@ -72,22 +74,21 @@ namespace IA_Library_FSM
         protected Vector2 GetDir(float x)
         {
             Vector2 dir = new Vector2();
-
             if (x > positiveHalf)
             {
                 dir = new Vector2(1, 0);
             }
-
+            
             else if (x < positiveHalf && x > 0)
             {
                 dir = new Vector2(-1, 0);
             }
-
+            
             else if (x < 0 && x < negativeHalf)
             {
                 dir = new Vector2(0, 1);
             }
-
+            
             else if (x < negativeHalf)
             {
                 dir = new Vector2(0, -1);
@@ -99,11 +100,11 @@ namespace IA_Library_FSM
         protected float GetDistanceFrom(List<Vector2> enemies)
         {
             float distance = float.MaxValue;
-
+            
             foreach (var enemy in enemies)
             {
                 float newDistance = Vector2.Distance(position, enemy);
-
+                
                 if (distance > newDistance)
                 {
                     distance = newDistance;

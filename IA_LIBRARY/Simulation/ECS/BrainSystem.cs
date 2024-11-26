@@ -59,7 +59,6 @@ namespace IA_Library_ECS
                 inputComponent[entity].size = outputComponent[entity].output.Length;
                 inputComponent[entity].inputs = outputComponent[entity].output;
                 outputComponent[entity].output = new float[hiddenLayerComponent[entity].HiggestLayerSize];
-                
                 for (int layer = 0; layer < hiddenLayerComponent[entity].hiddenLayers.Length; layer++)
                 {
                     LayerSynapsis(entity, inputComponent[entity].inputs, layer, ref inputComponent[entity].size);
@@ -100,6 +99,7 @@ namespace IA_Library_ECS
         private float[] OutputLayerSynapsis(uint entity, float[] inputs, ref int size)
         {
             int neuronCount = outputLayerComponent[entity].layer.weights.GetLength(0);
+            
             Array.Resize(ref outputComponent[entity].output, neuronCount);
             
             Parallel.For(0, neuronCount, parallelOptions,

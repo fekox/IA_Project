@@ -11,7 +11,7 @@ namespace IA_Library_FSM
         public AgentPlant(Simulation simulation, GridManager gridManager) : base(simulation, gridManager, null)
         {
         }
-        
+    
         public void Eat()
         {
             if (isAlive)
@@ -61,6 +61,11 @@ namespace IA_Library_FSM
         }
 
         public override void SetEatState(bool state)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void AddFitnessToMain()
         {
             throw new System.NotImplementedException();
         }
