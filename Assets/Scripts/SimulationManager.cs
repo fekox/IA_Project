@@ -134,7 +134,7 @@ public class SimulationManager : MonoBehaviour
         if (!Application.isPlaying)
             return;
 
-        Gizmos.color = Color.black;
+        Gizmos.color = Color.white;
 
         for (int x = 0; x < simulation.gridManager.size.X; x++)
         {

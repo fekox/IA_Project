@@ -903,7 +903,7 @@ Transform:
   m_GameObject: {fileID: 1690210757}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -31.82, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -933,7 +933,7 @@ MonoBehaviour:
   mutationChance: 20
   mutationRate: 20
   totalElites: 5
-  generationTime: 420
+  generationTime: 300
   Bias: 0.5
   P: 0.5
   plantMaterial: {fileID: 2100000, guid: 25340932a8ef5e3448b9648f4d92d4b6, type: 2}
