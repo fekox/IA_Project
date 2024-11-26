@@ -235,6 +235,10 @@ namespace IA_Library_FSM
 
         public override void AddFitnessToMain()
         {
+            moveToFoodBrain.ApplyFitness();
+            moveToEscapeBrain.ApplyFitness();
+            eatBrain.ApplyFitness();
+
             mainBrain.FitnessMultiplier = 1.0f;
             mainBrain.FitnessReward = 0f;
             mainBrain.FitnessReward += eatBrain.FitnessReward + moveToFoodBrain.FitnessReward + moveToEscapeBrain.FitnessReward;

@@ -120,6 +120,8 @@ namespace IA_Library_FSM
 
         public override void AddFitnessToMain()
         {
+            flockingBrain.ApplyFitness();
+
             mainBrain.FitnessMultiplier = 1.0f;
             mainBrain.FitnessReward = 0f;
             mainBrain.FitnessReward += flockingBrain.FitnessReward + (hasEaten ? flockingBrain.FitnessReward : 0);
