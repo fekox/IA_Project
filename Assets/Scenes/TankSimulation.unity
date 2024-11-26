@@ -929,16 +929,22 @@ MonoBehaviour:
   totalHerbivores: 50
   totalCarnivores: 25
   totalScavengers: 25
+  totalPlants: 100
   mutationChance: 20
   mutationRate: 20
   totalElites: 5
   generationTime: 420
+  Bias: 0.5
+  P: 0.5
   plantMaterial: {fileID: 2100000, guid: 25340932a8ef5e3448b9648f4d92d4b6, type: 2}
   herbivoreMaterial: {fileID: 2100000, guid: 0a72a8e3deb1c61419a63c76596d5f5b, type: 2}
   deadHerbivoreMaterial: {fileID: 2100000, guid: ca0f89d5e5744884fa6f7f67aad4f1b6, type: 2}
   carnivoreMaterial: {fileID: 2100000, guid: 4fee3579053b3dc4bb2e570947637632, type: 2}
   scavengerMaterial: {fileID: 2100000, guid: 869412771b722364c91d1183ee9c90d4, type: 2}
-  CubeMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  herbivoreMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  carnivoreMesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+  scavengerMesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  plantMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!4 &1731890038 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400002, guid: 126dbcddb53386c4f969fdf0c555e822, type: 3}

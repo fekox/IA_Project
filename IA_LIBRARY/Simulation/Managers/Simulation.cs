@@ -18,6 +18,7 @@ namespace IA_Library
         private int totalHerbivores;
         private int totalCarnivores;
         private int totalScavengers;
+        private int totalPlants;
         private int totalElite;
 
         private float mutationChance;
@@ -76,7 +77,7 @@ namespace IA_Library
 
         public Simulation(GridManager grid,
             List<BrainData> herbivoreData, List<BrainData> carnivoreData, List<BrainData> scavengerData,
-            int totalHerbivores, int totalCarnivores, int totalScavengers, int totalElite,
+            int totalHerbivores, int totalCarnivores, int totalScavengers, int totalPlants, int totalElite,
             float mutationChance, float mutationRate, int generationLifeTime)
         {
             //Data
@@ -91,6 +92,8 @@ namespace IA_Library
             this.totalHerbivores = totalHerbivores;
             this.totalCarnivores = totalCarnivores;
             this.totalScavengers = totalScavengers;
+            this.totalPlants = totalPlants;
+
             this.totalElite = totalElite;
             this.mutationChance = mutationChance;
             this.mutationRate = mutationRate;
@@ -132,6 +135,11 @@ namespace IA_Library
                 scavengerFlockingBrain.Add(Scavenger[i].flockingBrain);
             }
 
+            for (int i = 0; i < totalPlants; i++)
+            {
+                Plants.Add(new AgentPlant(this, gridManager));
+            }
+
             HeMainBrain = new GeneticData(totalElite, mutationChance, mutationRate, herbivoreMainBrain[0]);
             HeEatBrain = new GeneticData(totalElite, mutationChance, mutationRate, herbivoreEatBrain[0]);
             HeMoveFoodBrain = new GeneticData(totalElite, mutationChance, mutationRate, herbivoreMoveFoodBrain[0]);
@@ -157,11 +165,6 @@ namespace IA_Library
             foreach (GeneticData geneticData in data)
             {
                 manager.AddDataset(geneticData);
-            }
-
-            for (int i = 0; i < totalHerbivores*2; i++)
-            {
-                Plants.Add(new AgentPlant(this, gridManager));
             }
         }
 

@@ -8,18 +8,23 @@ public class SimulationManager : MonoBehaviour
 {
     private Simulation simulation;
 
+    [Header("Save system")] 
     public string fileToLoad;
 
     public string filePath = "/Saves/";
     public string fileExtension = "generation";
 
+    [Header("Grid settings")]
     [SerializeField] private Vector2Int gridSize;
     [SerializeField] private float cellSize;
 
+    [Header("Entities settings")]
     [SerializeField] private int totalHerbivores;
     [SerializeField] private int totalCarnivores;
     [SerializeField] private int totalScavengers;
+    [SerializeField] private int totalPlants;
 
+    [Header("Simulation settings")]
     [SerializeField] private int mutationChance;
     [SerializeField] private int mutationRate;
 
@@ -27,13 +32,21 @@ public class SimulationManager : MonoBehaviour
 
     [SerializeField] private int generationTime;
 
+    [SerializeField] private float Bias = 0.5f;
+    [SerializeField] private float P = 0.5f;
+
+    [Header("Materials")]
     public Material plantMaterial;
     public Material herbivoreMaterial;
     public Material deadHerbivoreMaterial;
     public Material carnivoreMaterial;
     public Material scavengerMaterial;
 
-    public Mesh CubeMesh;
+    [Header("Meshes")]
+    public Mesh herbivoreMesh;
+    public Mesh carnivoreMesh;
+    public Mesh scavengerMesh;
+    public Mesh plantMesh;
 
     private BrainData herbivoreMainBrain;
     private BrainData herbivoreMoveEatBrain;
@@ -44,9 +57,6 @@ public class SimulationManager : MonoBehaviour
     private BrainData carnivoreEatBrain;
     private BrainData scavengerMainBrain;
     private BrainData scavengerFlockingBrain;
-
-    private float Bias = 0.5f;
-    private float P = 0.5f;
 
     private GridManager NewGrid;
 
@@ -75,7 +85,7 @@ public class SimulationManager : MonoBehaviour
         List<BrainData> scavengerData = new List<BrainData> { scavengerMainBrain, scavengerFlockingBrain };
 
         simulation = new Simulation(NewGrid, herbivoreData, carnivoreData, scavengerData, totalHerbivores,
-            totalCarnivores, totalScavengers, totalElites, mutationChance, mutationRate, generationTime)
+            totalCarnivores, totalScavengers, totalPlants, totalElites, mutationChance, mutationRate, generationTime)
         {
             filepath = Application.dataPath + filePath,
             fileExtension = fileExtension,
@@ -90,32 +100,32 @@ public class SimulationManager : MonoBehaviour
 
     private void DrawEntities()
     {
-        foreach (AgentPlant agent in simulation.Plants)
-        {
-            DrawSquare(new Vector3(agent.position.X, agent.position.Y, 0), plantMaterial, 1);
-        }
-
         foreach (AgentHerbivore agent in simulation.Herbivore)
         {
             if (agent.lives <= 0)
             {
-                DrawSquare(new Vector3(agent.position.X, agent.position.Y, 0), deadHerbivoreMaterial, 1);
+                DrawMesh(herbivoreMesh, new Vector3(agent.position.X, agent.position.Y, 0), deadHerbivoreMaterial, 1);
             }
         
             else
             {
-                DrawSquare(new Vector3(agent.position.X, agent.position.Y, 0), herbivoreMaterial, 1);
+                DrawMesh(herbivoreMesh, new Vector3(agent.position.X, agent.position.Y, 0), herbivoreMaterial, 1);
             }
         }
 
         foreach (AgentCarnivore agent in simulation.Carnivore)
         {
-            DrawSquare(new Vector3(agent.position.X, agent.position.Y, 0), carnivoreMaterial, 1);
+            DrawMesh(carnivoreMesh, new Vector3(agent.position.X, agent.position.Y, 0), carnivoreMaterial, 1);
         }
 
         foreach (AgentScavenger agent in simulation.Scavenger)
         {
-            DrawSquare(new Vector3(agent.position.X, agent.position.Y, 0), scavengerMaterial, 1);
+            DrawMesh(scavengerMesh, new Vector3(agent.position.X, agent.position.Y, 0), scavengerMaterial, 1);
+        }
+
+        foreach (AgentPlant agent in simulation.Plants)
+        {
+            DrawMesh(plantMesh, new Vector3(agent.position.X, agent.position.Y, 0), plantMaterial, 1);
         }
     }
 
@@ -135,12 +145,12 @@ public class SimulationManager : MonoBehaviour
         }
     }
 
-    private void DrawSquare(Vector3 position, Material color, float squareSize)
+    private void DrawMesh(Mesh meshType, Vector3 position, Material color, float squareSize)
     {
         color.SetPass(0);
         Matrix4x4 matrix =
             Matrix4x4.TRS(position, Quaternion.identity, new Vector3(squareSize, squareSize, squareSize));
-        Graphics.DrawMeshNow(CubeMesh, matrix);
+        Graphics.DrawMeshNow(meshType, matrix);
     }
 
     private void OnRenderObject()
