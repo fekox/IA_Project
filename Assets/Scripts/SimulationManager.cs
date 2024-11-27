@@ -10,6 +10,11 @@ public class SimulationManager : MonoBehaviour
 {
     private Simulation simulation;
 
+    [SerializeField] private UpdateGenerationText updateGenerationText;
+
+    [Header("Current generation")]
+    public int currentGeneration = 1;
+
     [Header("Save system")] 
     public string fileToLoad;
 
@@ -123,7 +128,8 @@ public class SimulationManager : MonoBehaviour
 
     private void Update()
     {
-        simulation.UpdateSimulation(Time.deltaTime);
+       currentGeneration = simulation.UpdateSimulation(Time.deltaTime);
+       updateGenerationText.UpdateCurrentGeneration(currentGeneration);
     }
 
     private void DrawEntities()

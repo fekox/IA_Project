@@ -209,7 +209,7 @@ namespace IA_Library
             entities.Add(entityID, brain);
         }
 
-        public void UpdateSimulation(float deltaTime)
+        public int UpdateSimulation(float deltaTime)
         {
             if (currentTurn < generationLifeTime)
             {
@@ -219,12 +219,14 @@ namespace IA_Library
                 UpdateOutputs(deltaTime);
                 currentTurn++;
             }
-            
+
             else
             {
                 Epoch();
                 CreateNewGeneration();
             }
+
+            return currentGeneration;
         }
 
         private void Epoch()
