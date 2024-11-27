@@ -3,6 +3,8 @@ using IA_Library;
 using IA_Library_FSM;
 using IA_Library.Brain;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class SimulationManager : MonoBehaviour
 {
@@ -15,8 +17,8 @@ public class SimulationManager : MonoBehaviour
     public string fileExtension = "generation";
 
     [Header("Grid settings")]
-    [SerializeField] private Vector2Int gridSize;
-    [SerializeField] private float cellSize;
+    public Vector2Int gridSize;
+    public float cellSize;
 
     [Header("Entities settings")]
     [SerializeField] private int totalHerbivores;
@@ -27,9 +29,7 @@ public class SimulationManager : MonoBehaviour
     [Header("Simulation settings")]
     [SerializeField] private int mutationChance;
     [SerializeField] private int mutationRate;
-
     [SerializeField] private int totalElites;
-
     [SerializeField] private int generationTime;
 
     [SerializeField] private float Bias = 0.5f;
@@ -41,12 +41,14 @@ public class SimulationManager : MonoBehaviour
     public Material deadHerbivoreMaterial;
     public Material carnivoreMaterial;
     public Material scavengerMaterial;
+    public Material gridMaterial;
 
     [Header("Meshes")]
     public Mesh herbivoreMesh;
     public Mesh carnivoreMesh;
     public Mesh scavengerMesh;
     public Mesh plantMesh;
+    public Mesh gridMesh;
 
     private BrainData herbivoreMainBrain;
     private BrainData herbivoreMoveEatBrain;
@@ -59,6 +61,32 @@ public class SimulationManager : MonoBehaviour
     private BrainData scavengerFlockingBrain;
 
     private GridManager NewGrid;
+
+    #region Inputs Fields
+
+    [Header("Save System UI")]
+    [SerializeField] private TMP_InputField fileToLoadIF;
+
+    [Header("Grid Settings UI")]
+    [SerializeField] private TMP_InputField gridXIF;
+    [SerializeField] private TMP_InputField gridYIF;
+    [SerializeField] private TMP_InputField cellSizeIF;
+
+    [Header("Entities Settings UI")]
+    [SerializeField] private TMP_InputField maxHerbivoresIF;
+    [SerializeField] private TMP_InputField maxCarnivoresIF;
+    [SerializeField] private TMP_InputField maxScavengersIF;
+    [SerializeField] private TMP_InputField maxPlantsIF;
+
+    [Header("Simulation Settings UI")]
+    [SerializeField] private TMP_InputField mutationChanceIF;
+    [SerializeField] private TMP_InputField mutationRateIF;
+    [SerializeField] private TMP_InputField totalElitesIF;
+    [SerializeField] private TMP_InputField generationTimeIF;
+    [SerializeField] private TMP_InputField biasIF;
+    [SerializeField] private TMP_InputField PIF;
+
+    #endregion
 
     private void OnEnable()
     {
@@ -129,18 +157,13 @@ public class SimulationManager : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
+    public void DrawGrid() 
     {
-        if (!Application.isPlaying)
-            return;
-
-        Gizmos.color = Color.white;
-
         for (int x = 0; x < simulation.gridManager.size.X; x++)
         {
             for (int y = 0; y < simulation.gridManager.size.Y; y++)
             {
-                Gizmos.DrawSphere(new Vector3(x, y, 0), 0.2f);
+                DrawMesh(gridMesh, new Vector3(x, y, 0), gridMaterial, 0.3f);
             }
         }
     }
@@ -155,6 +178,7 @@ public class SimulationManager : MonoBehaviour
 
     private void OnRenderObject()
     {
+        DrawGrid();
         DrawEntities();
     }
 
@@ -166,4 +190,114 @@ public class SimulationManager : MonoBehaviour
         simulation.fileExtension = fileExtension;
         simulation.Load();
     }
+
+    #region Setters
+    public void SetFileToLoad() 
+    {
+        fileToLoad = fileToLoadIF.text;
+    }
+
+    public void SetGirdXSize() 
+    {
+        if (int.TryParse(gridXIF.text, out int value))
+        {
+            gridSize.x = value;
+        }
+    }
+    public void SetGirdYSize()
+    {
+        if (int.TryParse(gridYIF.text, out int value))
+        {
+            gridSize.y = value;
+        }
+    }
+
+    public void SetCellSize() 
+    {
+        if (float.TryParse(cellSizeIF.text, out float value))
+        {
+            cellSize = value;
+        }
+    }
+
+    public void SetMaxHerbivores() 
+    {
+        if (int.TryParse(maxHerbivoresIF.text, out int value))
+        {
+            totalHerbivores = value;
+        }
+    }
+
+    public void SetMaxCarnivores() 
+    {
+        if(int.TryParse(maxCarnivoresIF.text, out int value)) 
+        {
+            totalCarnivores = value;
+        }
+    }
+
+    public void SetMaxScavengers() 
+    {
+        if (int.TryParse(maxScavengersIF.text, out int value))
+        {
+            totalScavengers = value;
+        }
+    }
+
+    public void SetMaxPlants() 
+    {
+        if (int.TryParse(maxPlantsIF.text, out int value))
+        {
+            totalPlants = value;
+        }
+    }
+
+    public void SetMutationChance() 
+    {
+        if (int.TryParse(mutationChanceIF.text, out int value))
+        {
+            mutationChance = value;
+        }
+    }
+
+    public void SetMutationRate() 
+    {
+        if (int.TryParse(mutationRateIF.text, out int value))
+        {
+            mutationRate = value;
+        }
+    }
+
+    public void SetTotalElites() 
+    {
+        if (int.TryParse(totalElitesIF.text, out int value))
+        {
+            totalElites = value;
+        }
+    }
+
+    public void SetGenerationTime() 
+    {
+        if (int.TryParse(generationTimeIF.text, out int value))
+        {
+            generationTime = value;
+        }
+    }
+
+    public void SetBias() 
+    {
+        if (float.TryParse(biasIF.text, out float value))
+        {
+            Bias = value;
+        }
+    }
+
+    public void SetP() 
+    {
+        if (float.TryParse(PIF.text, out float value))
+        {
+            P = value;
+        }
+    }
+    #endregion
 }
