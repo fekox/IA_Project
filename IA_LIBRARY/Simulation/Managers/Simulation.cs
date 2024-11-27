@@ -256,10 +256,11 @@ namespace IA_Library
             
             foreach (AgentHerbivore current in Herbivore)
             {
+                current.AddFitnessToMain();
+
                 if (current.lives > 0 && current.hasEaten)
                 {
                     count++;
-                    current.AddFitnessToMain();
                 }
             
                 else
@@ -285,10 +286,11 @@ namespace IA_Library
             
             foreach (AgentCarnivore current in Carnivore)
             {
+                current.AddFitnessToMain();
+
                 if (current.hasEaten)
                 {
                     count++;
-                    current.AddFitnessToMain();
                 }
             
                 else
@@ -312,10 +314,11 @@ namespace IA_Library
             
             foreach (AgentScavenger current in Scavenger)
             {
+                current.AddFitnessToMain();
+
                 if (current.hasEaten)
                 {
                     count++;
-                    current.AddFitnessToMain();
                 }
                 
                 else
@@ -386,8 +389,15 @@ namespace IA_Library
         {
             for (int i = 0; i < brains.Count; i++)
             {
-                brains[i] = new Brain.Brain(info.brainStructure);
-                brains[i].SetWeights(info.lastGenome[i].genome);
+                int counter = i;
+
+                if (counter >= info.lastGenome.Length)
+                {
+                    counter -= info.lastGenome.Length;
+                }
+
+                brains[counter] = new Brain.Brain(info.brainStructure);
+                brains[counter].SetWeights(info.lastGenome[counter].genome);
             }
         }
 
@@ -508,6 +518,7 @@ namespace IA_Library
             currentTurn = 0;
         }
 
+        #region Getters
         public AgentPlant GetNearestPlantAgents(Vector2 position)
         {
             AgentPlant nearestPoint = Plants[0];
@@ -633,5 +644,7 @@ namespace IA_Library
 
             return sortedScavengers;
         }
+
+        #endregion
     }
 }
