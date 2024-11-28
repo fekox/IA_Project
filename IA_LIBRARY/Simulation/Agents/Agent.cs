@@ -57,7 +57,7 @@ namespace IA_Library_FSM
         public abstract Vector2 GetNearestFoodPosition();
         public abstract void SettingBrainUpdate(float deltaTime);
         public abstract void SetEatState(bool state);
-        public abstract void AddFitnessToMain();
+        public abstract void ApplyFitness();
         public float[] GetMainBrainGenome()
         {
             return mainBrain.outputs;
@@ -74,6 +74,7 @@ namespace IA_Library_FSM
         protected Vector2 GetDir(float x)
         {
             Vector2 dir = new Vector2();
+            
             if (x > positiveHalf)
             {
                 dir = new Vector2(1, 0);

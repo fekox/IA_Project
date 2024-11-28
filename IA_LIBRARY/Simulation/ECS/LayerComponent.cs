@@ -8,7 +8,6 @@ namespace IA_Library_ECS
     {
         public int neuronCount;
         public float[,] weights;
-
         public Layer(int neuronCount, float[,] weights)
         {
             this.neuronCount = neuronCount;

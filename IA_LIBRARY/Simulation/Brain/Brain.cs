@@ -10,7 +10,7 @@ namespace IA_Library.Brain
         public List<NeuronLayer> layers = new List<NeuronLayer>();
         int totalWeightsCount = 0;
         int inputsCount = 0;
-        private float fitness = 1;
+        public float fitness = 1;
         public float FitnessReward;
         public float FitnessMultiplier;
         public float[] outputs;
@@ -89,7 +89,7 @@ namespace IA_Library.Brain
 
         public void ApplyFitness()
         {
-            fitness *= FitnessReward * FitnessMultiplier > 0 ? FitnessMultiplier : 0;
+            fitness += FitnessReward * FitnessMultiplier > 0 ? FitnessMultiplier + 1 : 1;
         }
 
         public bool AddNeuronLayer(int neuronsCount, float bias, float p)
@@ -120,7 +120,7 @@ namespace IA_Library.Brain
 
         public void Set0Fitness()
         {
-            fitness *= 0;
+            fitness = 0;
         }
 
         public bool AddFirstNeuronLayer(int inputsCount, float bias, float p)
@@ -158,10 +158,12 @@ namespace IA_Library.Brain
         public bool AddNeuronAtLayer(int neuronsCountToAdd, int layerPosition)
         {
             NeuronLayer oldLayer = layers[layerPosition];
-            layers[layerPosition] = new NeuronLayer(oldLayer.InputsCount, oldLayer.NeuronsCount + neuronsCountToAdd, bias, p);
+            layers[layerPosition] =
+                new NeuronLayer(oldLayer.InputsCount, oldLayer.NeuronsCount + neuronsCountToAdd, bias, p);
 
             NeuronLayer oldNextLayer = layers[layerPosition + 1];
-            layers[layerPosition + 1] = new NeuronLayer(layers[layerPosition].OutputsCount, oldNextLayer.NeuronsCount, bias, p);
+            layers[layerPosition + 1] =
+                new NeuronLayer(layers[layerPosition].OutputsCount, oldNextLayer.NeuronsCount, bias, p);
 
             totalWeightsCount += layers[layerPosition].OutputsCount * neuronsCountToAdd;
             totalWeightsCount += layers[layerPosition + 1].OutputsCount * neuronsCountToAdd;
@@ -240,7 +242,7 @@ namespace IA_Library.Brain
             Index layerIndex = ^1;
             int id = layers[layerIndex].neurons.Length;
             float[,] weights = new float[layers[layerIndex].neurons.Length, layers[layerIndex].neurons[0].WeightsCount];
-            
+           
             for (var index = 0; index < layers[layerIndex].neurons.Length; index++)
             {
                 for (var j = 0; j < layers[layerIndex].neurons[index].WeightsCount; j++)
@@ -268,7 +270,6 @@ namespace IA_Library.Brain
 
                 int id = layers[k].neurons.Length;
                 float[,] weights = new float[layers[k].neurons.Length, layers[k].neurons[0].WeightsCount];
-            
                 for (var index = 0; index < layers[k].neurons.Length; index++)
                 {
                     for (var j = 0; j < layers[k].neurons[index].WeightsCount; j++)

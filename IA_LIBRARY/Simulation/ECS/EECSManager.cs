@@ -102,7 +102,12 @@ namespace IA_Library_ECS
                 ConcurrentDictionary<uint, ComponentType> comps = new ConcurrentDictionary<uint, ComponentType>();
 
                 Parallel.ForEach(components[typeof(ComponentType)], parallelOptions,
-                component => { comps.TryAdd(component.Key, component.Value as ComponentType); });
+                    
+                    component => 
+                    { 
+                        comps.TryAdd(component.Key, component.Value as ComponentType); 
+                    }
+                );
 
                 return comps;
             }

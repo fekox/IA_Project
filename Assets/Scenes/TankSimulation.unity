@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.40106103, g: 0.40937278, b: 0.38594413, a: 1}
+  m_IndirectSpecularColor: {r: 0.45451176, g: 0.41411775, b: 0.42490554, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -6404,9 +6404,14 @@ MonoBehaviour:
   mutationRate: 20
   totalElites: 5
   generationTime: 300
-  Bias: 0.5
-  P: 0.5
+  herbivoreBias: 0.5
+  herbivoreP: 0.5
+  carnivoreBias: 0.5
+  carnivoreP: 0.5
+  scavengerBias: 0.5
+  scavengerP: 0.5
   plantMaterial: {fileID: 2100000, guid: 25340932a8ef5e3448b9648f4d92d4b6, type: 2}
+  deadPlantMaterial: {fileID: 2100000, guid: 20210aab22417ae4686720efe583619f, type: 2}
   herbivoreMaterial: {fileID: 2100000, guid: 0a72a8e3deb1c61419a63c76596d5f5b, type: 2}
   deadHerbivoreMaterial: {fileID: 2100000, guid: ca0f89d5e5744884fa6f7f67aad4f1b6, type: 2}
   carnivoreMaterial: {fileID: 2100000, guid: 4fee3579053b3dc4bb2e570947637632, type: 2}

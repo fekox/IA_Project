@@ -12,7 +12,7 @@ namespace IA_Library.Brain
         public Genome(float[] genes)
         {
             this.genome = genes;
-            fitness = 0;
+            fitness = 1;
         } 
         public Genome(byte[] data,ref int output)
         {
@@ -20,7 +20,7 @@ namespace IA_Library.Brain
             output += sizeof(int);
         
             genome = new float[genomeLength];
-           
+            
             for (int i = 0; i < genomeLength; i++)
             {
                 genome[i] = BitConverter.ToSingle(data, output);
@@ -29,7 +29,6 @@ namespace IA_Library.Brain
         
             fitness = BitConverter.ToSingle(data, output);
             output += sizeof(float);
-        
         }
         public byte[] Serialize()
         {
@@ -50,16 +49,16 @@ namespace IA_Library.Brain
         {
             genome = new float[genesCount];
             Random rand = new Random();
-        
+            
             for (int j = 0; j < genesCount; j++)
                 genome[j] = (float)(rand.NextDouble() * 2 - 1);
 
-            fitness = 0;
+            fitness = 1;
         }
 
         public Genome()
         {
-            fitness = 0;
+            fitness = 1;
         }
     }
 }

@@ -12,7 +12,6 @@ namespace IA_Library.Brain
         public int inputsCount = 0;
         private float bias = 1;
         private float p = 0.5f;
-
         public int NeuronsCount
         {
             get { return neurons.Length; }
@@ -42,7 +41,6 @@ namespace IA_Library.Brain
             bytes.AddRange(BitConverter.GetBytes(bias));
             bytes.AddRange(BitConverter.GetBytes(p));
 
-
             return bytes.ToArray();
         }
 
@@ -60,7 +58,7 @@ namespace IA_Library.Brain
             int length = BitConverter.ToInt32(data, output);
             output += sizeof(int);
             neurons = new Neuron[length];
-            
+
             for (int i = 0; i < length; i++)
             {
                 neurons[i] = new Neuron(data, ref output);

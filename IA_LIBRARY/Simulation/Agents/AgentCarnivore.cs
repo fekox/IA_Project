@@ -10,6 +10,9 @@ namespace IA_Library_FSM
     {
         public Brain moveToFoodBrain = new Brain();
         public Brain eatBrain = new Brain();
+        int counterEating = 0;
+        Vector2 nearestFoodPosition;
+        AgentHerbivore herbivore;
 
         public AgentCarnivore(Simulation simulation, GridManager gridManager,
             Brain mainBrain, Brain moveToFoodBrain, Brain eatBrain) : base(simulation, gridManager, mainBrain)
@@ -34,28 +37,28 @@ namespace IA_Library_FSM
                 {
                     return new object[]
                     {
-                        moveToFoodBrain.outputs, position, GetNearestFoodPosition(), GetNearestFood(), onMove = MoveTo
+                        moveToFoodBrain.outputs, position, nearestFoodPosition, onMove = MoveTo, herbivore
                     };
                 }
             );
 
             fsmController.AddBehaviour<EatCarnivoreState>(Behaviours.Eat,
-                
+            
                 onEnterParameters: () => 
                 { 
                     return new object[] { eatBrain }; 
                 },
-               
+                
                 onTickParameters: () =>
                 {
                     return new object[]
                     {
-                        eatBrain.outputs, position, GetNearestFoodPosition(),
-                        hasEaten, currentFood, maxFood,
+                        eatBrain.outputs, position, nearestFoodPosition,
+                        hasEaten, counterEating, maxFood,
                         onHasEantenEnoughFood = b =>
-                        hasEaten = b,
-                        onEaten = i => currentFood = i,
-                        GetNearestFood()
+                            hasEaten = b,
+                        onEaten = i => counterEating = i,
+                        herbivore
                     };
                 }
             );
@@ -110,13 +113,14 @@ namespace IA_Library_FSM
 
         public override void SettingBrainUpdate(float deltaTime)
         {
-            Vector2 nearestFoodPosition = GetNearestFoodPosition();
+            nearestFoodPosition = GetNearestFoodPosition();
+            herbivore = GetNearestFood();
 
             mainBrain.inputs = new[]
             { 
                 position.X, position.Y, nearestFoodPosition.X, nearestFoodPosition.Y, hasEaten ? 1 : -1, 
             };
-
+            
             moveToFoodBrain.inputs = new[] 
             { 
                 position.X, position.Y, nearestFoodPosition.X, nearestFoodPosition.Y 
@@ -143,16 +147,16 @@ namespace IA_Library_FSM
             hasEaten = state;
         }
 
-        public override void AddFitnessToMain()
+        public override void ApplyFitness()
         {
             moveToFoodBrain.ApplyFitness();
             eatBrain.ApplyFitness();
-
+            
             mainBrain.FitnessMultiplier = 1.0f;
             mainBrain.FitnessReward = 0f;
             mainBrain.FitnessReward = eatBrain.FitnessReward + moveToFoodBrain.FitnessReward;
             mainBrain.FitnessMultiplier += eatBrain.FitnessMultiplier + moveToFoodBrain.FitnessMultiplier;
-
+            
             mainBrain.ApplyFitness();
         }
     }
@@ -167,7 +171,7 @@ namespace IA_Library_FSM
             brain = parameters[0] as Brain;
             positiveHalf = Neuron.Sigmoid(0.5f, brain.p);
             negativeHalf = Neuron.Sigmoid(-0.5f, brain.p);
-            
+
             return default;
         }
 
@@ -178,8 +182,8 @@ namespace IA_Library_FSM
             float[] outputs = parameters[0] as float[];
             position = (Vector2)parameters[1];
             Vector2 nearFoodPos = (Vector2)parameters[2];
-            AgentHerbivore herbivore = parameters[3] as AgentHerbivore;
-            var onMove = parameters[4] as Action<Vector2>;
+            Action<Vector2> onMove = parameters[3] as Action<Vector2>;
+            AgentHerbivore herbivore = parameters[4] as AgentHerbivore;
 
             behaviour.AddMultitreadableBehaviours(0, () =>
             {
@@ -189,7 +193,7 @@ namespace IA_Library_FSM
                 }
 
                 Vector2[] direction = new Vector2[movesPerTurn];
-                
+            
                 for (int i = 0; i < direction.Length; i++)
                 {
                     direction[i] = GetDir(outputs[i]);
@@ -197,7 +201,7 @@ namespace IA_Library_FSM
 
                 foreach (Vector2 direc in direction)
                 {
-                    onMove.Invoke(direc);
+                    onMove?.Invoke(direc);
                 }
 
                 List<Vector2> newPositions = new List<Vector2> { nearFoodPos };
@@ -208,7 +212,7 @@ namespace IA_Library_FSM
                     brain.FitnessReward += 20;
                     brain.FitnessMultiplier += 0.05f;
                 }
-            
+                
                 else
                 {
                     brain.FitnessMultiplier -= 0.05f;
@@ -259,11 +263,15 @@ namespace IA_Library_FSM
                     {
                         if (herbivore.CanBeEaten())
                         {
+                            herbivore.EatPiece();
                             onEaten(++counterEating);
-                            brain.FitnessReward += 20;
-                            if (counterEating == maxEating)
+                            brain.FitnessReward += 30;
+                            brain.FitnessMultiplier += 0.30f;
+                            
+                            if (counterEating >= maxEating)
                             {
-                                brain.FitnessReward += 30;
+                                brain.FitnessReward += 60;
+                                brain.FitnessMultiplier += 0.10f;
                                 onHasEatenEnoughFood.Invoke(true);
                             }
                         }
@@ -274,14 +282,14 @@ namespace IA_Library_FSM
                         brain.FitnessMultiplier -= 0.05f;
                     }
                 }
-            
+                
                 else
                 {
                     if (position == nearFoodPos && !hasEatenEnoughFood)
                     {
                         brain.FitnessMultiplier -= 0.05f;
                     }
-                
+                   
                     else if (hasEatenEnoughFood)
                     {
                         brain.FitnessMultiplier += 0.10f;

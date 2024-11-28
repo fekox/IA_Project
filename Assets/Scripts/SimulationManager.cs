@@ -37,8 +37,15 @@ public class SimulationManager : MonoBehaviour
     [SerializeField] private int totalElites;
     [SerializeField] private int generationTime;
 
-    [SerializeField] private float Bias = 0.5f;
-    [SerializeField] private float P = 0.5f;
+    [Header("Bias")]
+    public float herbivoreBias = 0.5f;
+    public float carnivoreBias = 0.5f;
+    public float scavengerBias = 0.5f;
+
+    [Header("P")]
+    public float herbivoreP = 0.5f;
+    public float carnivoreP = 0.5f;
+    public float scavengerP = 0.5f;
 
     [Header("Materials")]
     public Material plantMaterial;
@@ -97,17 +104,17 @@ public class SimulationManager : MonoBehaviour
     {
         NewGrid = new GridManager(gridSize.x, gridSize.y, cellSize);
 
-        herbivoreMainBrain = new BrainData(11, new int[] { 9, 7, 5, 3 }, 3, Bias, P);
-        herbivoreMoveEatBrain = new BrainData(4, new int[] { 5, 4, 4 }, 4, Bias, P);
-        herbivoreMoveEscapeBrain = new BrainData(8, new int[] { 5, 4, 4 }, 4, Bias, P);
-        herbivoreEatBrain = new BrainData(5, new int[] { 3, 3, 2 }, 1, Bias, P);
+        herbivoreMainBrain = new BrainData(11, new int[] { 9, 7, 5, 3 }, 3, herbivoreBias, herbivoreP);
+        herbivoreMoveEatBrain = new BrainData(4, new int[] { 8, 8, 6, 4 }, 4, herbivoreBias, herbivoreP);
+        herbivoreMoveEscapeBrain = new BrainData(8, new int[] { 8, 6, 4, 4 }, 4, herbivoreBias, herbivoreP);
+        herbivoreEatBrain = new BrainData(5, new int[] { 3, 3, 2 }, 1, herbivoreBias, herbivoreP);
 
-        carnivoreMainBrain = new BrainData(5, new int[] { 3, 2 }, 2, Bias, P);
-        carnivoreMoveEatBrain = new BrainData(4, new int[] { 3, 2 }, 2, Bias, P);
-        carnivoreEatBrain = new BrainData(5, new int[] { 2, 2 }, 1, Bias, P);
+        carnivoreMainBrain = new BrainData(5, new int[] { 3, 2 }, 2, carnivoreBias, carnivoreP);
+        carnivoreMoveEatBrain = new BrainData(4, new int[] { 6, 4, 4 }, 2, carnivoreBias, carnivoreP);
+        carnivoreEatBrain = new BrainData(5, new int[] { 6, 4, 2 }, 1, carnivoreBias, carnivoreP);
 
-        scavengerMainBrain = new BrainData(5, new int[] { 3, 5 }, 2, Bias, P);
-        scavengerFlockingBrain = new BrainData(8, new int[] { 5, 5, 5 }, 4, Bias, P);
+        scavengerMainBrain = new BrainData(5, new int[] { 8, 6, 4, 6 }, 2, scavengerBias, scavengerP);
+        scavengerFlockingBrain = new BrainData(8, new int[] { 10, 8, 6, 6 }, 6, scavengerBias, scavengerP);
 
         List<BrainData> herbivoreData = new List<BrainData>
             { herbivoreMainBrain, herbivoreMoveEatBrain, herbivoreMoveEscapeBrain, herbivoreEatBrain };
@@ -124,12 +131,28 @@ public class SimulationManager : MonoBehaviour
             fileExtension = fileExtension,
             fileToLoad = fileToLoad
         };
+
+        simulation.OnFitnessCalculated += LogFitness;
+    }
+
+
+    private void OnDisable()
+    {
+        simulation.OnFitnessCalculated -= LogFitness;
     }
 
     private void Update()
     {
         currentGeneration = simulation.UpdateSimulation(Time.deltaTime);
         updateGenerationText.UpdateCurrentGeneration(currentGeneration);
+    }
+
+    private void LogFitness(int nH, float FH, int nC, float FC, int nS, float FS)
+    {
+        // Debug.Log("--- Average Fitness ---");
+        // Debug.Log("Herbivore - Alive = " + nH + " / fitness = " + FH);
+        // Debug.Log("Carnivore - Alive = " + nC + " / fitness = " + FC);
+        // Debug.Log("Scavenger - Alive = " + nS + " / fitness = " + FS);
     }
 
     private void DrawEntities()
@@ -177,8 +200,10 @@ public class SimulationManager : MonoBehaviour
     private void DrawMesh(Mesh meshType, Vector3 position, Material color, float squareSize)
     {
         color.SetPass(0);
+
         Matrix4x4 matrix =
             Matrix4x4.TRS(position, Quaternion.identity, new Vector3(squareSize, squareSize, squareSize));
+
         Graphics.DrawMeshNow(meshType, matrix);
     }
 
@@ -294,7 +319,9 @@ public class SimulationManager : MonoBehaviour
     {
         if (float.TryParse(biasIF.text, out float value))
         {
-            Bias = value;
+            herbivoreBias = value;
+            carnivoreBias = value;
+            scavengerBias = value;
         }
     }
 
@@ -302,7 +329,9 @@ public class SimulationManager : MonoBehaviour
     {
         if (float.TryParse(PIF.text, out float value))
         {
-            P = value;
+            herbivoreP = value;
+            carnivoreP = value;
+            scavengerP = value;
         }
     }
     #endregion

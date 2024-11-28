@@ -22,7 +22,7 @@ namespace IA_Library.Brain
             int length = BitConverter.ToInt32(data, outputOffset);
             outputOffset += sizeof(int);
             weights = new float[length];
-         
+            
             for (int i = 0; i < length; i++)
             {
                 weights[i] = BitConverter.ToSingle(data, outputOffset);

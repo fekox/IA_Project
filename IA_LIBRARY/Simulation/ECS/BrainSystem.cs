@@ -38,7 +38,6 @@ namespace IA_Library_ECS
             inputComponent ??= ECSManager.GetComponents<InputComponent>();
 
             activeEntities ??= ECSManager.GetEntitiesWithComponentTypes(
-                
                 typeof(InputLayerComponent),
                 typeof(HiddenLayerComponent),
                 typeof(OutputLayerComponent),
@@ -59,6 +58,7 @@ namespace IA_Library_ECS
                 inputComponent[entity].size = outputComponent[entity].output.Length;
                 inputComponent[entity].inputs = outputComponent[entity].output;
                 outputComponent[entity].output = new float[hiddenLayerComponent[entity].HiggestLayerSize];
+                
                 for (int layer = 0; layer < hiddenLayerComponent[entity].hiddenLayers.Length; layer++)
                 {
                     LayerSynapsis(entity, inputComponent[entity].inputs, layer, ref inputComponent[entity].size);
@@ -77,7 +77,12 @@ namespace IA_Library_ECS
         private float[] FirstLayerSynapsis(uint entity, float[] inputs)
         {
             Parallel.For(0, inputs.Length, parallelOptions,
-            neuron => { outputComponent[entity].output[neuron] = FirstNeuronSynapsis(entity, neuron, inputs); });
+                
+                neuron => 
+                { 
+                    outputComponent[entity].output[neuron] = FirstNeuronSynapsis(entity, neuron, inputs); 
+                }
+            );
             
             return outputComponent[entity].output;
         }
@@ -85,25 +90,32 @@ namespace IA_Library_ECS
         private float[] LayerSynapsis(uint entity, float[] inputs, int layer, ref int size)
         {
             int neuronCount = hiddenLayerComponent[entity].hiddenLayers[layer].weights.GetLength(0);
-            
             Array.Resize(ref outputComponent[entity].output, neuronCount);
 
             Parallel.For(0, neuronCount, parallelOptions,
-            neuron => { outputComponent[entity].output[neuron] = NeuronSynapsis(entity, neuron, inputs, layer); });
+                
+                neuron => 
+                { 
+                    outputComponent[entity].output[neuron] = NeuronSynapsis(entity, neuron, inputs, layer); 
+                }
+            );
 
             size = neuronCount;
-            
+           
             return outputComponent[entity].output;
         }
 
         private float[] OutputLayerSynapsis(uint entity, float[] inputs, ref int size)
         {
             int neuronCount = outputLayerComponent[entity].layer.weights.GetLength(0);
-            
             Array.Resize(ref outputComponent[entity].output, neuronCount);
             
             Parallel.For(0, neuronCount, parallelOptions,
-            neuron => { outputComponent[entity].output[neuron] = LastNeuronSynapsis(entity, neuron, inputs); });
+                neuron => 
+                { 
+                    outputComponent[entity].output[neuron] = LastNeuronSynapsis(entity, neuron, inputs); 
+                }
+            );
             
             return outputComponent[entity].output;
         }
@@ -117,7 +129,7 @@ namespace IA_Library_ECS
                 a += inputLayerComponent[entity].layer.weights[neuron, i] * inputs[i];
             }
 
-            a += biasComponent[entity].X;
+            a += biasComponent[entity].X * inputLayerComponent[entity].layer.weights[neuron, inputs.Length - 1];
 
             return (float)Math.Tanh(a / sigmoidComponent[entity].X);
         }
@@ -132,7 +144,7 @@ namespace IA_Library_ECS
                 a += hiddenLayerComponent[entity].hiddenLayers[layer].weights[neuron, i] * inputs[i];
             }
 
-            a += biasComponent[entity].X;
+            a += biasComponent[entity].X * hiddenLayerComponent[entity].hiddenLayers[layer].weights[neuron, exclusive - 1];
 
             return (float)Math.Tanh(a / sigmoidComponent[entity].X);
         }
@@ -141,13 +153,13 @@ namespace IA_Library_ECS
         {
             float a = 0;
             int exclusive = outputLayerComponent[entity].layer.weights.GetLength(1);
-            
+           
             for (int i = 0; i < exclusive; i++)
             {
                 a += outputLayerComponent[entity].layer.weights[neuron, i] * inputs[i];
             }
 
-            a += biasComponent[entity].X;
+            a += biasComponent[entity].X * outputLayerComponent[entity].layer.weights[neuron, exclusive - 1];;
 
             return (float)Math.Tanh(a / sigmoidComponent[entity].X);
         }

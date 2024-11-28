@@ -51,7 +51,7 @@ namespace IA_Library
             {
                 position.X = size.X - 1;
             }
-            
+ 
             else if (position.X >= size.X)
             {
                 position.X = 0;

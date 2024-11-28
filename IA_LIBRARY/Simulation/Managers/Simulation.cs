@@ -27,6 +27,14 @@ namespace IA_Library
         private int generationLifeTime;
         private int currentTurn = 0;
 
+        public float averageHerbivoreFitness = 0;
+        public float averageCarnivoreFitness = 0;
+        public float averageScavengerFitness = 0;
+        public int finalHerbivoreAlive = 0;
+        public int finalCarnivoreAlive = 0;
+        public int finalScavengerAlive = 0;
+        public event Action<int, float, int, float, int, float> OnFitnessCalculated;
+
         //Agents
         public List<AgentHerbivore> Herbivore = new List<AgentHerbivore>();
         public List<AgentCarnivore> Carnivore = new List<AgentCarnivore>();
@@ -122,6 +130,7 @@ namespace IA_Library
             {
                 Carnivore.Add(new AgentCarnivore(this, gridManager, carnivoreData[0].CreateBrain(),
                     carnivoreData[1].CreateBrain(), carnivoreData[2].CreateBrain()));
+                
                 carnivoreMainBrain.Add(Carnivore[i].mainBrain);
                 carnivoreMoveBrain.Add(Carnivore[i].moveToFoodBrain);
                 carnivoreEatBrain.Add(Carnivore[i].eatBrain);
@@ -131,6 +140,7 @@ namespace IA_Library
             {
                 Scavenger.Add(new AgentScavenger(this, gridManager, scavengerData[0].CreateBrain(),
                     scavengerData[1].CreateBrain()));
+                
                 scavengerMainBrain.Add(Scavenger[i].mainBrain);
                 scavengerFlockingBrain.Add(Scavenger[i].flockingBrain);
             }
@@ -240,6 +250,10 @@ namespace IA_Library
             EpochCarnivore();
             EpochScavenger();
 
+            OnFitnessCalculated?.Invoke(finalHerbivoreAlive, averageHerbivoreFitness,
+                finalCarnivoreAlive, averageCarnivoreFitness,
+                finalScavengerAlive, averageScavengerFitness);
+
             string file = $"{filepath}{currentGeneration}.{fileExtension}";
             manager.SaveAll(file);
             
@@ -250,21 +264,26 @@ namespace IA_Library
                 OutputLayerComponent outputComponent = ECSManager.GetComponent<OutputLayerComponent>(entity.Key);
                 outputComponent.layer = entity.Value.GetOutputLayer();
             }
+
+            averageHerbivoreFitness = 0;
+            averageCarnivoreFitness = 0;
+            averageScavengerFitness = 0;
         }
 
         private void EpochHerbivore()
         {
             int count = 0;
-            
+            float totalFitness = 0f;
+
             foreach (AgentHerbivore current in Herbivore)
             {
-                current.AddFitnessToMain();
+                current.ApplyFitness();
 
                 if (current.lives > 0 && current.hasEaten)
                 {
                     count++;
                 }
-            
+
                 else
                 {
                     current.mainBrain.Set0Fitness();
@@ -272,9 +291,15 @@ namespace IA_Library
                     current.moveToFoodBrain.Set0Fitness();
                     current.moveToEscapeBrain.Set0Fitness();
                 }
+
+                totalFitness += current.mainBrain.fitness;
             }
 
+            finalHerbivoreAlive = count;
+
             bool isGenerationDead = (count <= 1);
+
+            averageHerbivoreFitness = count < 1 ? 0f : totalFitness / Herbivore.Count;
 
             EpochSingle(herbivoreMainBrain, isGenerationDead, HeMainBrain);
             EpochSingle(herbivoreMoveFoodBrain, isGenerationDead, HeMoveFoodBrain);
@@ -285,14 +310,16 @@ namespace IA_Library
         private void EpochCarnivore()
         {
             int count = 0;
-            
+            float totalFitness = 0f;
+
             foreach (AgentCarnivore current in Carnivore)
             {
-                current.AddFitnessToMain();
+                current.ApplyFitness();
 
                 if (current.hasEaten)
                 {
                     count++;
+                    totalFitness += current.mainBrain.fitness;
                 }
             
                 else
@@ -303,8 +330,10 @@ namespace IA_Library
                 }
             }
 
-            bool isGenerationDead = count <= 1;
-            
+            finalCarnivoreAlive = count;
+            bool isGenerationDead = (count <= 1);
+            averageCarnivoreFitness = isGenerationDead ? 0f : totalFitness;
+
             EpochSingle(carnivoreMainBrain, isGenerationDead, CaMainBrain);
             EpochSingle(carnivoreMoveBrain, isGenerationDead, CaMoveBrain);
             EpochSingle(carnivoreEatBrain, isGenerationDead, CaEatBrain);
@@ -313,14 +342,16 @@ namespace IA_Library
         private void EpochScavenger()
         {
             int count = 0;
-            
+            float totalFitness = 0f;
+
             foreach (AgentScavenger current in Scavenger)
             {
-                current.AddFitnessToMain();
+                current.ApplyFitness();
 
                 if (current.hasEaten)
                 {
                     count++;
+                    totalFitness += current.mainBrain.fitness;
                 }
                 
                 else
@@ -330,8 +361,10 @@ namespace IA_Library
                 }
             }
 
+            finalScavengerAlive = count;
             bool isGenerationDead = count <= 1;
-            
+            averageScavengerFitness = isGenerationDead ? 0f : totalFitness;
+
             EpochSingle(scavengerMainBrain, isGenerationDead, ScaMainBrain);
             EpochSingle(scavengerFlockingBrain, isGenerationDead, ScaFlockingBrain);
         }
@@ -409,7 +442,8 @@ namespace IA_Library
             
             foreach (var brain in brains)
             {
-                Genome genome = new Genome(brain.GetTotalWeightsCount());
+                Genome genome = new Genome(brain.GetWeights());
+                genome.fitness = brain.fitness;
                 genomes.Add(genome);
             }
 
@@ -497,7 +531,6 @@ namespace IA_Library
                 current.Update(deltaTime);
             }
         }
-        
         public void Load()
         {
             manager.LoadAll(fileToLoad);
