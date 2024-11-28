@@ -15,7 +15,7 @@ public class SimulationManager : MonoBehaviour
     [Header("Current generation")]
     public int currentGeneration = 1;
 
-    [Header("Save system")] 
+    [Header("Save system")]
     public string fileToLoad;
 
     public string filePath = "/Saves/";
@@ -111,10 +111,10 @@ public class SimulationManager : MonoBehaviour
 
         List<BrainData> herbivoreData = new List<BrainData>
             { herbivoreMainBrain, herbivoreMoveEatBrain, herbivoreMoveEscapeBrain, herbivoreEatBrain };
-        
+
         List<BrainData> carnivoreData = new List<BrainData>
             { carnivoreMainBrain, carnivoreMoveEatBrain, carnivoreEatBrain };
-    
+
         List<BrainData> scavengerData = new List<BrainData> { scavengerMainBrain, scavengerFlockingBrain };
 
         simulation = new Simulation(NewGrid, herbivoreData, carnivoreData, scavengerData, totalHerbivores,
@@ -128,8 +128,8 @@ public class SimulationManager : MonoBehaviour
 
     private void Update()
     {
-       currentGeneration = simulation.UpdateSimulation(Time.deltaTime);
-       updateGenerationText.UpdateCurrentGeneration(currentGeneration);
+        currentGeneration = simulation.UpdateSimulation(Time.deltaTime);
+        updateGenerationText.UpdateCurrentGeneration(currentGeneration);
     }
 
     private void DrawEntities()
@@ -140,7 +140,7 @@ public class SimulationManager : MonoBehaviour
             {
                 DrawMesh(herbivoreMesh, new Vector3(agent.position.X, agent.position.Y, 0), deadHerbivoreMaterial, 1);
             }
-        
+
             else
             {
                 DrawMesh(herbivoreMesh, new Vector3(agent.position.X, agent.position.Y, 0), herbivoreMaterial, 1);
@@ -163,7 +163,7 @@ public class SimulationManager : MonoBehaviour
         }
     }
 
-    public void DrawGrid() 
+    public void DrawGrid()
     {
         for (int x = 0; x < simulation.gridManager.size.X; x++)
         {
@@ -198,12 +198,12 @@ public class SimulationManager : MonoBehaviour
     }
 
     #region Setters
-    public void SetFileToLoad() 
+    public void SetFileToLoad()
     {
         fileToLoad = fileToLoadIF.text;
     }
 
-    public void SetGirdXSize() 
+    public void SetGirdXSize()
     {
         if (int.TryParse(gridXIF.text, out int value))
         {
@@ -218,7 +218,7 @@ public class SimulationManager : MonoBehaviour
         }
     }
 
-    public void SetCellSize() 
+    public void SetCellSize()
     {
         if (float.TryParse(cellSizeIF.text, out float value))
         {
@@ -226,7 +226,7 @@ public class SimulationManager : MonoBehaviour
         }
     }
 
-    public void SetMaxHerbivores() 
+    public void SetMaxHerbivores()
     {
         if (int.TryParse(maxHerbivoresIF.text, out int value))
         {
@@ -234,15 +234,15 @@ public class SimulationManager : MonoBehaviour
         }
     }
 
-    public void SetMaxCarnivores() 
+    public void SetMaxCarnivores()
     {
-        if(int.TryParse(maxCarnivoresIF.text, out int value)) 
+        if (int.TryParse(maxCarnivoresIF.text, out int value))
         {
             totalCarnivores = value;
         }
     }
 
-    public void SetMaxScavengers() 
+    public void SetMaxScavengers()
     {
         if (int.TryParse(maxScavengersIF.text, out int value))
         {
@@ -250,7 +250,7 @@ public class SimulationManager : MonoBehaviour
         }
     }
 
-    public void SetMaxPlants() 
+    public void SetMaxPlants()
     {
         if (int.TryParse(maxPlantsIF.text, out int value))
         {
@@ -258,7 +258,7 @@ public class SimulationManager : MonoBehaviour
         }
     }
 
-    public void SetMutationChance() 
+    public void SetMutationChance()
     {
         if (int.TryParse(mutationChanceIF.text, out int value))
         {
@@ -266,7 +266,7 @@ public class SimulationManager : MonoBehaviour
         }
     }
 
-    public void SetMutationRate() 
+    public void SetMutationRate()
     {
         if (int.TryParse(mutationRateIF.text, out int value))
         {
@@ -274,7 +274,7 @@ public class SimulationManager : MonoBehaviour
         }
     }
 
-    public void SetTotalElites() 
+    public void SetTotalElites()
     {
         if (int.TryParse(totalElitesIF.text, out int value))
         {
@@ -282,7 +282,7 @@ public class SimulationManager : MonoBehaviour
         }
     }
 
-    public void SetGenerationTime() 
+    public void SetGenerationTime()
     {
         if (int.TryParse(generationTimeIF.text, out int value))
         {
@@ -290,7 +290,7 @@ public class SimulationManager : MonoBehaviour
         }
     }
 
-    public void SetBias() 
+    public void SetBias()
     {
         if (float.TryParse(biasIF.text, out float value))
         {
@@ -298,7 +298,7 @@ public class SimulationManager : MonoBehaviour
         }
     }
 
-    public void SetP() 
+    public void SetP()
     {
         if (float.TryParse(PIF.text, out float value))
         {
