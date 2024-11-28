@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Input manager.
+/// </summary>
 public class StartEndLogic : MonoBehaviour
 {
     [SerializeField] private GameObject simulationGO;

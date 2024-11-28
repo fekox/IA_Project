@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Simple camera movement whit WASD and the mouse.
+/// </summary>
 public class CameraLookAndMove : MonoBehaviour
 {
     public float moveSpeed = 5f;
@@ -9,7 +12,6 @@ public class CameraLookAndMove : MonoBehaviour
 
     void Start()
     {
-        // Bloquear y ocultar el cursor
         Cursor.lockState = CursorLockMode.Locked;
     }
 

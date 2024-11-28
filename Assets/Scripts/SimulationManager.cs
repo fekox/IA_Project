@@ -6,6 +6,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+/// Simulation manager.
+/// </summary>
+
 public class SimulationManager : MonoBehaviour
 {
     private Simulation simulation;
@@ -100,6 +104,9 @@ public class SimulationManager : MonoBehaviour
 
     #endregion
 
+    /// <summary>
+    /// Create the brains for the entities, the data and the simulation.
+    /// </summary>
     private void OnEnable()
     {
         NewGrid = new GridManager(gridSize.x, gridSize.y, cellSize);
@@ -133,12 +140,18 @@ public class SimulationManager : MonoBehaviour
         };
     }
 
+    /// <summary>
+    /// Update the simulation.
+    /// </summary>
     private void Update()
     {
         currentGeneration = simulation.UpdateSimulation(Time.deltaTime);
         updateGenerationText.UpdateCurrentGeneration(currentGeneration);
     }
 
+    /// <summary>
+    /// Draw the entities on the screen.
+    /// </summary>
     private void DrawEntities()
     {
         foreach (AgentHerbivore agent in simulation.Herbivore)
@@ -170,6 +183,9 @@ public class SimulationManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Draw the map.
+    /// </summary>
     public void DrawGrid()
     {
         for (int x = 0; x < simulation.gridManager.size.X; x++)
@@ -181,6 +197,13 @@ public class SimulationManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Draw a mesh wiht a mesh type, a position, a color and a size.
+    /// </summary>
+    /// <param name="meshType"></param>
+    /// <param name="position"></param>
+    /// <param name="color"></param>
+    /// <param name="squareSize"></param>
     private void DrawMesh(Mesh meshType, Vector3 position, Material color, float squareSize)
     {
         color.SetPass(0);
@@ -191,12 +214,18 @@ public class SimulationManager : MonoBehaviour
         Graphics.DrawMeshNow(meshType, matrix);
     }
 
+    /// <summary>
+    /// Render the objects.
+    /// </summary>
     private void OnRenderObject()
     {
         DrawGrid();
         DrawEntities();
     }
 
+    /// <summary>
+    /// Load a file with data of one specific generation.
+    /// </summary>
     [ContextMenu("Load Save")]
     private void Load()
     {
@@ -206,6 +235,9 @@ public class SimulationManager : MonoBehaviour
         simulation.Load();
     }
 
+    /// <summary>
+    /// Setters for the UI.
+    /// </summary>
     #region Setters
     public void SetFileToLoad()
     {
