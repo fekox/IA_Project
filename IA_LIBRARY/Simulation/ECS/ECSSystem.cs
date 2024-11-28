@@ -1,5 +1,8 @@
 namespace IA_Library_ECS
 {
+    /// <summary>
+    /// ECS system manager.
+    /// </summary>
     public abstract class ECSSystem
     {
         public void Run(float deltaTime)
@@ -18,6 +21,9 @@ namespace IA_Library_ECS
         protected abstract void PostExecute(float deltaTime);
     }
 
+    /// <summary>
+    /// ECS responce manager.
+    /// </summary>
     public abstract class ECSResponce
     {
         public void Run(float deltaTime)

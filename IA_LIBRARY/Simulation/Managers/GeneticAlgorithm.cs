@@ -4,6 +4,9 @@ using IA_Library.Brain;
 
 namespace IA_Library
 {
+    /// <summary>
+    /// Create the genentic data of the brains.
+    /// </summary>
     [Serializable]
     public class GeneticData
     {
@@ -17,13 +20,21 @@ namespace IA_Library
         public int generationStalled = 0;
         public int generationCount = 0;
 
+        /// <summary>
+        /// Create a default genetic data.
+        /// </summary>
         public GeneticData()
         {
             eliteCount = 5;
             mutationChance = 0.2f;
             mutationRate = 0.4f;
         }
-
+        
+        /// <summary>
+        /// Create a custom genetic data.
+        /// </summary>
+        /// <param name="data">The data</param>
+        /// <param name="offset">The star index to read the data</param>
         public GeneticData(byte[] data, ref int offset)
         {
             eliteCount = BitConverter.ToInt32(data, offset);
@@ -46,6 +57,10 @@ namespace IA_Library
             offset += sizeof(int);
         }
 
+        /// <summary>
+        /// Serialize the data.
+        /// </summary>
+        /// <returns>The array of bytes</returns>
         public byte[] Serialize()
         {
             List<byte> bytes = new List<byte>();
@@ -61,6 +76,12 @@ namespace IA_Library
             return bytes.ToArray();
         }
 
+        /// <summary>
+        /// Create the genomes array.
+        /// </summary>
+        /// <param name="data">The data</param>
+        /// <param name="currentOffset">The current index to read the data</param>
+        /// <returns>The array of genomes</returns>
         private Genome[] CreateGenomeArray(byte[] data, ref int currentOffset)
         {
             int arrayLength = BitConverter.ToInt32(data, currentOffset);
@@ -75,6 +96,11 @@ namespace IA_Library
             return genomes;
         }
 
+        /// <summary>
+        /// Serialize the genomes array.
+        /// </summary>
+        /// <param name="genomes">The genomes array</param>
+        /// <returns>The array of bytes</returns>
         private byte[] SerializeGenomeArray(Genome[] genomes)
         {
             List<byte> bytes = new List<byte>();
@@ -88,6 +114,14 @@ namespace IA_Library
             return bytes.ToArray();
         }
 
+        /// <summary>
+        /// Create the genetic data.
+        /// </summary>
+        /// <param name="eliteCount">The count of elites</param>
+        /// <param name="mutationChance">The mutation chance</param>
+        /// <param name="mutationRate">The mutation rate</param>
+        /// <param name="brain">The brain</param>
+        /// <param name="maxStalledGenerationsUntilEvolve">Limit generation to evolve</param>
         public GeneticData(int eliteCount, float mutationChance, float mutationRate, Brain.Brain brain,
             int maxStalledGenerationsUntilEvolve = 5)
         {
@@ -98,6 +132,10 @@ namespace IA_Library
             this.maxStalledGenerationsUntilEvolve = maxStalledGenerationsUntilEvolve;
         }
 
+        /// <summary>
+        /// Sets the genetic data.
+        /// </summary>
+        /// <param name="data"></param>
         public GeneticData(GeneticData data)
         {
             eliteCount = data.eliteCount;
@@ -116,6 +154,9 @@ namespace IA_Library
         }
     }
 
+    /// <summary>
+    /// Manage and create the genetic algotithm.
+    /// </summary>
     [Serializable]
     public class GeneticAlgorithm
     {
@@ -135,6 +176,12 @@ namespace IA_Library
 
         static Random random = new Random();
 
+        /// <summary>
+        /// Get a random array of genomes
+        /// </summary>
+        /// <param name="count">Size of the array</param>
+        /// <param name="genesCount">Genes counter</param>
+        /// <returns>The genomes array</returns>
         public static Genome[] GetRandomGenomes(int count, int genesCount)
         {
             Genome[] genomes = new Genome[count];
@@ -147,11 +194,25 @@ namespace IA_Library
             return genomes;
         }
 
+        /// <summary>
+        /// Returns a float random range.
+        /// </summary>
+        /// <param name="min">The min for the range</param>
+        /// <param name="max">The max for the range</param>
+        /// <returns>The float random range</returns>
         public static float RandomRangeFloat(float min, float max)
         {
             return (float)(random.NextDouble() * (max - min) + min);
         }
 
+        /// <summary>
+        /// Evolves the agents.
+        /// </summary>
+        /// <param name="oldGenomes">Old genomes</param>
+        /// <param name="data">Data</param>
+        /// <param name="forceEvolve">Bolean to force evolve or not</param>
+        /// <returns>The evolved genome array</returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         public static Genome[] Epoch(Genome[] oldGenomes, GeneticData data, bool forceEvolve = false)
         {
             float currentTotalFitness = 0;
@@ -226,6 +287,10 @@ namespace IA_Library
             return data.lastGenome;
         }
 
+        /// <summary>
+        /// Calculate the neurons layers to add in the brain.
+        /// </summary>
+        /// <param name="brain">The entity brain</param>
         private static void CalculateNeuronsToAdd(Brain.Brain brain)
         {
             newNeuronToAddQuantity = random.Next(1, 3);
@@ -233,7 +298,11 @@ namespace IA_Library
             neuronLayers = brain.layers;
         }
 
-
+        /// <summary>
+        /// Select the elite.
+        /// </summary>
+        /// <param name="evolutionType">Type of evolution</param>
+        /// <param name="eliteCount">Elite counter</param>
         static void SelectElite(EvolutionType evolutionType, int eliteCount)
         {
             for (int i = 0; i < eliteCount && newPopulation.Count < population.Count; i++)
@@ -242,6 +311,11 @@ namespace IA_Library
             }
         }
 
+        /// <summary>
+        /// Crossover the genomes of the parents.
+        /// </summary>
+        /// <param name="data">Data of the entity</param>
+        /// <param name="evolutionType">Type of evolution</param>
         static void Crossover(GeneticData data, EvolutionType evolutionType)
         {
             Genome mom = RouletteSelection(data.totalFitness);
@@ -256,6 +330,15 @@ namespace IA_Library
             newPopulation.Add(child2);
         }
 
+        /// <summary>
+        /// Custom crossover for the genomes of the parents.
+        /// </summary>
+        /// <param name="data">Data</param>
+        /// <param name="evolutionType">Evolution Type</param>
+        /// <param name="mom">The genome of the mom</param>
+        /// <param name="dad">The genome of the dad</param>
+        /// <param name="child1">Fist child</param>
+        /// <param name="child2">Second child</param>
         static void Crossover(GeneticData data, EvolutionType evolutionType, Genome mom, Genome dad,
             out Genome child1,
             out Genome child2)
@@ -296,16 +379,31 @@ namespace IA_Library
             }
         }
 
+        /// <summary>
+        /// Check if the entity should mutate or not.
+        /// </summary>
+        /// <param name="mutationChance">Mutation chance</param>
+        /// <returns>If the entity should mutate or not</returns>
         static bool ShouldMutate(float mutationChance)
         {
             return RandomRangeFloat(0.0f, 1.0f) < mutationChance;
         }
 
+        /// <summary>
+        /// Compare the genomes and return the one with the most fitness
+        /// </summary>
+        /// <param name="x">First genome</param>
+        /// <param name="y">Second genome</param>
+        /// <returns>The genome with the most fitnnes</returns>
         static int HandleComparison(Genome x, Genome y)
         {
             return x.fitness > y.fitness ? 1 : x.fitness < y.fitness ? -1 : 0;
         }
 
+        /// <summary>
+        /// Evolve the neurons of the children.
+        /// </summary>
+        /// <param name="child">Genome of the child</param>
         static void EvolveChildNeurons(Genome child)
         {
             int previousLayerOutputs = neuronLayers[randomLayer].OutputsCount;
@@ -382,6 +480,10 @@ namespace IA_Library
             }
         }
 
+        /// <summary>
+        /// Evolve the neuron layer of the child.
+        /// </summary>
+        /// <param name="child"></param>
         static void EvolveChildLayer(Genome child)
         {
             int count = 0;
@@ -449,6 +551,11 @@ namespace IA_Library
             }
         }
 
+        /// <summary>
+        /// Select the population with the most fitness.
+        /// </summary>
+        /// <param name="totalFitness">Total fitnes</param>
+        /// <returns>The population</returns>
         public static Genome RouletteSelection(float totalFitness)
         {
             float rnd = RandomRangeFloat(0, MathF.Max(totalFitness, 0));

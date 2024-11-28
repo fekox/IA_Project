@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace IA_Library.Brain
 {
+    /// <summary>
+    /// Create the neuron.
+    /// </summary>
     [Serializable]
     public class Neuron
     {
@@ -17,6 +20,11 @@ namespace IA_Library.Brain
             get { return weights.Length; }
         }
 
+        /// <summary>
+        /// Create the neuron with data and output offset.
+        /// </summary>
+        /// <param name="data">The data</param>
+        /// <param name="outputOffset">The output offset</param>
         public Neuron(byte[] data, ref int outputOffset)
         {
             int length = BitConverter.ToInt32(data, outputOffset);
@@ -35,6 +43,10 @@ namespace IA_Library.Brain
             outputOffset += sizeof(float);
         }
 
+        /// <summary>
+        /// Serialize the data.
+        /// </summary>
+        /// <returns>The array of bytes</returns>
         public byte[] Serialize()
         {
             List<byte> bytes = new List<byte>();
@@ -53,6 +65,12 @@ namespace IA_Library.Brain
             return bytes.ToArray();
         }
 
+        /// <summary>
+        /// Create the neuron with weights count, bias and sigmoid.
+        /// </summary>
+        /// <param name="weightsCount">The weights</param>
+        /// <param name="bias">The bias</param>
+        /// <param name="p">The sigmoid</param>
         public Neuron(int weightsCount, float bias, float p)
         {
             weights = new float[weightsCount];
@@ -67,6 +85,11 @@ namespace IA_Library.Brain
             this.p = p;
         }
 
+        /// <summary>
+        /// The sigmoid.
+        /// </summary>
+        /// <param name="input">The inputs</param>
+        /// <returns></returns>
         public float Synapsis(float[] input)
         {
             float a = 0;
@@ -81,6 +104,12 @@ namespace IA_Library.Brain
             return Sigmoid(a, p);
         }
 
+        /// <summary>
+        /// Setthe weights from one ID.
+        /// </summary>
+        /// <param name="newWeights">The weight</param>
+        /// <param name="fromId">The ID</param>
+        /// <returns>The new weights</returns>
         public int SetWeights(float[] newWeights, int fromId)
         {
             for (int i = 0; i < weights.Length; i++)
@@ -91,11 +120,21 @@ namespace IA_Library.Brain
             return fromId + weights.Length;
         }
 
+        /// <summary>
+        /// Gets the weight.
+        /// </summary>
+        /// <returns>The weight</returns>
         public float[] GetWeights()
         {
             return this.weights;
         }
 
+        /// <summary>
+        /// The sigmoid.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="p"></param>
+        /// <returns>The sigmoid</returns>
         public static float Sigmoid(float a, float p)
         {
             return (float)Math.Tanh(a / p);

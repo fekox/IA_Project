@@ -1,9 +1,15 @@
 namespace IA_Library_ECS
 {
+    /// <summary>
+    /// The layer component.
+    /// </summary>
     public abstract class LayerComponent : ECSComponent
     {
     }
 
+    /// <summary>
+    /// Create the layer.
+    /// </summary>
     public class Layer
     {
         public int neuronCount;
@@ -20,6 +26,9 @@ namespace IA_Library_ECS
         }
     }
 
+    /// <summary>
+    /// Create the input layer.
+    /// </summary>
     public class InputLayerComponent : LayerComponent
     {
         public Layer layer;
@@ -31,6 +40,9 @@ namespace IA_Library_ECS
         }
     }
 
+    /// <summary>
+    /// Create the hidden layer.
+    /// </summary>
     public class HiddenLayerComponent : LayerComponent
     {
         public Layer[] hiddenLayers;
@@ -42,6 +54,9 @@ namespace IA_Library_ECS
             SetHighestLayerSize();
         }
         
+        /// <summary>
+        /// Set the highest layer size.
+        /// </summary>
         public void SetHighestLayerSize()
         {
             foreach (var layer in this.hiddenLayers)
@@ -54,6 +69,9 @@ namespace IA_Library_ECS
         }
     }
 
+    /// <summary>
+    /// Create the output layer.
+    /// </summary>
     public class OutputLayerComponent : LayerComponent
     {
         public Layer layer;
@@ -64,6 +82,9 @@ namespace IA_Library_ECS
         }
     }
 
+    /// <summary>
+    /// Create the ouput component.
+    /// </summary>
     public class OutputComponent : ECSComponent
     {
         public float[] output;
@@ -73,7 +94,10 @@ namespace IA_Library_ECS
             this.output = output;
         }
     }
-
+    
+    /// <summary>
+    /// Create the input component.
+    /// </summary>
     public class InputComponent : ECSComponent
     {
         public float[] inputs;

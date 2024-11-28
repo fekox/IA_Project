@@ -24,6 +24,9 @@ namespace IA_Library_FSM
         OnTransitionCorpse
     }
 
+    /// <summary>
+    /// Create the agent.
+    /// </summary>
     [System.Serializable]
     public abstract class Agent
     {
@@ -64,6 +67,9 @@ namespace IA_Library_FSM
         }
     }
 
+    /// <summary>
+    /// The move state for the agent.
+    /// </summary>
     public abstract class MoveState : State
     {
         protected Vector2 position;
@@ -71,6 +77,11 @@ namespace IA_Library_FSM
         protected float positiveHalf;
         protected float negativeHalf;
 
+        /// <summary>
+        /// Get the direction in X.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
         protected Vector2 GetDir(float x)
         {
             Vector2 dir = new Vector2();
@@ -98,6 +109,11 @@ namespace IA_Library_FSM
             return dir;
         }
 
+        /// <summary>
+        /// Get the distance from a position.
+        /// </summary>
+        /// <param name="enemies"></param>
+        /// <returns></returns>
         protected float GetDistanceFrom(List<Vector2> enemies)
         {
             float distance = float.MaxValue;
@@ -116,16 +132,25 @@ namespace IA_Library_FSM
         }
     }
 
+    /// <summary>
+    /// Crate the eat state.
+    /// </summary>
     public abstract class EatState : State
     {
         protected Vector2 position;
         protected Brain brain;
     }
 
+    /// <summary>
+    /// Create the dead state.
+    /// </summary>
     public abstract class DeadState : State
     {
     }
 
+    /// <summary>
+    /// Create the corpse state.
+    /// </summary>
     public abstract class CorpseState : State
     {
     }

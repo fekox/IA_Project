@@ -6,6 +6,9 @@ using IA_Library.Brain;
 
 namespace IA_Library_FSM
 {
+    /// <summary>
+    /// Create the agent scavenger.
+    /// </summary>
     public class AgentScavenger : Agent
     {
         public Brain flockingBrain;
@@ -50,12 +53,19 @@ namespace IA_Library_FSM
             fsmController.ForcedState(Behaviours.MoveToFood);
         }
 
+        /// <summary>
+        /// Update the FSM states.
+        /// </summary>
+        /// <param name="deltaTime"></param>
         public override void Update(float deltaTime)
         {
             fsmController.Tick();
             Move(deltaTime);
         }
 
+        /// <summary>
+        /// Reset the entity.
+        /// </summary>
         public override void Reset()
         {
             hasEaten = false;
@@ -64,22 +74,39 @@ namespace IA_Library_FSM
             fsmController.ForcedState(Behaviours.MoveToFood);
         }
 
+        /// <summary>
+        /// Chose next state.
+        /// </summary>
+        /// <param name="outputs"></param>
+        /// <exception cref="NotImplementedException"></exception>
         public override void ChooseNextState(float[] outputs)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Move to direction.
+        /// </summary>
+        /// <param name="direction"></param>
         public override void MoveTo(Vector2 direction)
         {
             dir = direction;
         }
 
+        /// <summary>
+        /// Move with delta time.
+        /// </summary>
+        /// <param name="deltaTime"></param>
         public void Move(float deltaTime)
         {
             position += dir * speed * deltaTime;
             position = gridManager.GetOpositeSide(position);
         }
 
+        /// <summary>
+        /// Setting the inputs of the brains.
+        /// </summary>
+        /// <param name="deltaTime"></param>
         public override void SettingBrainUpdate(float deltaTime)
         {
             this.deltaTime = deltaTime;
@@ -99,27 +126,46 @@ namespace IA_Library_FSM
             };
         }
 
+        /// <summary>
+        /// Gets the nearest food position.
+        /// </summary>
+        /// <returns></returns>
         public override Vector2 GetNearestFoodPosition()
         {
             return simulation.GetNearestDeadHerbivorePosition(position) ??
                    simulation.GetNearestHerbivorePosition(position);
         }
 
+        /// <summary>
+        /// Get nearest food agent.
+        /// </summary>
+        /// <returns></returns>
         public AgentHerbivore GetNearestFoodAgent()
         {
             return simulation.GetNearestHerbivoreAgent(position);
         }
 
+        /// <summary>
+        /// Get nearest agent.
+        /// </summary>
+        /// <returns></returns>
         private List<AgentScavenger> GetNearestAgents()
         {
             return simulation.GetNearestScavengers(position, 3);
         }
 
+        /// <summary>
+        /// Set eat state.
+        /// </summary>
+        /// <param name="state"></param>
         public override void SetEatState(bool state)
         {
             hasEaten = state;
         }
 
+        /// <summary>
+        /// Aplly fitnnes to main brain.
+        /// </summary>
         public override void ApplyFitness()
         {
             flockingBrain.ApplyFitness();
@@ -133,6 +179,9 @@ namespace IA_Library_FSM
         }
     }
 
+    /// <summary>
+    /// Create the movement state.
+    /// </summary>
     public class MoveToEatScavengerState : MoveState
     {
         private float MinEatRadius;

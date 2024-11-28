@@ -6,6 +6,9 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace IA_Library_FSM
 {
+    /// <summary>
+    /// Create the agent hebivore.
+    /// </summary>
     public class AgentHerbivore : Agent
     {
         public Brain moveToFoodBrain;
@@ -104,12 +107,19 @@ namespace IA_Library_FSM
             fsmController.ForcedState(Behaviours.MoveToFood);
         }
 
+        /// <summary>
+        /// Update the FSM states.
+        /// </summary>
+        /// <param name="deltaTime"></param>
         public override void Update(float deltaTime)
         {
             ChooseNextState(mainBrain.outputs);
             fsmController.Tick();
         }
 
+        /// <summary>
+        /// Reset the fitnnes.
+        /// </summary>
         public override void Reset()
         {
             mainBrain.FitnessMultiplier = 1;
@@ -132,6 +142,10 @@ namespace IA_Library_FSM
             fsmController.ForcedState(Behaviours.MoveToFood);
         }
 
+        /// <summary>
+        /// Chose next state.
+        /// </summary>
+        /// <param name="outputs"></param>
         public override void ChooseNextState(float[] outputs)
         {
             if (outputs[0] > 0.0f)
@@ -150,26 +164,46 @@ namespace IA_Library_FSM
             }
         }
 
+        /// <summary>
+        /// Move to direction.
+        /// </summary>
+        /// <param name="direction"></param>
         public override void MoveTo(Vector2 direction)
         {
             position = gridManager.GetNewPositionInGrid(position, direction);
         }
 
+        /// <summary>
+        /// Get nearest food.
+        /// </summary>
+        /// <returns></returns>
         private AgentPlant GetNearestFood()
         {
             return simulation.GetNearestPlantAgents(position);
         }
 
+        /// <summary>
+        /// Get nearest food position.
+        /// </summary>
+        /// <returns></returns>
         public override Vector2 GetNearestFoodPosition()
         {
             return simulation.GetNearestPlantPosition(position);
         }
 
+        /// <summary>
+        /// Get neares enemy posirion.
+        /// </summary>
+        /// <returns></returns>
         private List<Vector2> GetNearestEnemiesPosition()
         {
             return simulation.GetNearestCarnivoresPositions(position, 3);
         }
 
+        /// <summary>
+        /// Set the inputs of the brains.
+        /// </summary>
+        /// <param name="deltaTime"></param>
         public override void SettingBrainUpdate(float deltaTime)
         {
             nearFoodPosition = GetNearestFoodPosition();
@@ -203,6 +237,9 @@ namespace IA_Library_FSM
             };
         }
 
+        /// <summary>
+        /// Recibe damage.
+        /// </summary>
         public void ReceiveDamage()
         {
             lives--;
@@ -213,26 +250,44 @@ namespace IA_Library_FSM
             }
         }
 
+        /// <summary>
+        /// Eat a piece.
+        /// </summary>
         public void EatPiece()
         {
             fsmController.ForcedState(Behaviours.Corpse);
         }
 
+        /// <summary>
+        /// Returns if the entity can be eating or not.
+        /// </summary>
+        /// <returns></returns>
         public bool CanBeEaten()
         {
             return fsmController.currentState == (int)Behaviours.Death;
         }
 
+        /// <summary>
+        /// Return if the entity if corpse or not.
+        /// </summary>
+        /// <returns></returns>
         public bool IsCorpse()
         {
             return fsmController.currentState == (int)Behaviours.Corpse;
         }
 
+        /// <summary>
+        /// Sets eat state.
+        /// </summary>
+        /// <param name="state"></param>
         public override void SetEatState(bool state)
         {
             hasEaten = state;
         }
 
+        /// <summary>
+        /// Apply fitnnes.
+        /// </summary>
         public override void ApplyFitness()
         {
             moveToFoodBrain.ApplyFitness();
@@ -251,6 +306,9 @@ namespace IA_Library_FSM
         }
     }
 
+    /// <summary>
+    /// Create the move to eat state.
+    /// </summary>
     public class MoveToEatHerbivoreState : MoveState
     {
         List<Vector2> nearEnemyPositions = new List<Vector2>();
@@ -345,6 +403,9 @@ namespace IA_Library_FSM
         }
     }
 
+    /// <summary>
+    /// Create the move to scape state.
+    /// </summary>
     public class MoveToEscapeHerbivoreState : MoveState
     {
         List<Vector2> nearEnemyPositions = new List<Vector2>();
@@ -436,6 +497,9 @@ namespace IA_Library_FSM
         }
     }
 
+    /// <summary>
+    /// Create the eat hebivore state.
+    /// </summary>
     public class EatHerbivoreState : EatState
     {
         public override BehavioursActions GetOnEnterBehaviour(params object[] parameters)
@@ -515,6 +579,9 @@ namespace IA_Library_FSM
         }
     }
 
+    /// <summary>
+    /// Create the dead herbivore state.
+    /// </summary>
     public class DeathHerbivoreState : DeadState
     {
         private int lives;
@@ -547,6 +614,9 @@ namespace IA_Library_FSM
         }
     }
 
+    /// <summary>
+    /// Create the corpse herbivore state.
+    /// </summary>
     public class CorpseHerbivoreState : CorpseState
     {
         public override BehavioursActions GetOnEnterBehaviour(params object[] parameters)

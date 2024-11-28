@@ -9,6 +9,9 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace IA_Library
 {
+    /// <summary>
+    /// Init and Update the simulation, create entities and brains for the entities.
+    /// </summary>
     [Serializable]
     public class Simulation
     {
@@ -83,6 +86,21 @@ namespace IA_Library
         private Dictionary<uint, Brain.Brain> entities;
         private SaveDataSystem manager = new SaveDataSystem();
 
+        /// <summary>
+        /// Inint the simulation
+        /// </summary>
+        /// <param name="grid">The map</param>
+        /// <param name="herbivoreData">Herbivore brain data</param>
+        /// <param name="carnivoreData">Carnivore brain data</param>
+        /// <param name="scavengerData">Scavenger brain data</param>
+        /// <param name="totalHerbivores">Max herbivores</param>
+        /// <param name="totalCarnivores">Max carnivores</param>
+        /// <param name="totalScavengers">Max scavengers</param>
+        /// <param name="totalPlants">Max plants</param>
+        /// <param name="totalElite">Max elites</param>
+        /// <param name="mutationChance">The mutation chance</param>
+        /// <param name="mutationRate">The mutation rate</param>
+        /// <param name="generationLifeTime">Time of the generation</param>
         public Simulation(GridManager grid,
             List<BrainData> herbivoreData, List<BrainData> carnivoreData, List<BrainData> scavengerData,
             int totalHerbivores, int totalCarnivores, int totalScavengers, int totalPlants, int totalElite,
@@ -113,6 +131,9 @@ namespace IA_Library
             CreateNewGeneration();
         }
 
+        /// <summary>
+        /// Create the entities, create the genetic data, add the entities in a respective list and add the data in to a manager.
+        /// </summary>
         private void CreateEntities()
         {
             for (int i = 0; i < totalHerbivores; i++)
@@ -178,6 +199,9 @@ namespace IA_Library
             }
         }
 
+        /// <summary>
+        /// Crete the ESC for the respective entity and respective brain.
+        /// </summary>
         private void CreateECSEntities()
         {
             for (int i = 0; i < totalHerbivores; i++)
@@ -202,6 +226,10 @@ namespace IA_Library
             }
         }
 
+        /// <summary>
+        /// Add the components of the entity in the respective brain.
+        /// </summary>
+        /// <param name="brain">Entity brain</param>
         private void CreateEntity(Brain.Brain brain)
         {
             uint entityID = ECSManager.CreateEntity();
@@ -219,6 +247,11 @@ namespace IA_Library
             entities.Add(entityID, brain);
         }
 
+        /// <summary>
+        /// Update the simulation, sets the brains, updates the inputs, update the ECS manager, make the epoch and create a new generation.
+        /// </summary>
+        /// <param name="deltaTime">Delta time</param>
+        /// <returns>The current generation</returns>
         public int UpdateSimulation(float deltaTime)
         {
             if (currentTurn < generationLifeTime)
@@ -239,6 +272,9 @@ namespace IA_Library
             return currentGeneration;
         }
 
+        /// <summary>
+        /// Make the epoch for the entities and create a file to save the data.
+        /// </summary>
         private void Epoch()
         {
             foreach (GeneticData geneticData in data)
@@ -270,6 +306,9 @@ namespace IA_Library
             averageScavengerFitness = 0;
         }
 
+        /// <summary>
+        /// Epoch for the herbivore.
+        /// </summary>
         private void EpochHerbivore()
         {
             int count = 0;
@@ -307,6 +346,9 @@ namespace IA_Library
             EpochSingle(herbivoreEatBrain, isGenerationDead, HeEatBrain);
         }
 
+        /// <summary>
+        /// Epoch for the carnivore.
+        /// </summary>
         private void EpochCarnivore()
         {
             int count = 0;
@@ -339,6 +381,9 @@ namespace IA_Library
             EpochSingle(carnivoreEatBrain, isGenerationDead, CaEatBrain);
         }
 
+        /// <summary>
+        /// Epoch for the scavenger.
+        /// </summary>
         private void EpochScavenger()
         {
             int count = 0;
@@ -369,6 +414,12 @@ namespace IA_Library
             EpochSingle(scavengerFlockingBrain, isGenerationDead, ScaFlockingBrain);
         }
 
+        /// <summary>
+        /// Single epoch for one brain in especific.
+        /// </summary>
+        /// <param name="brains">The brain</param>
+        /// <param name="force">To force evolution</param>
+        /// <param name="data">Data to save</param>
         private void EpochSingle(List<Brain.Brain> brains, bool force, GeneticData data)
         {
             Genome[] newGenomes = GeneticAlgorithm.Epoch(GetGenomes(brains), data, force);
@@ -381,6 +432,9 @@ namespace IA_Library
             }
         }
         
+        /// <summary>
+        /// Restore the save data.
+        /// </summary>
         private void RestoreSave()
         {
             List<GeneticData> dataToPaste = manager.GetAllDatasets();
@@ -394,6 +448,7 @@ namespace IA_Library
             CaMoveBrain = dataToPaste[6];
             ScaMainBrain = dataToPaste[7];
             ScaFlockingBrain = dataToPaste[8];
+            
             manager.ClearDatasets();
             manager.AddDataset(HeMainBrain);
             manager.AddDataset(HeEatBrain);
@@ -407,6 +462,7 @@ namespace IA_Library
             
             
             currentGeneration = HeMainBrain.generationCount;
+            
             RestoreBrainsData(herbivoreMainBrain, HeMainBrain);
             RestoreBrainsData(herbivoreEatBrain, HeEatBrain);
             RestoreBrainsData(herbivoreMoveEscapeBrain, HeMoveEscapeBrain);
@@ -420,6 +476,11 @@ namespace IA_Library
             
         }
 
+        /// <summary>
+        /// Restore the brain save data.
+        /// </summary>
+        /// <param name="brains"></param>
+        /// <param name="info"></param>
         private void RestoreBrainsData(List<Brain.Brain> brains, GeneticData info)
         {
             for (int i = 0; i < brains.Count; i++)
@@ -436,6 +497,11 @@ namespace IA_Library
             }
         }
 
+        /// <summary>
+        /// Gets the genomes in one brain.
+        /// </summary>
+        /// <param name="brains">The brain</param>
+        /// <returns>Genomes array</returns>
         private static Genome[] GetGenomes(List<Brain.Brain> brains)
         {
             List<Genome> genomes = new List<Genome>();
@@ -450,6 +516,9 @@ namespace IA_Library
             return genomes.ToArray();
         }
 
+        /// <summary>
+        /// Create a new generation, resets the turn and add 1 to the current generation.
+        /// </summary>
         private void CreateNewGeneration()
         {
             currentGeneration++;
@@ -458,6 +527,9 @@ namespace IA_Library
             currentTurn = 0;
         }
 
+        /// <summary>
+        /// Reset the position of the entities.
+        /// </summary>
         private void ResetPositions()
         {
             foreach (var herb in Herbivore)
@@ -481,6 +553,10 @@ namespace IA_Library
             }
         }
 
+        /// <summary>
+        /// Sets the brains of the entities.
+        /// </summary>
+        /// <param name="deltaTime">The time</param>
         public void SettingBrain(float deltaTime)
         {
             foreach (AgentHerbivore current in Herbivore)
@@ -499,6 +575,9 @@ namespace IA_Library
             }
         }
 
+        /// <summary>
+        /// Update the inputs for the ECS in respective entity.
+        /// </summary>
         private void UpdateInputs()
         {
             foreach (KeyValuePair<uint, Brain.Brain> entity in entities)
@@ -508,6 +587,10 @@ namespace IA_Library
             }
         }
 
+        /// <summary>
+        /// Update the outputs of the entities.
+        /// </summary>
+        /// <param name="deltaTime"></param>
         public void UpdateOutputs(float deltaTime)
         {
             foreach (KeyValuePair<uint, Brain.Brain> entity in entities)
@@ -531,6 +614,10 @@ namespace IA_Library
                 current.Update(deltaTime);
             }
         }
+
+        /// <summary>
+        /// Load the data of the entities. 
+        /// </summary>
         public void Load()
         {
             manager.LoadAll(fileToLoad);
@@ -554,6 +641,12 @@ namespace IA_Library
         }
 
         #region Getters
+
+        /// <summary>
+        /// Gets the nearest plant agent.
+        /// </summary>
+        /// <param name="position">Position of the agent</param>
+        /// <returns>Nearest position</returns>
         public AgentPlant GetNearestPlantAgents(Vector2 position)
         {
             AgentPlant nearestPoint = Plants[0];
@@ -574,6 +667,11 @@ namespace IA_Library
             return nearestPoint;
         }
 
+        /// <summary>
+        /// Gets the position of the nearest plant agent.
+        /// </summary>
+        /// <param name="position">Position of the agent</param>
+        /// <returns>The position</returns>
         public Vector2 GetNearestPlantPosition(Vector2 position)
         {
             AgentPlant nearestPoint = Plants[0];
@@ -594,6 +692,12 @@ namespace IA_Library
             return nearestPoint.position;
         }
 
+        /// <summary>
+        /// Gets the nearest carnivore position.
+        /// </summary>
+        /// <param name="position">Position of the agent</param>
+        /// <param name="count">Count of the carnivores</param>
+        /// <returns>The near carnivores.</returns>
         public List<Vector2> GetNearestCarnivoresPositions(Vector2 position, int count)
         {
             var sortedCarnivores = Carnivore
@@ -606,6 +710,11 @@ namespace IA_Library
             return sortedCarnivores;
         }
 
+        /// <summary>
+        /// Get the neares herbivore agent.
+        /// </summary>
+        /// <param name="position">The position of the agent</param>
+        /// <returns>The near herbivore</returns>
         public AgentHerbivore GetNearestHerbivoreAgent(Vector2 position)
         {
             AgentHerbivore nearestPoint = Herbivore[0];
@@ -626,6 +735,11 @@ namespace IA_Library
             return nearestPoint;
         }
 
+        /// <summary>
+        /// Gets the position of the near herbivore.
+        /// </summary>
+        /// <param name="position">The agent position</param>
+        /// <returns>The near herbivore position</returns>
         public Vector2 GetNearestHerbivorePosition(Vector2 position)
         {
             AgentHerbivore nearestPoint = Herbivore[0];
@@ -646,6 +760,11 @@ namespace IA_Library
             return nearestPoint.position;
         }
 
+        /// <summary>
+        /// Returns the dead herbivore position.
+        /// </summary>
+        /// <param name="position">The agent position</param>
+        /// <returns>The near dead herbivore position</returns>
         public Vector2? GetNearestDeadHerbivorePosition(Vector2 position)
         {
             AgentHerbivore nearestPoint = null;
@@ -669,6 +788,12 @@ namespace IA_Library
             return nearestPoint?.position;
         }
 
+        /// <summary>
+        /// Returns the near scavengers.
+        /// </summary>
+        /// <param name="position">The agent position</param>
+        /// <param name="count">The number of scavengers</param>
+        /// <returns>The nearest scavengers</returns>
         public List<AgentScavenger> GetNearestScavengers(Vector2 position, int count)
         {
             List<AgentScavenger> sortedScavengers = Scavenger

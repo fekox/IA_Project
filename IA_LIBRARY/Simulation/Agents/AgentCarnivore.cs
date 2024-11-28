@@ -6,6 +6,9 @@ using IA_Library.Brain;
 
 namespace IA_Library_FSM
 {
+    /// <summary>
+    /// Create the agent carnivore.
+    /// </summary>
     public class AgentCarnivore : Agent
     {
         public Brain moveToFoodBrain = new Brain();
@@ -69,12 +72,19 @@ namespace IA_Library_FSM
             fsmController.ForcedState(Behaviours.MoveToFood);
         }
 
+        /// <summary>
+        /// Update the FSM.
+        /// </summary>
+        /// <param name="deltaTime"></param>
         public override void Update(float deltaTime)
         {
             ChooseNextState(mainBrain.outputs);
             fsmController.Tick();
         }
 
+        /// <summary>
+        /// Reset the fitnnes for the brains.
+        /// </summary>
         public override void Reset()
         {
             mainBrain.FitnessMultiplier = 1;
@@ -93,6 +103,10 @@ namespace IA_Library_FSM
             fsmController.ForcedState(Behaviours.MoveToFood);
         }
 
+        /// <summary>
+        /// Choose next state.
+        /// </summary>
+        /// <param name="outputs"></param>
         public override void ChooseNextState(float[] outputs)
         {
             if (outputs[0] > 0.0f)
@@ -106,11 +120,19 @@ namespace IA_Library_FSM
             }
         }
 
+        /// <summary>
+        /// Move to drection.
+        /// </summary>
+        /// <param name="direction"></param>
         public override void MoveTo(Vector2 direction)
         {
             position = gridManager.GetNewPositionInGrid(position, direction);
         }
 
+        /// <summary>
+        /// Update the brains inputs.
+        /// </summary>
+        /// <param name="deltaTime"></param>
         public override void SettingBrainUpdate(float deltaTime)
         {
             nearestFoodPosition = GetNearestFoodPosition();
@@ -132,21 +154,36 @@ namespace IA_Library_FSM
             };
         }
 
+        /// <summary>
+        /// Get nearest food.
+        /// </summary>
+        /// <returns></returns>
         private AgentHerbivore GetNearestFood()
         {
             return simulation.GetNearestHerbivoreAgent(position);
         }
 
+        /// <summary>
+        /// Get nearest food pos.
+        /// </summary>
+        /// <returns></returns>
         public override Vector2 GetNearestFoodPosition()
         {
             return simulation.GetNearestHerbivorePosition(position);
         }
 
+        /// <summary>
+        /// Ser eat state.
+        /// </summary>
+        /// <param name="state"></param>
         public override void SetEatState(bool state)
         {
             hasEaten = state;
         }
 
+        /// <summary>
+        /// Apply the fitnnes in the main brain.
+        /// </summary>
         public override void ApplyFitness()
         {
             moveToFoodBrain.ApplyFitness();
@@ -161,6 +198,9 @@ namespace IA_Library_FSM
         }
     }
 
+    /// <summary>
+    /// Create the move to eat state.
+    /// </summary>
     public class MoveToEatCarnivoreState : MoveState
     {
         private int movesPerTurn = 2;
@@ -232,6 +272,9 @@ namespace IA_Library_FSM
         }
     }
 
+    /// <summary>
+    /// Create the eat carnivore state.
+    /// </summary>
     public class EatCarnivoreState : EatState
     {
         public override BehavioursActions GetOnEnterBehaviour(params object[] parameters)
@@ -300,6 +343,11 @@ namespace IA_Library_FSM
             return behaviour;
         }
 
+        /// <summary>
+        /// Get on exit behavior and apply fitnnes.
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         public override BehavioursActions GetOnExitBehaviour(params object[] parameters)
         {
             brain.ApplyFitness();

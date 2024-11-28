@@ -4,6 +4,9 @@ using IA_Library_ECS;
 
 namespace IA_Library.Brain
 {
+    /// <summary>
+    /// Create and manage the brain.
+    /// </summary>
     [Serializable]
     public class Brain
     {
@@ -29,6 +32,11 @@ namespace IA_Library.Brain
         {
         }
 
+        /// <summary>
+        /// Create a brain with data and a current offset to read the data.
+        /// </summary>
+        /// <param name="data">The data</param>
+        /// <param name="currentOffset">The current offset</param>
         public Brain(byte[] data, ref int currentOffset)
         {
             layers = CreateLayersFromBytes(data, ref currentOffset);
@@ -38,6 +46,10 @@ namespace IA_Library.Brain
             currentOffset += sizeof(float);
         }
 
+        /// <summary>
+        /// Create the brain.
+        /// </summary>
+        /// <param name="brain"></param>
         public Brain(Brain brain)
         {
             bias = brain.bias;
@@ -45,6 +57,10 @@ namespace IA_Library.Brain
             totalWeightsCount = brain.totalWeightsCount;
         }
 
+        /// <summary>
+        /// Serialize the data.
+        /// </summary>
+        /// <returns>The array of bytes</returns>
         public byte[] Serialize()
         {
             List<byte> bytes = new List<byte>();
@@ -58,6 +74,10 @@ namespace IA_Library.Brain
             return bytes.ToArray();
         }
 
+        /// <summary>
+        /// Serialize the layer.
+        /// </summary>
+        /// <returns>The array of bytes</returns>
         private byte[] SerializeLayers()
         {
             List<byte> bytes = new List<byte>();
@@ -72,6 +92,12 @@ namespace IA_Library.Brain
             return bytes.ToArray();
         }
 
+        /// <summary>
+        /// Create a layer from bytes.
+        /// </summary>
+        /// <param name="data">The data</param>
+        /// <param name="offset">The offset</param>
+        /// <returns>The layers to add.</returns>
         public List<NeuronLayer> CreateLayersFromBytes(byte[] data, ref int offset)
         {
             int layerCount = BitConverter.ToInt32(data, offset);
@@ -87,11 +113,21 @@ namespace IA_Library.Brain
             return layersToAdd;
         }
 
+        /// <summary>
+        /// Apply fitness.
+        /// </summary>
         public void ApplyFitness()
         {
             fitness += FitnessReward * FitnessMultiplier > 0 ? FitnessMultiplier + 1 : 1;
         }
 
+        /// <summary>
+        /// Add a neuron layer.
+        /// </summary>
+        /// <param name="neuronsCount">The neuron counter</param>
+        /// <param name="bias">The bias.</param>
+        /// <param name="p">The sigmoid</param>
+        /// <returns>Adds or not the neuron layer</returns>
         public bool AddNeuronLayer(int neuronsCount, float bias, float p)
         {
             if (layers.Count == 0)
@@ -102,6 +138,14 @@ namespace IA_Library.Brain
             return AddNeuronLayer(layers[^1].OutputsCount, neuronsCount, bias, p);
         }
 
+        /// <summary>
+        /// Add a neuron layer.
+        /// </summary>
+        /// <param name="inputsCount">The inputs counter</param>
+        /// <param name="neuronsCount">The neuron counter</param>
+        /// <param name="bias">The bias</param>
+        /// <param name="p">The sigmoid</param>
+        /// <returns>Adds or not the neuron layer</returns>
         private bool AddNeuronLayer(int inputsCount, int neuronsCount, float bias, float p)
         {
             if (layers.Count > 0 && layers[^1].OutputsCount != inputsCount)
@@ -118,11 +162,21 @@ namespace IA_Library.Brain
             return true;
         }
 
+        /// <summary>
+        /// Set the fitness to 0.
+        /// </summary>
         public void Set0Fitness()
         {
             fitness = 0;
         }
 
+        /// <summary>
+        /// Add a first neuron layer.
+        /// </summary>
+        /// <param name="inputsCount">Inputs counter</param>
+        /// <param name="bias">The bias</param>
+        /// <param name="p">The sigmoid</param>
+        /// <returns>Adds or not the neuron layer</returns>
         public bool AddFirstNeuronLayer(int inputsCount, float bias, float p)
         {
             if (layers.Count != 0)
@@ -135,6 +189,12 @@ namespace IA_Library.Brain
             return AddNeuronLayer(inputsCount, inputsCount, bias, p);
         }
 
+        /// <summary>
+        /// Add neuron layer in to a position.
+        /// </summary>
+        /// <param name="neuronsCount">The neuron counter</param>
+        /// <param name="layerPosition">The layer position</param>
+        /// <returns>Adds or not the neuron layer</returns>
         public bool AddNeuronLayerAtPosition(int neuronsCount, int layerPosition)
         {
             if (layers.Count <= 0 || layerPosition >= layers.Count)
@@ -155,6 +215,12 @@ namespace IA_Library.Brain
             return true;
         }
 
+        /// <summary>
+        /// Add a neuron layer in to a layer position.
+        /// </summary>
+        /// <param name="neuronsCountToAdd">Neurons counter to add</param>
+        /// <param name="layerPosition">Layer position</param>
+        /// <returns>Adds or not the neuron layer</returns>
         public bool AddNeuronAtLayer(int neuronsCountToAdd, int layerPosition)
         {
             NeuronLayer oldLayer = layers[layerPosition];
@@ -173,11 +239,19 @@ namespace IA_Library.Brain
             return true;
         }
 
+        /// <summary>
+        /// Get the total weights.
+        /// </summary>
+        /// <returns></returns>
         public int GetTotalWeightsCount()
         {
             return totalWeightsCount;
         }
 
+        /// <summary>
+        /// Set the weight.
+        /// </summary>
+        /// <param name="newWeights">The new weight</param>
         public void SetWeights(float[] newWeights)
         {
             int fromId = 0;
@@ -188,6 +262,10 @@ namespace IA_Library.Brain
             }
         }
 
+        /// <summary>
+        /// Gets the weight.
+        /// </summary>
+        /// <returns>The weight</returns>
         public float[] GetWeights()
         {
             float[] weights = new float[totalWeightsCount];
@@ -207,6 +285,10 @@ namespace IA_Library.Brain
             return weights;
         }
 
+        /// <summary>
+        /// Gets the wieght count.
+        /// </summary>
+        /// <returns></returns>
         public int GetWeightsCount()
         {
             int id = 0;
@@ -219,6 +301,10 @@ namespace IA_Library.Brain
             return id;
         }
 
+        /// <summary>
+        /// Get the list of inputs layers.
+        /// </summary>
+        /// <returns>The inputs layers</returns>
         public Layer GetInputLayer()
         {
             int id = layers[0].neurons.Length;
@@ -237,6 +323,10 @@ namespace IA_Library.Brain
             return layer;
         }
 
+        /// <summary>
+        /// Gets a list of outputs layer.
+        /// </summary>
+        /// <returns>The list of outputs layers</returns>
         public Layer GetOutputLayer()
         {
             Index layerIndex = ^1;
@@ -255,7 +345,11 @@ namespace IA_Library.Brain
             
             return layer;
         }
-
+        
+        /// <summary>
+        /// Get a list of hidden layers.
+        /// </summary>
+        /// <returns>The list of hidden layers</returns>
         public Layer[] GetHiddenLayers()
         {
             Layer[] layersToReturn = new Layer[layers.Count - 2 > 0 ? layers.Count - 2 : 0];
@@ -285,6 +379,11 @@ namespace IA_Library.Brain
             return layersToReturn;
         }
 
+        /// <summary>
+        /// The sybapsis for the outputs.
+        /// </summary>
+        /// <param name="inputs">The inputs</param>
+        /// <returns>The array of outputs</returns>
         public float[] Synapsis(float[] inputs)
         {
             float[] outputs = inputs;
@@ -297,6 +396,15 @@ namespace IA_Library.Brain
             return outputs;
         }
 
+        /// <summary>
+        /// Create a custom brain.
+        /// </summary>
+        /// <param name="inputsCount">The inputs layers count</param>
+        /// <param name="HidenLayers">The hidden layers count</param>
+        /// <param name="outputsCount">The outputs layers count</param>
+        /// <param name="bias">The bias</param>
+        /// <param name="sigmoid">The sigmoid</param>
+        /// <returns>The new brain</returns>
         public static Brain CreateBrain(int inputsCount, int[] HidenLayers, int outputsCount, float bias, float sigmoid)
         {
             Brain newbrain = new Brain();

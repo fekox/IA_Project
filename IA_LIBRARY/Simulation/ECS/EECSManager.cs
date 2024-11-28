@@ -11,6 +11,9 @@ namespace IA_Library_ECS
         OnRotationComplete = 1
     }
 
+    /// <summary>
+    /// Manage the ECS.
+    /// </summary>
     public static class ECSManager
     {
         private static readonly ParallelOptions parallelOptions = new ParallelOptions() { MaxDegreeOfParallelism = 32 };
@@ -20,6 +23,9 @@ namespace IA_Library_ECS
         private static ConcurrentDictionary<Type, ECSSystem> systems = null;
         private static ConcurrentDictionary<uint, FlagsActions> response = null;
 
+        /// <summary>
+        /// Init the ECS.
+        /// </summary>
         public static void Init()
         {
             entities = new ConcurrentDictionary<uint, ECSEntity>();
@@ -49,11 +55,19 @@ namespace IA_Library_ECS
             }
         }
 
+        /// <summary>
+        /// The tick.
+        /// </summary>
+        /// <param name="deltaTime">The time</param>
         public static void Tick(float deltaTime)
         {
             Parallel.ForEach(systems, parallelOptions, system => { system.Value.Run(deltaTime); });
         }
 
+        /// <summary>
+        /// Create the entity ECS.
+        /// </summary>
+        /// <returns></returns>
         public static uint CreateEntity()
         {
             ECSEntity ecsEntity;
@@ -63,6 +77,12 @@ namespace IA_Library_ECS
             return ecsEntity.GetID();
         }
 
+        /// <summary>
+        /// Add a componet for the entity.
+        /// </summary>
+        /// <typeparam name="ComponentType"></typeparam>
+        /// <param name="entityID">Entity ID</param>
+        /// <param name="component">Component to add</param>
         public static void AddComponent<ComponentType>(uint entityID, ComponentType component)
             where ComponentType : ECSComponent
         {
@@ -71,11 +91,22 @@ namespace IA_Library_ECS
             components[typeof(ComponentType)].TryAdd(entityID, component);
         }
 
+        /// <summary>
+        /// Return if contains a component type or not.
+        /// </summary>
+        /// <typeparam name="ComponentType">Type of component</typeparam>
+        /// <param name="entityID">ID of the entity</param>
+        /// <returns>if contains a component type or not</returns>
         public static bool ContainsComponent<ComponentType>(uint entityID) where ComponentType : ECSComponent
         {
             return entities[entityID].ContainsComponentType<ComponentType>();
         }
 
+        /// <summary>
+        /// Gets the specific component.
+        /// </summary>
+        /// <param name="componentTypes">Type of component</param>
+        /// <returns>The component</returns>
         public static IEnumerable<uint> GetEntitiesWithComponentTypes(params Type[] componentTypes)
         {
             ConcurrentBag<uint> matchs = new ConcurrentBag<uint>();
@@ -94,6 +125,11 @@ namespace IA_Library_ECS
             return matchs;
         }
 
+        /// <summary>
+        /// Gets the specific component.
+        /// </summary>
+        /// <typeparam name="ComponentType">Type of component</typeparam>
+        /// <returns>The component</returns>
         public static ConcurrentDictionary<uint, ComponentType> GetComponents<ComponentType>()
             where ComponentType : ECSComponent
         {
@@ -115,6 +151,12 @@ namespace IA_Library_ECS
             return null;
         }
 
+        /// <summary>
+        /// Gets the specific component.
+        /// </summary>
+        /// <typeparam name="ComponentType">Type of component</typeparam>
+        /// <param name="entityID">Entity ID</param>
+        /// <returns>The component</returns>
         public static ComponentType GetComponent<ComponentType>(uint entityID) where ComponentType : ECSComponent
         {
             return components[typeof(ComponentType)][entityID] as ComponentType;

@@ -1,5 +1,8 @@
 namespace IA_Library_ECS
 {
+    /// <summary>
+    /// ECS component.
+    /// </summary>
     public abstract class ECSComponent
     {
         private uint entityOwnerID = 0;

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace IA_Library.Brain
 {
+    /// <summary>
+    /// Create the neuron layer.
+    /// </summary>
     [Serializable]
     public class NeuronLayer
     {
@@ -27,6 +30,10 @@ namespace IA_Library.Brain
             get { return outputs.Length; }
         }
 
+        /// <summary>
+        /// Serialize the data.
+        /// </summary>
+        /// <returns>The array of bytes</returns>
         public byte[] Serialize()
         {
             List<byte> bytes = new List<byte>();
@@ -44,6 +51,13 @@ namespace IA_Library.Brain
             return bytes.ToArray();
         }
 
+        /// <summary>
+        /// Create a neuron layer with inputs, neuron counts, bias and sigmoid.
+        /// </summary>
+        /// <param name="inputsCount">The inputs</param>
+        /// <param name="neuronsCount">The neurons counter</param>
+        /// <param name="bias">The bias</param>
+        /// <param name="p">The sigmoid</param>
         public NeuronLayer(int inputsCount, int neuronsCount, float bias, float p)
         {
             this.inputsCount = inputsCount;
@@ -53,6 +67,11 @@ namespace IA_Library.Brain
             SetNeuronsCount(neuronsCount);
         }
 
+        /// <summary>
+        /// Create a neuron layer with data and outputs.
+        /// </summary>
+        /// <param name="data">The data</param>
+        /// <param name="output">The ouputs</param>
         public NeuronLayer(byte[] data, ref int output)
         {
             int length = BitConverter.ToInt32(data, output);
@@ -70,6 +89,10 @@ namespace IA_Library.Brain
             output += sizeof(float);
         }
 
+        /// <summary>
+        /// Sets the neurons counter.
+        /// </summary>
+        /// <param name="neuronsCount">The neuron counter</param>
         void SetNeuronsCount(int neuronsCount)
         {
             neurons = new Neuron[neuronsCount];
@@ -83,6 +106,12 @@ namespace IA_Library.Brain
             outputs = new float[neurons.Length];
         }
 
+        /// <summary>
+        /// Sets the weight from one ID.
+        /// </summary>
+        /// <param name="weights">The weight.</param>
+        /// <param name="fromId">The ID</param>
+        /// <returns>The ID</returns>
         public int SetWeights(float[] weights, int fromId)
         {
             for (int i = 0; i < neurons.Length; i++)
@@ -93,6 +122,10 @@ namespace IA_Library.Brain
             return fromId;
         }
 
+        /// <summary>
+        /// Gets the weights.
+        /// </summary>
+        /// <returns>The weight</returns>
         public float[] GetWeights()
         {
             float[] weights = new float[totalWeights];
@@ -112,6 +145,10 @@ namespace IA_Library.Brain
             return weights;
         }
 
+        /// <summary>
+        /// Gets the weight count.
+        /// </summary>
+        /// <returns>The ID</returns>
         public int GetWeightCount()
         {
             int id = 0;
@@ -124,6 +161,11 @@ namespace IA_Library.Brain
             return id;
         }
 
+        /// <summary>
+        /// The synamsis.
+        /// </summary>
+        /// <param name="inputs">The inputs</param>
+        /// <returns>The outputs</returns>
         public float[] Synapsis(float[] inputs)
         {
             for (int j = 0; j < neurons.Length; j++)

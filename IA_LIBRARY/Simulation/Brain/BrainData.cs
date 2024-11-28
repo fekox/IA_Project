@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace IA_Library.Brain
 {
+    /// <summary>
+    /// Create th brain data.
+    /// </summary>
     [Serializable]
     public class BrainData
     {
