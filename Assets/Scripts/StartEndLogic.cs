@@ -21,6 +21,16 @@ public class StartEndLogic : MonoBehaviour
             StartSimualtion();
         }
 
+        if (Input.anyKey && !Input.GetKeyDown(KeyCode.Space) 
+                         || !Input.GetKeyDown(KeyCode.W) 
+                         || !Input.GetKeyDown(KeyCode.A) 
+                         || !Input.GetKeyDown(KeyCode.S) 
+                         || !Input.GetKeyDown(KeyCode.D))
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+
         if (Input.GetKeyDown(KeyCode.R))
         {
             gameStarted = false;

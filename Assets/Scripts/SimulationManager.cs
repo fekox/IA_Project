@@ -131,28 +131,12 @@ public class SimulationManager : MonoBehaviour
             fileExtension = fileExtension,
             fileToLoad = fileToLoad
         };
-
-        simulation.OnFitnessCalculated += LogFitness;
-    }
-
-
-    private void OnDisable()
-    {
-        simulation.OnFitnessCalculated -= LogFitness;
     }
 
     private void Update()
     {
         currentGeneration = simulation.UpdateSimulation(Time.deltaTime);
         updateGenerationText.UpdateCurrentGeneration(currentGeneration);
-    }
-
-    private void LogFitness(int nH, float FH, int nC, float FC, int nS, float FS)
-    {
-        // Debug.Log("--- Average Fitness ---");
-        // Debug.Log("Herbivore - Alive = " + nH + " / fitness = " + FH);
-        // Debug.Log("Carnivore - Alive = " + nC + " / fitness = " + FC);
-        // Debug.Log("Scavenger - Alive = " + nS + " / fitness = " + FS);
     }
 
     private void DrawEntities()
